@@ -1,8 +1,8 @@
 from flask import Flask
-import time
+import datetime
 
 app = Flask(__name__)
 
 @app.route("/time")
 def get_current_time():
-	return {'time': time.datetime()}
+	return {'time': datetime.datetime.now()}
