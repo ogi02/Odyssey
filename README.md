@@ -11,5 +11,5 @@ You must have 'npm' and 'pipenv' installed.
 
 
 ### Creators
-Gabriela Yoncheva -> https://github.com/GabrielaY
+Gabriela Yoncheva -> https://github.com/GabrielaY \
 Ognian Baruh -> https://github.com/ogi02
