@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
 	fetch('/time').then(res => res.json()).then(data => {
-		setCurrentTime("test1")
+		setCurrentTime(data.time)
 	});
   }, [])
 
