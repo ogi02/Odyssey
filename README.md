@@ -13,3 +13,6 @@ You must have 'npm' and 'pipenv' installed.
 ### Creators
 Gabriela Yoncheva -> https://github.com/GabrielaY \
 Ognian Baruh -> https://github.com/ogi02
+
+### About
+https://docs.google.com/document/d/1fe4PTeQvuJQCtzLAepiWgYKQRrgO0HffOD3cP5iOwkI/edit?usp=sharing
