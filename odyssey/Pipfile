@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "*"
 python-dotenv = "*"
 pymongo = "*"
+flask-restful = "*"
 
 [requires]
 python_version = "3.7"
