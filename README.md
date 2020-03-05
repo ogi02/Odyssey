@@ -3,11 +3,15 @@ A website like Patreon, built by two 11 graders with Flask and React JS.
 
 
 ### To Run
-Go to Odyssey/ directory and run 'make run'.
+```
+cd Odyssey/
+cd odyssey/
+make
+```
 
 
 ### Requirements
-You must have 'npm' and 'pipenv' installed.
+You must have any version of 'pipenv' installed.
 
 
 ### Creators
