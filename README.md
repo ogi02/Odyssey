@@ -20,18 +20,10 @@ pipenv install
 
 ### Libraries
 
-[Flask](https://flask.palletsprojects.com/en/1.1.x/)
-- For backend
-\
-[Flask RESTful](https://flask-restful.readthedocs.io/en/latest/)
-- For REST API
-\
-[PyMongo](https://api.mongodb.com/python/current/tutorial.html)
-- Database 
-\
-[Python Dotenv](https://pypi.org/project/python-dotenv/)
-- For app configurations
-\
+[Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend \
+[Flask RESTful](https://flask-restful.readthedocs.io/en/latest/) for REST API \
+[PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database \
+[Python Dotenv](https://pypi.org/project/python-dotenv/) for app configurations \
 
 ### Creators
 Gabriela Yoncheva -> https://github.com/GabrielaY \
