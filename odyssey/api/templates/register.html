@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/form.css')}}">
+    <link rel="shortcut icon" href="static/favcon.ico" type="image/x-icon">
+    <title>Registration</title>
+</head>
+
+<body>
+
+    <form class="login-form" action="/register" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{username}}" required/>
+        
+        <input type="password" placeholder="Password" name="password" value="{{password}}" required/>
+        <input type="email" placeholder="Email" name="email" value="{{email}}" required/>
+        <input type="name" placeholder="Name" name="name" value="{{name}}" required/>
+     
+        
+        <button type="submit">Sign up</button>
+
+    </form>
+
+</body>
+
+</html>

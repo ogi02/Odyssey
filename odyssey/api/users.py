@@ -33,6 +33,6 @@ class User:
 
 	def verify_password(self, password):
 		return sha256_crypt.verify(password, self.password)
-
+		
 
  
