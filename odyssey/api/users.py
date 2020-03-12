@@ -30,6 +30,20 @@ class User:
 
 		return jsonify({'result': output})
 
+	def all_usernames():
+		output = []
+		for user in db.users.find():
+			output.append(user['username'])
+
+		return output
+
+	def all_emails():
+		output = []
+		for user in db.users.find():
+			output.append(user['email'])
+
+		return output
+
 	def find_by_username(username):
 		found = db.users.find_one({'username': username})
 		if found:
