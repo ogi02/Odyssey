@@ -8,8 +8,11 @@ verify_ssl = true
 [packages]
 Flask = "*"
 python-dotenv = "*"
-pymongo = "*"
+pymongo = {extras = ["srv"],version = "*"}
 flask-restful = "*"
+passlib = "*"
+flask-pymongo = "*"
+flask-wtforms = "*"
 
 [requires]
 python_version = "3.7"
