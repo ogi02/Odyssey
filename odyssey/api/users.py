@@ -25,7 +25,9 @@ class User:
 		found = db.users.find_one({'username': username})
 		return User(found['username'], found['password'], found['name'], found['email'])
 
-		
+	def find_by_email(email):
+		found = db.users.find_one({'email': email})
+		return User(found['username'], found['password'], found['name'], found['email'])
 
 	def hash_password(password):
 		return sha256_crypt.hash(password)
