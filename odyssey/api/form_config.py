@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, validators
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import InputRequired, EqualTo, Length, NoneOf, ValidationError
 
-from users import User
+from user import User
 
 # registration form
 class RegistrationForm(FlaskForm):
