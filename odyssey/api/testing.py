@@ -1,6 +1,6 @@
 from flask import Flask, session
 from flask import render_template, request, redirect, url_for, make_response
-from users import User
+from user import User
 from flask_restful import Resource, Api
 from form_config import RegistrationForm, LoginForm
 
