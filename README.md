@@ -1,20 +1,21 @@
 # Odyssey
-A website like Patreon, built by two 11 graders with Flask and React JS.
+A website like Patreon, built by two 11 graders with Flask and Flask RESTful.
 
 ## Requirements
-You must have any version of 'pipenv' installed.
+pipenv - any version
+python - any version >= 3
 
 ### To Run
 ```
-cd Odyssey/odyssey
+cd Odyssey/odyssey/api
 make
 ```
 
 ### To Edit
 ```
-cd Odyssey/odyssey/
-pipenv shell
+cd Odyssey/odyssey/api
 pipenv install
+pipenv shell
 ```
 
 ### Libraries
