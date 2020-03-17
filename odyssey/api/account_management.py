@@ -1,10 +1,10 @@
-from flask import render_template, redirect, request
+from flask import send_from_directory, redirect, request
 from user import User
 from form_config import RegistrationForm, LoginForm
 
 from app_config import app, api
 
-@app.route('/api/register', methods=["GET", "POST"])
+@app.route('/register', methods=["GET", "POST"])
 def register():
 	form = RegistrationForm()
 
@@ -21,9 +21,9 @@ def register():
 	# else:
 		# error log
 
-	return render_template('register.html', form = form)
+	return send_from_directory('client/public', 'register.html', form = form)
 
-@app.route('/api/login', methods=["GET", "POST"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
 	form = LoginForm()
 

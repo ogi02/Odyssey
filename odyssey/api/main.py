@@ -1,15 +1,22 @@
-from flask import url_for
+from flask import url_for, send_from_directory
 from user import User
-from flask_restful import Resource
+import random
 
 from app_config import app, api
-from account_management import register, login
+from account_management import register
+#, login
 
-class Users(Resource):
-	def get(self):
-		return User.all()
+@app.route("/")
+def base():
+	return send_from_directory('client/public', 'index.html')
 
-api.add_resource(Users, '/api/users')
+# @app.route("/<path>")
+# def home(path):
+# 	return send_from_directory('client/public', path + '.html', form = form)
+
+@app.route("/rand")
+def hello():
+	return str(random.randint(0, 100))
 
 if __name__ == "__main__":
 	app.run(debug=True)
