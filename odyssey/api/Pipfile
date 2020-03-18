@@ -11,6 +11,7 @@ python-dotenv = "*"
 pymongo = {extras = ["srv"],version = "*"}
 passlib = "*"
 flask-pymongo = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"

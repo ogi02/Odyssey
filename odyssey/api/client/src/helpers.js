@@ -15,5 +15,6 @@ export async function fetchPost(url, data) {
     body: JSON.stringify(data),
   });
   const response = await res.json();
+  console.log(response);
   return response;
 }
