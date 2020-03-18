@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from bson import ObjectId
+from nestedDict import NestedDictValues
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.info
 class Info:
@@ -54,12 +55,16 @@ class Info:
 		result = db.info_collection.insert_one(info)
 		return self
 
+	
 	def find_by_user_id(user_id):
 		user_id = ObjectId(user_id)
 		found = db.info_collection.find_one({'user_id': user_id})
 		if found:
-			print(*found.values())
-			return Info(*found.values())
+			found = list(NestedDictValues(found))
+			return Info(*found)
+
 
 info = Info.find_by_user_id("5e67e09e97c6eec599b47b96")
-print(info)
+print(info.bio)
+
+
