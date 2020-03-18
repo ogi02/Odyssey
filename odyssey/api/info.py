@@ -1,11 +1,11 @@
 from pymongo import MongoClient
-
+from bson import ObjectId
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.info
-
 class Info:
-	def __init__(self, user_id, country_of_residence, country_for_shipping, full_name, address, suite, city, state,
-    postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, content_type, bio):
+	def __init__(self, _id, user_id, country_of_residence, country_for_shipping, full_name, address, suite, city, state,
+	postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, content_type, bio):
+		self._id = _id
 		self.user_id = user_id
 		self.country_of_residence = country_of_residence
 		self.country_for_shipping = country_for_shipping
@@ -52,30 +52,14 @@ class Info:
 			'bio': self.bio
 		}
 		result = db.info_collection.insert_one(info)
-		print(result)
 		return self
 
+	def find_by_user_id(user_id):
+		user_id = ObjectId(user_id)
+		found = db.info_collection.find_one({'user_id': user_id})
+		if found:
+			print(*found.values())
+			return Info(*found.values())
 
-values = (
-	"5e67e09e97c6eec599b47b96",
-	"Belgium",
-	"Bulgaria",
-	"Gabriela",
-	"gj.Druzba 2, bl.240, vh.A, et.5, ap.40",
-	"240A",
-	"1582",
-	"0888543950",
-	"Gabriela Baruh",
-	"Gabito",
-	"gabriela_b",
-	None,
-	None,
-	None,
-	"Art, Video",
-	"obicham sirene",
-	None,
-	"mrazq chesun"
-
-
-)
-Info(*values).create()
+info = Info.find_by_user_id("5e67e09e97c6eec599b47b96")
+print(info)

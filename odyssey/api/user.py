@@ -1,12 +1,14 @@
 from flask import jsonify
 from pymongo import MongoClient
 from passlib.hash import sha256_crypt
+from bson import ObjectId
 
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.user
 
 class User:
-	def __init__(self, username, password, name, email):
+	def __init__(self, _id, username, password, name, email):
+		self._id = _id
 		self.username = username
 		self.password = password
 		self.name = name
@@ -20,39 +22,23 @@ class User:
 			'email': self.email
 		}
 		result = db.users.insert_one(user)
-		print(result)
 		return self
-
-	def all():
-		output = []
-		for user in db.users.find():
-			output.append({'username': user['username'], 'password': user['password'], 'name': user['name'], 'email': user['email']})
-
-		return jsonify({'result': output})
-
-	def all_usernames():
-		output = []
-		for user in db.users.find():
-			output.append(user['username'])
-
-		return output
-
-	def all_emails():
-		output = []
-		for user in db.users.find():
-			output.append(user['email'])
-
-		return output
 
 	def find_by_username(username):
 		found = db.users.find_one({'username': username})
 		if found:
-			return User(found['username'], found['password'], found['name'], found['email'])
+			return User(*found.values())
 
 	def find_by_email(email):
 		found = db.users.find_one({'email': email})
 		if found:
-			return User(found['username'], found['password'], found['name'], found['email'])
+			return User(*found.values())
+
+	def find_by_id(user_id):
+		user_id = ObjectId(user_id)
+		found = db.users.find_one({'_id': user_id})
+		if found:
+			return User(*found.values())
 
 	def hash_password(password):
 		return sha256_crypt.hash(password)
@@ -60,6 +46,3 @@ class User:
 
 	def verify_password(self, password):
 		return sha256_crypt.verify(password, self.password)
-		
-
- 
