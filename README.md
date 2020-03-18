@@ -1,9 +1,10 @@
 # Odyssey
-A website like Patreon, built by two 11 graders with Flask and Flask RESTful.
+A website like Patreon, built by two 11 graders with Flask and Svelte JS.
 
 ## Requirements
 pipenv - any version
 python - any version >= 3
+npm - don't know really, have to checl
 
 ### To Run
 ```
@@ -21,7 +22,7 @@ pipenv shell
 ### Libraries
 
 [Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend \
-[Flask RESTful](https://flask-restful.readthedocs.io/en/latest/) for REST API \
+[Svelte JS](https://svelte.dev/) for frontend and REST API \
 [PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database \
 [Python Dotenv](https://pypi.org/project/python-dotenv/) for app configurations
 

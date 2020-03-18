@@ -9,10 +9,8 @@ verify_ssl = true
 Flask = "*"
 python-dotenv = "*"
 pymongo = {extras = ["srv"],version = "*"}
-flask-restful = "*"
 passlib = "*"
 flask-pymongo = "*"
-flask-wtf = "*"
 
 [requires]
 python_version = "3.7"
