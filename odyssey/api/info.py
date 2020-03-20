@@ -64,7 +64,4 @@ class Info:
 			return Info(*found)
 
 
-info = Info.find_by_user_id("5e67e09e97c6eec599b47b96")
-print(info.bio)
-
 
