@@ -40,18 +40,27 @@ def register():
 	password = request.get_json().get("password")
 	name = request.get_json().get("name")
 	email = request.get_json().get("email")
-	if not username or not password or not name or not email:
+	if not username:
 		# log
-		return jsonify(success=False, message="All inputs are required!"), 403
+		return jsonify(success=False, element="username", message="Username is required!"), 400	# bad request
+	if not password:
+		# log
+		return jsonify(success=False, element="password", message="Password is required!"), 400	# bad request
+	if not name:
+		# log
+		return jsonify(success=False, element="name", message="Name is required!"), 400	# bad request
+	if not email:
+		# log
+		return jsonify(success=False, element="email", message="Email is required!"), 400	# bad request
 	if len(password) < 8:
 		# log
-		return jsonify(success=False, message="Password must be at least 8 characters!"), 403
+		return jsonify(success=False, element="password", message="Password must be at least 8 characters!"), 403	# forbidden
 	if User.find_by_username(username):
 		# log
-		return jsonify(success=False, message="An account with such username already exists!"), 403
+		return jsonify(success=False, element="username", message="An account with such username already exists!"), 409	# conflict
 	if User.find_by_email(email):
 		# log
-		return jsonify(success=False, message="An account with such email already exists!"), 403
+		return jsonify(success=False, element="email", message="An account with such email already exists!"), 409	# conflict
 	values = (None, username, User.hash_password(password), name, email, None)
 	User(*values).create()
 	session["LOGGED_IN"] = True
@@ -63,16 +72,35 @@ def register():
 def login():
 	username = request.get_json().get("username")
 	password = request.get_json().get("password")
-	if not username or not password:
+	if not username:
 		# log
-		return jsonify(success=False, message="All inputs are required!"), 403
+		return jsonify(success=False, element="username", message="Username is required!"), 400	# bad request
+	if not password:
+		# log
+		return jsonify(success=False, element="password", message="Password is required!"), 400	# bad request
 	user = User.find_by_username(username)
 	if not user or not user.verify_password(password):
 		# log
-		return jsonify(success=False, message="Incorrect username or password!"), 403
+		return jsonify(success=False, element="password", message="Incorrect username or password!"), 403	# forbidden
 	session["LOGGED_IN"] = True
 	session["USERNAME"] = username
 	# log
+	return jsonify(success=True)
+
+@app.route("/FpCerpd9Z7SIbjmN81Jy/username")
+def check_username():
+	username = request.get_json().get("username")
+	user = User.find_by_username(username)
+	if user:
+		return jsonify(success=False, element="username", message="An account with such username already exists!")
+	return jsonify(success=True)
+
+@app.route("/FpCerpd9Z7SIbjmN81Jy/email")
+def check_email():
+	email = request.get_json().get("email")
+	user = User.find_by_email(email)
+	if user:
+		return jsonify(success=False, element="email", message="An account with such email already exists!")
 	return jsonify(success=True)
 
 @app.route("/logout")
