@@ -65,3 +65,13 @@ class User:
 	def verify_password(self, password):
 		return sha256_crypt.verify(password, self.password)
 
+	def change_password(username, new_password):
+		new_password = User.hash_password(new_password)
+		found = db.users.find_one_and_update({'username': username}, {"$set": {'password': new_password}}, return_document=ReturnDocument.AFTER)
+
+	def change_email(username, new_email):
+		found = db.users.find_one_and_update({'username': username}, {"$set": {'email': new_email}}, return_document=ReturnDocument.AFTER)
+
+
+
+
