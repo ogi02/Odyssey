@@ -1,11 +1,12 @@
 from pymongo import MongoClient
 from bson import ObjectId
 from nestedDict import NestedDictValues
+from pymongo import ReturnDocument
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.info
 class Info:
 	def __init__(self, _id, user_id, country_of_residence, country_for_shipping, full_name, address, suite, city, state,
-	postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, content_type, bio):
+	postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, bio, following, patreoning):
 		self._id = _id
 		self.user_id = user_id
 		self.country_of_residence = country_of_residence
@@ -23,8 +24,10 @@ class Info:
 		self.webtoon = webtoon
 		self.twitch = twitch
 		self.youtube = youtube
-		self.content_type = content_type
 		self.bio = bio
+		self.following = following;
+		self.patreoning = patreoning;
+
 
 	def create(self):
 		info = {
@@ -49,8 +52,9 @@ class Info:
 				'twitch': self.twitch,
 				'youtube': self.youtube
 			},
-			'content_type': self.content_type,
-			'bio': self.bio
+			'bio': self.bio,
+			'following': [[]],
+			'patreoning': [[]]
 		}
 		result = db.info_collection.insert_one(info)
 		return self
@@ -62,6 +66,9 @@ class Info:
 		if found:
 			found = list(NestedDictValues(found))
 			return Info(*found)
+
+	def become_patreon(self, creator_id, tier_id):
+		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
 
 
 
