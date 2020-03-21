@@ -1,7 +1,7 @@
 <script>
 	
 	import { onMount } from "svelte";
-	import Register from "./Register.svelte";
+	import Authentication from "./Authentication/Authentication.svelte";
 	
 	let loggedIn;
 	
@@ -15,18 +15,11 @@
 			loggedIn = false;
 		}
 	});
-	
-	async function logoutUser() {
-		loggedIn = false;
-		const res = await fetch('http://localhost:3000/logout');
-		const response = await res.json();
-	}
-	
 
 </script>
 
 {#if loggedIn == false}
-	<Register/>
+	<Authentication />
 {:else}
 	<div></div>
 {/if}
