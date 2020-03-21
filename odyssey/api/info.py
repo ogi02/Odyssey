@@ -71,6 +71,4 @@ class Info:
 		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
 
 
-info = Info.find_by_user_id("5e67e09e97c6eec599b47b96")
-info.become_patreon("5e67e09e97c6eec599b47b53","5e67e09e97c6eec599b47b42")
-print(info)
+
