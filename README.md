@@ -20,6 +20,12 @@ pipenv shell
 cd client/
 npm install
 ```
+### Commit Messages Formatting
+ - [Update] "commit message"
+ - [Remove] "commit message"
+ - [Fix] "commit message"
+ - [New] "commit message"
+  
 
 ### Libraries
 
