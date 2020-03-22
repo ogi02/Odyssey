@@ -2,6 +2,8 @@ from flask import send_from_directory, jsonify, request, session
 from functools import wraps
 from user import User
 from flask_cors import CORS
+from info import Info
+from creatorSpecific import CreatorSpecific
 
 from flask import Flask
 
@@ -40,12 +42,79 @@ def register():
 	password = request.get_json().get("password")
 	name = request.get_json().get("name")
 	email = request.get_json().get("email")
-	values = (None, username, User.hash_password(password), name, email, None)
+
+	values = (
+		None, 
+		username, 
+		User.hash_password(password), 
+		name,
+		email,
+		None
+	)
+
 	User(*values).create()
 	session["LOGGED_IN"] = True
 	session["USERNAME"] = username
 	# log
 	return jsonify(success=True, message="Registration successful!")
+
+@app.route("/becomeCreator", methods=["POST"])
+def become_creator():
+	user = user.find_by_username("USERNAME")
+	user_id = user._id
+	full_name = request.get_json().get("full_name")
+	country_of_residence = request.get_json().get("country_of_residence")
+	country_for_shipping = request.get_json().get("country_for_shipping")
+	address = request.get_json().get("address")
+	suite = request.get_json().get("suite")
+	city = request.get_json().get("city")
+	state = request.get_json().get("state")
+	postal_code = request.get_json().get("postal_code")
+	phone_number = request.get_json().get("phone_number")
+	facebook = request.get_json().get("facebook")
+	twitter = request.get_json().get("twitter")
+	instagram = request.get_json().get("instagram")
+	webtoon = request.get_json().get("webtoon")
+	twitch = request.get_json().get("twitch")
+	youtube = request.get_json().get("youtube")
+	bio = request.get_json().get("bio")
+
+
+	values = (
+		None,
+		user_id,
+		country_of_residence,
+		country_for_shipping,
+		full_name,
+		address,
+		suite,
+		city,
+		state,
+		postal_code,
+		phone_number,
+		facebook, twitter,
+		instagram, webtoon,
+		twitch,
+		youtube,
+		bio,
+		None,
+		None
+	)
+	Info(*values).create()
+
+	content_type = request.get_json().get("content_type")
+
+	values = (
+		None,
+		user_id,
+		None,
+		None,
+		content_type
+	)
+	CreatorSpecific(*values).create()
+
+	# log
+	return jsonify(success=True, message="Successfully updated to creator!")
 
 @app.route("/login", methods=["POST"])
 def login():
