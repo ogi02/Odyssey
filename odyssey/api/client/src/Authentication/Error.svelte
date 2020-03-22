@@ -1,10 +1,9 @@
 <script>
 	export let message;
 	export let id;
-	export let classes;
 </script>
 
-<div id={id} class={classes}>
+<div id={id} class="error">
 	<h4>{message}</h4>
 </div>
 
@@ -15,6 +14,7 @@
 	display: none;
 }
 h4 {
+	display: inline;
 	color: tomato;
 }
 </style>
