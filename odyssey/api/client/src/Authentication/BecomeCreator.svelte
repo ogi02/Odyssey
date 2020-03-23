@@ -2,6 +2,7 @@
 
 	import { fetchPost } from '../fetch.js';
 	import Countries from '../Helpers/Countries.svelte';
+	import { becomeCreator } from './authentication_management.js';
 
 	let result = {
 		country: '',
@@ -14,7 +15,7 @@
 			city: '',
 			address: '',
 			suite: '',
-			postal_code: '',
+			postal_code: ''
 		},
 		social_media_links: {
 			facebook: '',
@@ -22,7 +23,7 @@
 			instagram: '',
 			webtoon: '',
 			twitch: '',
-			youtube: '',
+			youtube: ''
 		}
 	}
 
@@ -38,10 +39,6 @@
 
 	function cancelBecomingCreator() {
 		console.log('cancel');
-	}
-
-	function becomeCreator() {
-		console.log('finish');
 	}
 
 </script>
@@ -158,7 +155,7 @@
 				<h4>Previous</h4>
 			</div>
 
-			<div class='page_buttons green' on:click={becomeCreator}>
+			<div class='page_buttons green' on:click={() => becomeCreator(result)}>
 				<h4>Finish</h4>
 			</div>
 		

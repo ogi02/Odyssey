@@ -36,6 +36,11 @@ export async function registerUser(login) {
 	});
 }
 
+// become creator function 
+export async function becomeCreator(result) {
+	console.log(result)
+}
+
 // logout function 
 export async function logoutUser() {
 	loggedIn = false;
