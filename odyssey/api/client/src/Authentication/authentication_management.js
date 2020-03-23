@@ -39,6 +39,9 @@ export async function registerUser(login) {
 // become creator function 
 export async function becomeCreator(result) {
 	console.log(result)
+	const response = await fetchPost('http://localhost:3000/becomeCreator', {
+		result: result
+	});
 }
 
 // logout function 

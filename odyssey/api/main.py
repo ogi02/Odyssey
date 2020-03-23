@@ -11,15 +11,6 @@ app = Flask(__name__)
 app.secret_key = "OCML3BRawWEUeaxcuKHLpw"
 CORS(app)
 
-def require_login(func):
-	@wraps(func)
-	def wrapper(*args, **kwargs):
-		# if there isn't a logged user
-		if not session.get("SIGNED_IN"):
-			return redirect('/login')
-		return func(*args, **kwargs)
-	return wrapper
-
 @app.route("/")
 def base():
 	return send_from_directory('client/public', 'index.html')
@@ -60,56 +51,43 @@ def register():
 
 @app.route("/becomeCreator", methods=["POST"])
 def become_creator():
-	user = user.find_by_username("USERNAME")
+	user = User.find_by_username(session.get("USERNAME"))
 	user_id = user._id
-	full_name = request.get_json().get("full_name")
-	country_of_residence = request.get_json().get("country_of_residence")
-	country_for_shipping = request.get_json().get("country_for_shipping")
-	address = request.get_json().get("address")
-	suite = request.get_json().get("suite")
-	city = request.get_json().get("city")
-	state = request.get_json().get("state")
-	postal_code = request.get_json().get("postal_code")
-	phone_number = request.get_json().get("phone_number")
-	facebook = request.get_json().get("facebook")
-	twitter = request.get_json().get("twitter")
-	instagram = request.get_json().get("instagram")
-	webtoon = request.get_json().get("webtoon")
-	twitch = request.get_json().get("twitch")
-	youtube = request.get_json().get("youtube")
-	bio = request.get_json().get("bio")
+	result = request.get_json().get("result")
+	
 
 
 	values = (
 		None,
 		user_id,
-		country_of_residence,
-		country_for_shipping,
-		full_name,
-		address,
-		suite,
-		city,
-		state,
-		postal_code,
-		phone_number,
-		facebook, twitter,
-		instagram, webtoon,
-		twitch,
-		youtube,
-		bio,
+		result.get("country_of_residence"),
+		result.get("country_for_shipping"),
+		result.get("full_name"),
+		result.get("address"),
+		result.get("suite"),
+		result.get("city"),
+		result.get("state"),
+		result.get("postal_code"),
+		result.get("phone_number"),
+		result.get("facebook"), 
+		result.get("twitter"),
+		result.get("instagram"), 
+		result.get("webtoon"),
+		result.get("twitch"),
+		result.get("youtube"),
+		result.get("bio"),
 		None,
 		None
 	)
 	Info(*values).create()
 
-	content_type = request.get_json().get("content_type")
 
 	values = (
 		None,
 		user_id,
 		None,
 		None,
-		content_type
+		result.get("content_type")
 	)
 	CreatorSpecific(*values).create()
 
@@ -146,7 +124,6 @@ def check_email():
 	return jsonify(success=True)
 
 @app.route("/logout")
-@require_login
 def user_logout():
 	session["USERNAME"] = None
 	session["LOGGED_IN"] = False

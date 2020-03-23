@@ -17,10 +17,10 @@ class CreatorSpecific:
 			'user_id': self.user_id,
 			'followers': [],
 			'patreons': [[]],
-			'content_type':[]
+			'content_type': self.content_type
 
 		}
-		result = db.creator_specifics_collection.insert_one(info)
+		result = db.creator_specifics_collection.insert_one(creator_specific)
 		return self
 		
 	def find_by_user_id(user_id):
