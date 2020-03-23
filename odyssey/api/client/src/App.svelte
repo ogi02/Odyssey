@@ -1,13 +1,14 @@
 <script>
 	
-	import { onMount } from "svelte";
-	import Authentication from "./Authentication/Authentication.svelte";
+	import { onMount } from 'svelte';
+	import Authentication from './Authentication/Authentication.svelte';
+	import BecomeCreator from './Authentication/BecomeCreator.svelte'
 	
 	let loggedIn;
 	
 	onMount(async () => {
 		const res = await fetch(
-			"http://localhost:3000/checkLogin");
+			'http://localhost:3000/checkLogin');
 		const response = await res.json();
 		if (response.logged_in) {
 			loggedIn = true;
@@ -21,5 +22,5 @@
 {#if loggedIn == false}
 	<Authentication />
 {:else}
-	<div></div>
+	<BecomeCreator />
 {/if}

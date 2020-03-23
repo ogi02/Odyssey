@@ -1,6 +1,6 @@
 <script>
 	
-	import Field from './Field.svelte';
+	import Field from '../Helpers/Field.svelte';
 
 	import { loginUser, registerUser } from './authentication_management.js';
 	
