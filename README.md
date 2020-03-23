@@ -19,7 +19,11 @@ pipenv install
 pipenv shell
 cd client/
 npm install
+
 ```
+### Branching strategy
+ [GitHub Flow](https://githubflow.github.io/)
+
 ### Commit Messages Formatting
  - [Update] "commit message"
  - [Remove] "commit message"
