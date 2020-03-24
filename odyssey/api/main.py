@@ -2,21 +2,14 @@ from flask import send_from_directory, jsonify, request, session
 from functools import wraps
 from user import User
 from flask_cors import CORS
+from info import Info
+from creatorSpecific import CreatorSpecific
 
 from flask import Flask
 
 app = Flask(__name__)
 app.secret_key = "OCML3BRawWEUeaxcuKHLpw"
 CORS(app)
-
-def require_login(func):
-	@wraps(func)
-	def wrapper(*args, **kwargs):
-		# if there isn't a logged user
-		if not session.get("SIGNED_IN"):
-			return redirect('/login')
-		return func(*args, **kwargs)
-	return wrapper
 
 @app.route("/")
 def base():
@@ -40,12 +33,66 @@ def register():
 	password = request.get_json().get("password")
 	name = request.get_json().get("name")
 	email = request.get_json().get("email")
-	values = (None, username, User.hash_password(password), name, email, None)
+
+	values = (
+		None, 
+		username, 
+		User.hash_password(password), 
+		name,
+		email,
+		None
+	)
+
 	User(*values).create()
 	session["LOGGED_IN"] = True
 	session["USERNAME"] = username
 	# log
 	return jsonify(success=True, message="Registration successful!")
+
+@app.route("/becomeCreator", methods=["POST"])
+def become_creator():
+	user = User.find_by_username(session.get("USERNAME"))
+	user_id = user._id
+	result = request.get_json().get("result")
+	
+
+
+	values = (
+		None,
+		user_id,
+		result.get("country_of_residence"),
+		result.get("country_for_shipping"),
+		result.get("full_name"),
+		result.get("address"),
+		result.get("suite"),
+		result.get("city"),
+		result.get("state"),
+		result.get("postal_code"),
+		result.get("phone_number"),
+		result.get("facebook"), 
+		result.get("twitter"),
+		result.get("instagram"), 
+		result.get("webtoon"),
+		result.get("twitch"),
+		result.get("youtube"),
+		result.get("bio"),
+		None,
+		None
+	)
+	Info(*values).create()
+
+
+	values = (
+		None,
+		user_id,
+		None,
+		None,
+		result.get("content_type")
+	)
+	CreatorSpecific(*values).create()
+
+	# log
+	return jsonify(success=True, message="Successfully updated to creator!")
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -77,7 +124,6 @@ def check_email():
 	return jsonify(success=True)
 
 @app.route("/logout")
-@require_login
 def user_logout():
 	session["USERNAME"] = None
 	session["LOGGED_IN"] = False

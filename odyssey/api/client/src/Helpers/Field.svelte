@@ -2,7 +2,7 @@
 
 	import { fetchPost } from '../fetch.js';
 	import Error from './Error.svelte';
-	import { checkInput } from './authentication_management.js'
+	import { checkInput } from '../Authentication/authentication_management.js'
 
 	export let type;
 	export let id;

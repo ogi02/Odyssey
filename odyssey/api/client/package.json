@@ -18,7 +18,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "boxicons": "^2.0.5",
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svero": "^1.0.0"
   }
 }
