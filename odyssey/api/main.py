@@ -3,6 +3,8 @@ from functools import wraps
 from user import User
 from flask_cors import CORS
 from info import Info
+from bson import json_util, ObjectId
+import json
 from creatorSpecific import CreatorSpecific
 
 from flask import Flask
@@ -130,6 +132,11 @@ def user_logout():
 	# log
 	return jsonify(success=True, message="successfully logged out")
 
+@app.route("/profile")
+def user_profile():
+	user = User.get_from_db(session.get("USERNAME"))
+	user = json.loads(json_util.dumps(user))
+	return jsonify(user = user)
 
 if __name__ == "__main__":
 	app.run(debug=True)

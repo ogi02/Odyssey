@@ -64,8 +64,7 @@ class Info:
 		user_id = ObjectId(user_id)
 		found = db.info_collection.find_one({'user_id': user_id})
 		if found:
-			found = list(NestedDictValues(found))
-			return Info(*found)
+			return found
 
 	def become_patreon(self, creator_id, tier_id):
 		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
