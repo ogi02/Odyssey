@@ -7,6 +7,7 @@
 	let result = {
 		country_of_residence: '',
 		bio: '',
+		working_on: '',
 		full_name: '',
 		phone_number: '',
 		country_for_shipping: '',
@@ -51,6 +52,9 @@
 			
 			<h3>Who are you?</h3>
 			<p>The information you provide will help people know more about their favourite creator, but you can leave it empty if you like.</p>
+
+			<input type='text' class='input' id='working_on' placeholder='Creator of ...'
+				bind:value={result.working_on}>
 
 			<input class='input' list='countries' name='country_of_residence' placeholder='Country'
 				bind:value={result.country_of_residence}>

@@ -53,8 +53,8 @@ def register():
 
 @app.route("/becomeCreator", methods=["POST"])
 def become_creator():
-	user = User.find_by_username(session.get("USERNAME"))
-	user_id = user._id
+	user = User.get_from_db(session.get("USERNAME"))
+	user_id = user.get('_id')
 	result = request.get_json().get("result")
 	
 
@@ -78,6 +78,7 @@ def become_creator():
 		result.get("twitch"),
 		result.get("youtube"),
 		result.get("bio"),
+		result.get("working_on"),
 		None,
 		None
 	)
@@ -136,7 +137,12 @@ def user_logout():
 def user_profile():
 	user = User.get_from_db(session.get("USERNAME"))
 	user = json.loads(json_util.dumps(user))
-	return jsonify(user = user)
+	info = Info.find_by_user_id(user.get('_id').get("$oid"))
+	info = json.loads(json_util.dumps(info))
+
+
+
+	return jsonify(user = user, info = info)
 
 if __name__ == "__main__":
 	app.run(debug=True)
