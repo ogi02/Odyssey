@@ -24,5 +24,5 @@
 {#if loggedIn == false}
 	<Authentication />
 {:else}
-	<!-- <Profile /> -->
+	<Profile />
 {/if}

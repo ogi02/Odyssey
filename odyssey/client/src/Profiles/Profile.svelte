@@ -23,8 +23,8 @@
 <div class="card">
   <img src="https://www.stylist.co.uk/images/app/uploads/2016/09/21140727/gettyimages-1029935574.jpg?w=1640&h=1&fit=max&auto=format%2Ccompress" alt="ProfilePic" style="width:11rem; height: 11rem; margin-top: 1em; border: 5px; border-color: white; border-style: solid; border-radius: 95px;">
   <h1>{user.username}</h1>
-  <p class="title">{info.bio}</p>
-  <p>{info.country_of_residence}</p>
+  <p class="title">{info.bio || ""}</p>
+  <p>{info.country_of_residence || ""}</p>
   <div style="margin: 24px 0;">
     <a href="#"><i class="fa fa-twitch"></i></a> 
     <a href="#"><i class="fa fa-twitter"></i></a>  
