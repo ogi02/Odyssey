@@ -46,12 +46,12 @@ class User:
 	def find_by_username(username):
 		found = db.users.find_one({'username': username})
 		if found:
-			return found
+			return User(*found.values())
 
 	def find_by_email(email):
 		found = db.users.find_one({'email': email})
 		if found:
-			return found
+			return User(*found.values())
 
 	def find_by_id(user_id):
 		user_id = ObjectId(user_id)

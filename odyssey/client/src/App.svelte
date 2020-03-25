@@ -15,7 +15,8 @@
 			loggedIn = true;
 		} else {
 			loggedIn = false;
-		}
+		}	
+		console.log(loggedIn);
 	});
 
 </script>

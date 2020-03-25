@@ -1,8 +1,0 @@
-<script>
-	import { fetchGet } from '../fetch.js';
-	async function get_user(){
-		user = fetchGet("/profile");
-		console.log(user);
-	}
-	await get_user();
-</script>
