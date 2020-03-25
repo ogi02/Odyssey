@@ -27,7 +27,7 @@ class CreatorSpecific:
 		user_id = ObjectId(user_id)
 		found = db.creator_specifics_collection.find_one({'user_id': user_id})
 		if found:
-			return Info(*found)
+			return found
 
 	def get_follower_count(user_id):
 		user_id = ObjectId(user_id)

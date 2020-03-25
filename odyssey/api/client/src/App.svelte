@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import Authentication from './Authentication/Authentication.svelte';
 	import BecomeCreator from './Authentication/BecomeCreator.svelte'
+	import Profile from './Profiles/Profile.svelte'
 	
 	let loggedIn;
 	
@@ -22,5 +23,5 @@
 {#if loggedIn == false}
 	<Authentication />
 {:else}
-	<BecomeCreator />
+	<Profile />
 {/if}

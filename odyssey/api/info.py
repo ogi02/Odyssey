@@ -6,7 +6,7 @@ client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb
 db = client.info
 class Info:
 	def __init__(self, _id, user_id, country_of_residence, country_for_shipping, full_name, address, suite, city, state,
-	postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, bio, following, patreoning):
+	postal_code, phone_number, facebook, twitter, instagram, webtoon, twitch, youtube, bio, working_on, following, patreoning):
 		self._id = _id
 		self.user_id = user_id
 		self.country_of_residence = country_of_residence
@@ -25,8 +25,9 @@ class Info:
 		self.twitch = twitch
 		self.youtube = youtube
 		self.bio = bio
-		self.following = following;
-		self.patreoning = patreoning;
+		self.working_on = working_on
+		self.following = following
+		self.patreoning = patreoning
 
 
 	def create(self):
@@ -53,6 +54,7 @@ class Info:
 				'youtube': self.youtube
 			},
 			'bio': self.bio,
+			'working_on': self.working_on,
 			'following': [[]],
 			'patreoning': [[]]
 		}
@@ -64,8 +66,7 @@ class Info:
 		user_id = ObjectId(user_id)
 		found = db.info_collection.find_one({'user_id': user_id})
 		if found:
-			found = list(NestedDictValues(found))
-			return Info(*found)
+			return found
 
 	def become_patreon(self, creator_id, tier_id):
 		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)

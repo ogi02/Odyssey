@@ -4,6 +4,7 @@ from passlib.hash import sha256_crypt
 from bson import ObjectId
 from pymongo import ReturnDocument
 
+
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.user
 
@@ -45,18 +46,23 @@ class User:
 	def find_by_username(username):
 		found = db.users.find_one({'username': username})
 		if found:
-			return User(*found.values())
+			return found
 
 	def find_by_email(email):
 		found = db.users.find_one({'email': email})
 		if found:
-			return User(*found.values())
+			return found
 
 	def find_by_id(user_id):
 		user_id = ObjectId(user_id)
 		found = db.users.find_one({'_id': user_id})
 		if found:
-			return User(*found.values())
+			return found
+
+	def get_from_db(username):
+		found = db.users.find_one({'username': username})
+		if found:
+			return found
 
 	def hash_password(password):
 		return sha256_crypt.hash(password)
@@ -67,10 +73,10 @@ class User:
 
 	def change_password(username, new_password):
 		new_password = User.hash_password(new_password)
-		found = db.users.find_one_and_update({'username': username}, {"$set": {'password': new_password}}, return_document=ReturnDocument.AFTER)
+		change = db.users.find_one_and_update({'username': username}, {"$set": {'password': new_password}}, return_document=ReturnDocument.AFTER)
 
 	def change_email(username, new_email):
-		found = db.users.find_one_and_update({'username': username}, {"$set": {'email': new_email}}, return_document=ReturnDocument.AFTER)
+		change = db.users.find_one_and_update({'username': username}, {"$set": {'email': new_email}}, return_document=ReturnDocument.AFTER)
 
 
 
