@@ -43,7 +43,11 @@ npm install
 
 ### Braching Strategy
 
+<<<<<<< HEAD
 [GitHub Flow](https://githubflow.github.io/) 
+=======
+[GitHub Flow](https://githubflow.github.io/) \
+>>>>>>> master
 
  - Anything in the master branch is deployable
  - To work on something new, create a descriptively named branch off of maste
