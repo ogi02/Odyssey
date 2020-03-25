@@ -8,13 +8,12 @@ from creatorSpecific import CreatorSpecific
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask
-from helpers import allowed_image
+from helpers import allowed_image, get_extension
 
-UPLOAD_FOLDER = '/images/'
+upload_folder = './client/images'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLpw'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
 @app.route('/')
@@ -129,13 +128,14 @@ def check_email():
 
 @app.route('/FpCerpd9Z7SIbjmN81Jy/upload_picture', methods=['POST'])
 def upload_picture():
-	picture_type = request.get_json().get('picture_type')
-	file = request.get_json().get('file')
+	image = request.files['image']
 	username = session.get('USERNAME')
-
-	if allowed_image(file.filename):
-		filename = username + '_' + picture_type
-		file.save(os.path.join(app.config['UPLOAD_FOLDER'] + username + '/', filename))
+	if allowed_image(image.filename):
+		path = os.path.join(upload_folder, username)
+		filename = username + '_profile_picture'
+		if not os.path.exists(path):
+			os.makedirs(path)
+		image.save(os.path.join(path, filename))
 		return jsonify(success=True)
 	else:
 		return jsonify(success=False, message='Allowed extensions: "pdf", "png", "jpeg", "jpg", "gif".')

@@ -1,6 +1,7 @@
 <script>
 	import { fetchGet } from '../fetch.js';
 	import { onMount } from 'svelte';
+  import ChangeProfilePic from './ChangeProfilePic.svelte';
 
 	let user = {};
 	let info = {};
@@ -16,12 +17,28 @@
 
 	});
 
+  let change = true;
+
+  function toggleChangeProfilePic() {
+    change = !change;
+    console.log(change);
+  }
+
 	
 </script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{#if change} 
+  <ChangeProfilePic />
+{:else}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <img src="https://thewideawakening.com/wp-content/uploads/2016/03/TWA-Header-Background-1600x400.jpg" style="position: absolute; top: 0; left: 0; min-width: 100%; width: 100%; height: 45%; min-height: 300px; object-fit: cover;">
 <div class="card">
-  <img src="https://www.stylist.co.uk/images/app/uploads/2016/09/21140727/gettyimages-1029935574.jpg?w=1640&h=1&fit=max&auto=format%2Ccompress" alt="ProfilePic" style="width:11rem; height: 11rem; margin-top: 1em; border: 5px; border-color: white; border-style: solid; border-radius: 95px;">
+  <div class='profile_pic'>
+    <img src="https://www.stylist.co.uk/images/app/uploads/2016/09/21140727/gettyimages-1029935574.jpg?w=1640&h=1&fit=max&auto=format%2Ccompress" alt="ProfilePic" style="width:11rem; height: 11rem; margin-top: 1em; border: 5px; border-color: white; border-style: solid; border-radius: 95px;">
+    <div class='toggle' on:click={toggleChangeProfilePic}>
+      <i class='bx bx-image-add'></i>
+    </div>
+  </div>
   <h1>{user.username}</h1>
   <p class="title">{info.bio || ""}</p>
   <p>{info.country_of_residence || ""}</p>
@@ -34,6 +51,7 @@
   </div>
   <p><button>Follow</button></p>
 </div>
+{/if}
 
 <style>
 .card {
@@ -73,4 +91,9 @@ a {
 button:hover, a:hover {
   opacity: 0.7;
 }
+
+.toggle:hover {
+  background-color: #eee;
+}
+
 </style>
