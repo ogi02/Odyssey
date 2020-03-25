@@ -15,7 +15,8 @@
 			loggedIn = true;
 		} else {
 			loggedIn = false;
-		}
+		}	
+		console.log(loggedIn);
 	});
 
 </script>
@@ -23,5 +24,5 @@
 {#if loggedIn == false}
 	<Authentication />
 {:else}
-	<Profile />
+	<!-- <Profile /> -->
 {/if}

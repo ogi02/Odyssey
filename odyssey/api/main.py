@@ -1,5 +1,4 @@
-from flask import send_from_directory, jsonify, request, session
-from functools import wraps
+from flask import Flask, send_from_directory, jsonify, request, session
 from user import User
 from flask_cors import CORS
 from info import Info
@@ -57,8 +56,6 @@ def become_creator():
 	user_id = user.get('_id')
 	result = request.get_json().get("result")
 	
-
-
 	values = (
 		None,
 		user_id,
@@ -83,7 +80,6 @@ def become_creator():
 		None
 	)
 	Info(*values).create()
-
 
 	values = (
 		None,
@@ -139,8 +135,6 @@ def user_profile():
 	user = json.loads(json_util.dumps(user))
 	info = Info.find_by_user_id(user.get('_id').get("$oid"))
 	info = json.loads(json_util.dumps(info))
-
-
 
 	return jsonify(user = user, info = info)
 

@@ -1,6 +1,7 @@
 import { fetchPost } from '../fetch.js';
 import { 
-	clearErrorsAndLoaders, checkEmpty, displayError, clearError, showLoader, hideLoader, disableButton, enableButton
+	clearErrorsAndLoaders, checkEmpty, displayError, clearError, 
+	showLoader, hideLoader, disableButton, enableButton
 } from './authentication_helpers.js';
 
 
