@@ -5,35 +5,40 @@ from info import Info
 from bson import json_util, ObjectId
 import json
 from creatorSpecific import CreatorSpecific
-
+import os
+from werkzeug.utils import secure_filename
 from flask import Flask
+from helpers import allowed_image
+
+UPLOAD_FOLDER = '/images/'
 
 app = Flask(__name__)
-app.secret_key = "OCML3BRawWEUeaxcuKHLpw"
+app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLpw'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
-@app.route("/")
+@app.route('/')
 def base():
 	return send_from_directory('client/public', 'index.html')
 
-@app.route("/<path:path>")
+@app.route('/<path:path>')
 def home(path):
 	return send_from_directory('client/public', path)
 
-@app.route("/checkLogin")
+@app.route('/checkLogin')
 def check_login():
-	if session.get("LOGGED_IN"):
-		print("There is a user logged in")
+	if session.get('LOGGED_IN'):
+		print('There is a user logged in')
 		return jsonify(logged_in=True)
-	print("There is not a user logged in")
+	print('There is not a user logged in')
 	return jsonify(logged_in=False)
 
-@app.route("/register", methods=["POST"])
+@app.route('/register', methods=['POST'])
 def register():
-	username = request.get_json().get("username")
-	password = request.get_json().get("password")
-	name = request.get_json().get("name")
-	email = request.get_json().get("email")
+	username = request.get_json().get('username')
+	password = request.get_json().get('password')
+	name = request.get_json().get('name')
+	email = request.get_json().get('email')
 
 	values = (
 		None, 
@@ -45,37 +50,37 @@ def register():
 	)
 
 	User(*values).create()
-	session["LOGGED_IN"] = True
-	session["USERNAME"] = username
+	session['LOGGED_IN'] = True
+	session['USERNAME'] = username
 	# log
-	return jsonify(success=True, message="Registration successful!")
+	return jsonify(success=True, message='Registration successful!')
 
-@app.route("/becomeCreator", methods=["POST"])
+@app.route('/becomeCreator', methods=['POST'])
 def become_creator():
-	user = User.get_from_db(session.get("USERNAME"))
+	user = User.get_from_db(session.get('USERNAME'))
 	user_id = user.get('_id')
-	result = request.get_json().get("result")
+	result = request.get_json().get('result')
 	
 	values = (
 		None,
 		user_id,
-		result.get("country_of_residence"),
-		result.get("country_for_shipping"),
-		result.get("full_name"),
-		result.get("address"),
-		result.get("suite"),
-		result.get("city"),
-		result.get("state"),
-		result.get("postal_code"),
-		result.get("phone_number"),
-		result.get("facebook"), 
-		result.get("twitter"),
-		result.get("instagram"), 
-		result.get("webtoon"),
-		result.get("twitch"),
-		result.get("youtube"),
-		result.get("bio"),
-		result.get("working_on"),
+		result.get('country_of_residence'),
+		result.get('country_for_shipping'),
+		result.get('full_name'),
+		result.get('address'),
+		result.get('suite'),
+		result.get('city'),
+		result.get('state'),
+		result.get('postal_code'),
+		result.get('phone_number'),
+		result.get('facebook'), 
+		result.get('twitter'),
+		result.get('instagram'), 
+		result.get('webtoon'),
+		result.get('twitch'),
+		result.get('youtube'),
+		result.get('bio'),
+		result.get('working_on'),
 		None,
 		None
 	)
@@ -86,57 +91,70 @@ def become_creator():
 		user_id,
 		None,
 		None,
-		result.get("content_type")
+		result.get('content_type')
 	)
 	CreatorSpecific(*values).create()
 
 	# log
-	return jsonify(success=True, message="Successfully updated to creator!")
+	return jsonify(success=True, message='Successfully updated to creator!')
 
-@app.route("/login", methods=["POST"])
+@app.route('/login', methods=['POST'])
 def login():
-	username = request.get_json().get("username")
-	password = request.get_json().get("password")
+	username = request.get_json().get('username')
+	password = request.get_json().get('password')
 	user = User.find_by_username(username)
 	if not user or not user.verify_password(password):
 		# log
-		return jsonify(success=False, message="Incorrect username or password!"), 403	# forbidden
-	session["LOGGED_IN"] = True
-	session["USERNAME"] = username
+		return jsonify(success=False, message='Incorrect username or password!'), 403	# forbidden
+	session['LOGGED_IN'] = True
+	session['USERNAME'] = username
 	# log
 	return jsonify(success=True)
 
-@app.route("/FpCerpd9Z7SIbjmN81Jy/username", methods=["POST"])
+@app.route('/FpCerpd9Z7SIbjmN81Jy/username', methods=['POST'])
 def check_username():
-	username = request.get_json().get("username")
+	username = request.get_json().get('username')
 	user = User.find_by_username(username)
 	if user:
-		return jsonify(success=False, message="An account with such username already exists!")
+		return jsonify(success=False, message='An account with such username already exists!')
 	return jsonify(success=True)
 
-@app.route("/FpCerpd9Z7SIbjmN81Jy/email", methods=["POST"])
+@app.route('/FpCerpd9Z7SIbjmN81Jy/email', methods=['POST'])
 def check_email():
-	email = request.get_json().get("email")
+	email = request.get_json().get('email')
 	user = User.find_by_email(email)
 	if user:
-		return jsonify(success=False, message="An account with such email already exists!")
+		return jsonify(success=False, message='An account with such email already exists!')
 	return jsonify(success=True)
 
-@app.route("/logout")
-def user_logout():
-	session["USERNAME"] = None
-	session["LOGGED_IN"] = False
-	# log
-	return jsonify(success=True, message="successfully logged out")
+@app.route('/FpCerpd9Z7SIbjmN81Jy/upload_picture', methods=['POST'])
+def upload_picture():
+	picture_type = request.get_json().get('picture_type')
+	file = request.get_json().get('file')
+	username = session.get('USERNAME')
 
-@app.route("/profile")
+	if allowed_image(file.filename):
+		filename = username + '_' + picture_type
+		file.save(os.path.join(app.config['UPLOAD_FOLDER'] + username + '/', filename))
+		return jsonify(success=True)
+	else:
+		return jsonify(success=False, message='Allowed extensions: "pdf", "png", "jpeg", "jpg", "gif".')
+
+@app.route('/logout')
+def user_logout():
+	session['USERNAME'] = None
+	session['LOGGED_IN'] = False
+	# log
+	return jsonify(success=True, message='successfully logged out')
+
+@app.route('/profile')
 def user_profile():
-	user = User.get_from_db(session.get("USERNAME"))
+	user = User.get_from_db(session.get('USERNAME'))
 	user = json.loads(json_util.dumps(user))
-	info = Info.find_by_user_id(user.get('_id').get("$oid"))
+	info = Info.find_by_user_id(user.get('_id').get('$oid'))
 	info = json.loads(json_util.dumps(info))
 
 	return jsonify(user = user, info = info)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	app.run(debug=True)
