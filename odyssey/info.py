@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 from bson import ObjectId
-from nestedDict import NestedDictValues
 from pymongo import ReturnDocument
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.info

@@ -1,9 +1,6 @@
 import { fetchPost } from '../fetch.js';
-import { 
-	clearErrorsAndLoaders, checkEmpty, displayError, clearError, 
-	showLoader, hideLoader, disableButton, enableButton
-} from './authentication_helpers.js';
-
+import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
+import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../helpers.js';
 
 // login function
 export async function loginUser(login) {
