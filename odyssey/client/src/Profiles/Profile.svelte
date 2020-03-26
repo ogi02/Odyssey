@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
   import ChangeProfilePic from './ChangeProfilePic.svelte';
 
+  let profile_picture_src = '';
 	let user = {};
 	let info = {};
 	let social_media_links = {};
@@ -11,13 +12,14 @@
 		const response = await fetchGet("/profile");
 		user = response.user;
 		info = response.info;
-		social_media_links = response.info.social_media_links;
-		shipping_info = response.info.shipping_info;
-
-
+    if(info != null) {
+  		social_media_links = response.info.social_media_links;
+  		shipping_info = response.info.shipping_info;
+    }
+    profile_picture_src = 'images/' + user.username + '/profile_picture?t=' + new Date().getTime();
 	});
 
-  let change = true;
+  let change = false;
 
   function toggleChangeProfilePic() {
     change = !change;
@@ -28,20 +30,20 @@
 </script>
 
 {#if change} 
-  <ChangeProfilePic />
+  <ChangeProfilePic bind:change={change} bind:src={profile_picture_src} username={user.username}/>
 {:else}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <img src="https://thewideawakening.com/wp-content/uploads/2016/03/TWA-Header-Background-1600x400.jpg" style="position: absolute; top: 0; left: 0; min-width: 100%; width: 100%; height: 45%; min-height: 300px; object-fit: cover;">
 <div class="card">
   <div class='profile_pic'>
-    <img src="https://www.stylist.co.uk/images/app/uploads/2016/09/21140727/gettyimages-1029935574.jpg?w=1640&h=1&fit=max&auto=format%2Ccompress" alt="ProfilePic" style="width:11rem; height: 11rem; margin-top: 1em; border: 5px; border-color: white; border-style: solid; border-radius: 95px;">
+    <img src={profile_picture_src} id="profile_picture">
     <div class='toggle' on:click={toggleChangeProfilePic}>
-      <i class='bx bx-image-add'></i>
+      Change Profile Pic
     </div>
   </div>
   <h1>{user.username}</h1>
-  <p class="title">{info.bio || ""}</p>
-  <p>{info.country_of_residence || ""}</p>
+  <p class="title">{(info == null) ? "" : info.bio}</p>
+  <p>{(info == null) ? "" : info.country_of_residence}</p>
   <div style="margin: 24px 0;">
     <a href="#"><i class="fa fa-twitch"></i></a> 
     <a href="#"><i class="fa fa-twitter"></i></a>  
@@ -94,6 +96,15 @@ button:hover, a:hover {
 
 .toggle:hover {
   background-color: #eee;
+}
+
+#profile_picture {
+  margin-top: 1em;
+  border: 4px solid #fff;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 175px;
+  width: 175px;
 }
 
 </style>

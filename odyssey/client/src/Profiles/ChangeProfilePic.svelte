@@ -1,5 +1,8 @@
 <script>
 
+	export let username;
+	export let change;
+	export let src;
 	import Error from '../Helpers/Error.svelte';
 	import { displayError, clearError } from '../helpers.js';
 	import { fetchFilePost } from '../fetch.js';
@@ -21,6 +24,8 @@
 			displayError('profile_picture_error', response.message)
 			return false;
 		}
+		change = false;
+		src = 'images/' + username + '/profile_picture?t=' + new Date().getTime();
 	}
 
 </script>

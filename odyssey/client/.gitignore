@@ -1,4 +1,4 @@
-images/*
+public/images/*
 node_modules/
 public/build/
 package-lock.json

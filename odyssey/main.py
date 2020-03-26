@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from flask import Flask
 from helpers import allowed_image, get_extension
 
-upload_folder = './client/images'
+upload_folder = './client/public/images'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLpw'
@@ -132,7 +132,7 @@ def upload_picture():
 	username = session.get('USERNAME')
 	if allowed_image(image.filename):
 		path = os.path.join(upload_folder, username)
-		filename = username + '_profile_picture'
+		filename = 'profile_picture'
 		if not os.path.exists(path):
 			os.makedirs(path)
 		image.save(os.path.join(path, filename))
