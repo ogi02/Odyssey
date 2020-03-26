@@ -8,7 +8,7 @@ from creatorSpecific import CreatorSpecific
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask
-from helpers import allowed_image, get_extension
+from helpers import allowed_image
 
 upload_folder = './client/public/images'
 
@@ -129,10 +129,11 @@ def check_email():
 @app.route('/FpCerpd9Z7SIbjmN81Jy/upload_picture', methods=['POST'])
 def upload_picture():
 	image = request.files['image']
+	picture_type = request.args.get('type')
 	username = session.get('USERNAME')
 	if allowed_image(image.filename):
 		path = os.path.join(upload_folder, username)
-		filename = 'profile_picture'
+		filename = picture_type + '_picture'
 		if not os.path.exists(path):
 			os.makedirs(path)
 		image.save(os.path.join(path, filename))

@@ -8,6 +8,3 @@ def allowed_image(filename):
 		return True
 	else:
 		return False
-
-def get_extension(filename):
-	return filename.rsplit('.', 1)[1].lower()

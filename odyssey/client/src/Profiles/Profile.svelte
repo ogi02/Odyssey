@@ -1,14 +1,18 @@
 <script>
 	import { fetchGet } from '../fetch.js';
 	import { onMount } from 'svelte';
-  import ChangeProfilePic from './ChangeProfilePic.svelte';
+  import ChangePic from './ChangePic.svelte';
 
   let profile_picture_src = '';
+  let cover_picture_src = '';
+  let type_of_picture = '';
+
 	let user = {};
 	let info = {};
 	let social_media_links = {};
 	let shipping_info = {};
-	onMount(async()=>{
+	
+  onMount(async() => {
 		const response = await fetchGet("/profile");
 		user = response.user;
 		info = response.info;
@@ -17,28 +21,50 @@
   		shipping_info = response.info.shipping_info;
     }
     profile_picture_src = 'images/' + user.username + '/profile_picture?t=' + new Date().getTime();
+    cover_picture_src = 'images/' + user.username + '/cover_picture?t=' + new Date().getTime();
 	});
 
   let change = false;
 
   function toggleChangeProfilePic() {
-    change = !change;
-    console.log(change);
+    type_of_picture = 'profile';
+    change = true;
+  }
+
+  function toggleChangeCoverPic() {
+    type_of_picture = 'cover';
+    change = true;
   }
 
 	
 </script>
 
-{#if change} 
-  <ChangeProfilePic bind:change={change} bind:src={profile_picture_src} username={user.username}/>
+{#if change}
+  {#if type_of_picture == 'profile'} 
+    <ChangePic 
+      bind:change={change} 
+      bind:src={profile_picture_src} 
+      username={user.username} 
+      bind:type={type_of_picture}
+    />
+  {:else}
+    <ChangePic 
+      bind:change={change} 
+      bind:src={cover_picture_src} 
+      username={user.username} 
+      bind:type={type_of_picture}
+    />
+  {/if}
 {:else}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<img src="https://thewideawakening.com/wp-content/uploads/2016/03/TWA-Header-Background-1600x400.jpg" style="position: absolute; top: 0; left: 0; min-width: 100%; width: 100%; height: 45%; min-height: 300px; object-fit: cover;">
+<img src={cover_picture_src} id="cover_picture">
 <div class="card">
   <div class='profile_pic'>
     <img src={profile_picture_src} id="profile_picture">
     <div class='toggle' on:click={toggleChangeProfilePic}>
       Change Profile Pic
+    </div>
+    <div class='toggle' on:click={toggleChangeCoverPic}>
+      Change Cover Pic
     </div>
   </div>
   <h1>{user.username}</h1>
@@ -105,6 +131,17 @@ button:hover, a:hover {
   border-radius: 50%;
   height: 175px;
   width: 175px;
+}
+
+#cover_picture {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  min-width: 100%; 
+  width: 100%; 
+  height: 45%; 
+  min-height: 300px; 
+  object-fit: cover;
 }
 
 </style>
