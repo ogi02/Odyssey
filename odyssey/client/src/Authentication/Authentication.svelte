@@ -13,6 +13,9 @@
 </script>
 
 <div id='card'>
+
+	<p> Welcome to Odyssey! Log in or register to view content.</p>
+
 	<div class='header'>
 		{#if login}
 			<h1>Login</h1>
