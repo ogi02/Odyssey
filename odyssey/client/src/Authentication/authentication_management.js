@@ -44,7 +44,7 @@ export async function becomeCreator(result) {
 
 // logout function 
 export async function logoutUser() {
-	loggedIn = false;
+	let loggedIn = false;
 	const res = await fetch('http://localhost:3000/logout');
 	const response = await res.json();
 }

@@ -2,21 +2,34 @@
 	import { Router, Route} from "svelte-routing";
 	import BecomeCreator from '../Authentication/BecomeCreator.svelte';
 	import Profile from '../Profiles/Profile.svelte';
-  import { link } from "svelte-routing";
+  import { link, navigate } from "svelte-routing";
+  import Authentication from "../Authentication/Authentication.svelte";
+  import App from '../App.svelte';
 	export let url = "";
+  import { logoutUser, loginUser } from '../Authentication/authentication_management.js';
+  import { checkLogin } from "../helpers.js";
 </script>
 
 <Router url="{url}">
+
   <nav>
     <a href="/" use:link>Home</a>
-    <a href="become_a_creator" use:link>Become a creator!</a>
     <a href="about" use:link>About</a>
+    {#if checkLogin()}
+      <a href="become_a_creator" use:link>Become a creator!</a>
+      <a href="login" use:link on:click={() => logoutUser()}>Logout</a>
+    {:else}
+      <a href="login" use:link>Log in</a>
+    {/if}
     
   </nav>
   <div>
     <Route path="about" component="{Profile}" />
     <Route path="become_a_creator" component="{BecomeCreator}" />
     <Route path="/" component="{Profile}" />
+    <Route path="login" component="{Authentication}" />
+
+
   </div>
 </Router>
 
