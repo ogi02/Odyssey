@@ -13,8 +13,7 @@
     return {};
   }
 </script>
-<div style="position: relative; top: 500px;">
-  <Link to="{to}" getProps="{getProps}">
-    <slot />
-  </Link>
-</div>
+
+<Link to="{to}" getProps="{getProps}">
+  <slot />
+</Link>
