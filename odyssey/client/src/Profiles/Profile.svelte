@@ -2,7 +2,6 @@
 	import { fetchGet } from '../fetch.js';
 	import { onMount } from 'svelte';
   import ChangePic from './ChangePic.svelte';
-  import NavBar from '../Navigation/NavBar.svelte';
 
   let profile_picture_src = '';
   let cover_picture_src = '';

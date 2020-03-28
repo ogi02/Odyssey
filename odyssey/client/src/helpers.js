@@ -28,13 +28,11 @@ export function enableButton(button) {
 }
 
 export async function checkLogin() {
-	
 	const res = await fetch('http://localhost:3000/checkLogin');
 	const response = await res.json();
 	if (response.logged_in) {
 		return true;
 	} else {
 		return false;
- 	}
- 	
+	}
 }

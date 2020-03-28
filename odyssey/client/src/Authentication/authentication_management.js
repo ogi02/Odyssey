@@ -3,7 +3,7 @@ import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
 import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../helpers.js';
 
 // login function
-export async function loginUser(login) {
+export async function loginUser(login, dispatch) {
 	clearErrorsAndLoaders();
 	if(!checkEmpty(login)) {
 		return false;
@@ -17,10 +17,11 @@ export async function loginUser(login) {
 		displayError('error_l_password', response.message)
 		return false;
 	}
+	return true;
 }
 
 // register function
-export async function registerUser(login) {
+export async function registerUser(login, dispatch) {
 	clearErrorsAndLoaders();
 	if(!checkEmpty(login)) {
 		return false;
@@ -32,6 +33,7 @@ export async function registerUser(login) {
 	const response = await fetchPost('http://localhost:3000/register', {
 		username: username, email: email, name: name, password: password
 	});
+	return true;
 }
 
 // become creator function 
@@ -47,6 +49,7 @@ export async function logoutUser() {
 	let loggedIn = false;
 	const res = await fetch('http://localhost:3000/logout');
 	const response = await res.json();
+	return loggedIn;
 }
 
 // asynchronous input validation for registration
