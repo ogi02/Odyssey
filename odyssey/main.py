@@ -1,14 +1,4 @@
-from flask import Flask, send_from_directory, jsonify, request, session
-from user import User
-from flask_cors import CORS
-from info import Info
-from bson import json_util, ObjectId
-import json
-from creatorSpecific import CreatorSpecific
-import os
-from werkzeug.utils import secure_filename
-from flask import Flask
-from helpers import allowed_image
+from imports import *
 
 upload_folder = './client/public/images'
 
