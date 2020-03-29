@@ -55,6 +55,19 @@ def register():
 	# log
 	return jsonify(success=True, message='Registration successful!')
 
+@app.route('/editProfile', methods = ['POST'])
+def edit_profile():
+	username = session.get('USERNAME')
+	password = request.get_json().get('password')
+	email = request.get_json().get('email')
+	if password:
+		User.change_password(username, password)
+	
+	if email:
+		User.change_email(username, email)
+	
+	return jsonify(success=True, message='Profile edited successful!')
+
 @app.route('/becomeCreator', methods=['POST'])
 def become_creator():
 	user = User.get_from_db(session.get('USERNAME'))

@@ -1,4 +1,5 @@
 import { fetchPost } from '../fetch.js';
+import { displayError } from '../helpers.js';
 
 // clears all errors and loaders
 export function clearErrorsAndLoaders() {
