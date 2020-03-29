@@ -1,14 +1,20 @@
-<script>
+<!-- Used as input field for login, registration and profile editing forms -->
 
-	import { fetchPost } from '../fetch.js';
+<script>
+	// Component imports
 	import Error from './Error.svelte';
+
+	// Javascript imports
+	import { fetchPost } from '../fetch.js';
 	import { checkInput } from '../Authentication/authentication_management.js'
 
+	// Inherited variables
 	export let type;
 	export let id;
 	export let placeholder;
 	export let has_icon;
 
+	// Local variables
 	let username = '';
 	let email = '';
 	let password = '';
@@ -38,15 +44,19 @@
 </div>
 
 <style>
+
 	.field {
 		display: block;
 	}
+
 	.input, .icons, .error {
 		display: inline;
 	}
+
 	.icons {
 		color: rgba(0, 0, 0, 0,7);
 		font-size: 16px;
 		display: none;
 	}
+	
 </style>

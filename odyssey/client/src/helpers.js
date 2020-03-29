@@ -1,32 +1,35 @@
-// display certain error
+// Display certain error
 export function displayError(element, message) {
 	document.getElementById(element).style.display = 'inline';
 	document.getElementById(element).getElementsByTagName('h4')[0].innerHTML = message;
 }
 
-// clear certain error
+// Clear certain error
 export function clearError(element) {
 	document.getElementById(element).style.display = 'none';
 }
 
-// show certain loader
+// Show certain loader
 export function showLoader(element) {
 	document.getElementById(element).style.display = 'inline';
 }
 
-// hide certain loader
+// Hide certain loader
 export function hideLoader(element) {
 	document.getElementById(element).style.display = 'none';
 }
 
+// Disable certain button
 export function disableButton(button) {
 	document.getElementById(button).disabled = true;
 }
 
+// Enable certain button
 export function enableButton(button) {
 	document.getElementById(button).disabled = false;
 }
 
+// Check if there is a user logged in
 export async function checkLogin() {
 	const res = await fetch('http://localhost:3000/checkLogin');
 	const response = await res.json();

@@ -1,3 +1,5 @@
+<!-- List of all countries, used in becoming creator part -->
+
 <option value="Afghanistan">Afghanistan</option>
 <option value="Åland Islands">Åland Islands</option>
 <option value="Albania">Albania</option>

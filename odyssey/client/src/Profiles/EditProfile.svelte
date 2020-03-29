@@ -1,17 +1,28 @@
 <script>
+	// Component imports
 	import Field from "../Helpers/Field.svelte";
+
+	// Javascript imports
 	import { fetchPost } from '../fetch.js';
 	import { displayError } from '../helpers.js'
+
+	// Inherited variables
 	export let change;
 	
+	// Edit profile function
 	async function editProfile() {
+		// Get email, password and confirm password
 		let email = document.getElementById('input_e_email').value;
 		let password = document.getElementById('input_e_password').value;
 		let confirm = document.getElementById('input_e_confirm').value;
+
+		// Check is password is set, but not confirmed
 		if(password != '' && confirm == '') {
 			displayError('error_e_confirm', 'Confirm Password is required');
 			return false;
 		}
+
+		// Fetch post request for changing email, password or both
 		const response = await fetchPost('http://localhost:3000/editProfile', {
 			email: email, password: password
 		});
@@ -43,8 +54,10 @@
 </div>
 
 <style>
+
 	.card {
 		position: relative;
 		top: 50px;
 	}
+	
 </style>
