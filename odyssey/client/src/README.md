@@ -1,4 +1,4 @@
-## Comment conventions for Svelte JS
+## Conventions for Svelte JS
 
 ### Requirements for every .svelte file
 Order of code: 

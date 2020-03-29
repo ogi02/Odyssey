@@ -1,7 +1,7 @@
 # Odyssey
 A website like Patreon, built by two 11 graders with Flask and Svelte JS.
 
-## Requirements
+### Requirements
  - [Python](https://www.python.org/) - any version >= 3
  - [Pipenv](https://pipenv-fork.readthedocs.io/en/latest/) - compatible for Python 3
  - [Node JS](https://nodejs.org/en/), used for its [NPM](https://www.npmjs.com/)(Node Package Manager) - developed with 6.12.0
@@ -27,8 +27,6 @@ flask:
 svelte:
 	cd client/ && npm install && npm run autobuild
 ```
-&& -> synchronous,
-& -> asynchronous, so that both the Flask server and the Svelte front-end are started.
 
 ### To Edit
 Go to Terminal and type the following commands: 
@@ -53,8 +51,6 @@ npm install
  - Everything branches off of master and merges back to master
  - Hotfixes are treated like small features and merge back into master
 
-
-
 ### Commit Messages Formatting
  - [Update] "commit message"
  - [Remove] "commit message"
@@ -64,7 +60,7 @@ npm install
 ### Libraries
 [Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend \
 [Svelte JS](https://svelte.dev/) for frontend and REST API \
-[Svero](https://github.com/kazzkiq/svero) for routing web page \
+[Page JS](https://visionmedia.github.io/page.js/) for routing web page \
 [PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database \
 [Python Dotenv](https://pypi.org/project/python-dotenv/) for app configurations
 
