@@ -1,14 +1,18 @@
 <script>
-	export let hashbang = true;
-
+	// Library imports
 	import page from "page.js";
 	import { setContext, afterUpdate } from "svelte";
 	import { writable } from "svelte/store";
 
+	// Inherited variables
+	export let hashbang = true;
+
+	// Local variables
+	let started = false;
 	const current_path = writable("/");
+
 	setContext("current_path", current_path);
 
-	let started = false;
 	afterUpdate(() => {
 		if (!started) {
 			started = true;

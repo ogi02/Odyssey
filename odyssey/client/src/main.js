@@ -1,3 +1,4 @@
+// Component imports
 import App from './App.svelte';
 
 const app = new App({

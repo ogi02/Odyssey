@@ -1,9 +1,11 @@
+// Fetch get request
 export async function fetchGet(url) {
 	const res = await fetch(url);
 	const response = await res.json();
 	return response;
 }
 
+// Fetch post request with JSON body
 export async function fetchPost(url, data) {
   const res = await fetch(
 	url, {
@@ -19,6 +21,7 @@ export async function fetchPost(url, data) {
 	return response;
 }
 
+// Fetch post request with File body
 export async function fetchFilePost(url, file) {
 	const formData = new FormData()
 	formData.append('image', file);

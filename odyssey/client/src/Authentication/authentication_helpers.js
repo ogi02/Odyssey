@@ -1,22 +1,25 @@
+// Javascript imports
 import { fetchPost } from '../fetch.js';
 import { displayError } from '../helpers.js';
 
-// clears all errors and loaders
+// Clears all errors and loaders in forms of any kind
 export function clearErrorsAndLoaders() {
+	// Display: none of all erros
 	let errors = document.getElementsByClassName('error');
 	for(let i = 0; i < errors.length; i++) {
 		errors[i].style.display = 'none';
 	}
+	// Display: none of all loaders
 	let loaders = document.getElementsByClassName('icons');
 	for(let i = 0; i < loaders.length; i++) {
 		loaders[i].style.display = 'none';
 	}
 }
 
-// checks if there is any empty input
+// Checks if there is any empty input in login and registration form
 export function checkEmpty(login) {
 	let is_valid = true;
-
+	// If user is filling in login form
 	if(login) {
 		let username = document.getElementById('input_l_username').value;
 		let password = document.getElementById('input_l_password').value;
@@ -29,7 +32,7 @@ export function checkEmpty(login) {
 			is_valid = false;
 		}
 	}
-
+	// If user is filling in registration form
 	else {
 		let username = document.getElementById('input_r_username').value;
 		let email = document.getElementById('input_r_email').value;
