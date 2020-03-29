@@ -5,4 +5,4 @@ flask:
 	pipenv install && pipenv run flask run
 
 svelte:
-	cd client/ && npm install && npm run autobuild
+	cd client/ && npm install && npm run dev

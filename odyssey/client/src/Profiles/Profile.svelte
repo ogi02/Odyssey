@@ -36,7 +36,6 @@
     change = true;
   }
 
-	
 </script>
 
 {#if change}
@@ -125,7 +124,7 @@ button:hover, a:hover {
 }
 
 #profile_picture {
-  margin-top: 1em;
+  margin-top: 4em;
   border: 4px solid #fff;
   object-fit: cover;
   border-radius: 50%;
@@ -135,7 +134,7 @@ button:hover, a:hover {
 
 #cover_picture {
   position: absolute; 
-  top: 0; 
+  top: 3.5em; 
   left: 0; 
   min-width: 100%; 
   width: 100%; 

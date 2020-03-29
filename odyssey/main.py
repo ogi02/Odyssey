@@ -20,6 +20,7 @@ CORS(app)
 def base():
 	return send_from_directory('client/public', 'index.html')
 
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
 	return send_from_directory('client/public', path)
@@ -150,12 +151,14 @@ def user_logout():
 
 @app.route('/profile')
 def user_profile():
-	user = User.get_from_db(session.get('USERNAME'))
-	user = json.loads(json_util.dumps(user))
-	info = Info.find_by_user_id(user.get('_id').get('$oid'))
-	info = json.loads(json_util.dumps(info))
+	if(session.get('LOGGED_IN')):
+		user = User.get_from_db(session.get('USERNAME'))
+		user = json.loads(json_util.dumps(user))
+		info = Info.find_by_user_id(user.get('_id').get('$oid'))
+		info = json.loads(json_util.dumps(info))
 
-	return jsonify(user = user, info = info)
+		return jsonify(success=True, user = user, info = info)
+	return jsonify(success=False)
 
 if __name__ == '__main__':
 	app.run(debug=True)
