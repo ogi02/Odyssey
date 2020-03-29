@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLpw'
 CORS(app)
 
+# Register blueprints
 app.register_blueprint(profile_bp)
 app.register_blueprint(become_creator_bp)
 app.register_blueprint(authentication_bp)
@@ -21,15 +22,18 @@ app.register_blueprint(username_validator_bp)
 
 @app.route('/')
 def base():
+	# Main path
 	return send_from_directory('client/public', 'index.html')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
+	# Default path
 	return send_from_directory('client/public', path)
 
 @app.route('/checkLogin')
 def check_login():
+	# Check if there is a user logged in
 	if session.get('LOGGED_IN'):
 		print('There is a user logged in')
 		return jsonify(logged_in=True)

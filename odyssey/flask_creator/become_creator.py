@@ -14,10 +14,14 @@ become_creator_bp = Blueprint('become_creator_bp', __name__)
 
 @become_creator_bp.route('/becomeCreator', methods=['POST'])
 def become_creator():
+	# Get user from session
 	user = User.get_from_db(session.get('USERNAME'))
 	user_id = user.get('_id')
+
+	# Get information about the future creator
 	result = request.get_json().get('result')
 	
+	# Tuple with user's information
 	values = (
 		None,
 		user_id,
@@ -43,6 +47,7 @@ def become_creator():
 	)
 	Info(*values).create()
 
+	# Tuple with user's creator specific information
 	values = (
 		None,
 		user_id,
