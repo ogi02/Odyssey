@@ -54,71 +54,75 @@ export async function logoutUser() {
 
 // asynchronous input validation for registration
 export async function checkInput(element) {
-	switch(element.id) {
-		case 'r_username':
-			checkUsername();
+	switch(element.id.split('_')[1]) {
+		case 'username':
+			if(element.id.split('_')[0] != 'l') {
+				checkUsername(element.id);
+			}
 			break;
-		case 'r_email':
-			checkEmail();
+		case 'email':
+			checkEmail(element.id);
 			break;
-		case 'r_password':
-			checkPassword();
+		case 'password':
+			if(element.id.split('_')[0] != 'l') {
+				checkPassword(element.id);
+			}
 			break;
-		case 'r_confirm':
-			checkConfirm();
+		case 'confirm':
+			checkConfirm(element.id);
 			break;
 		default:
 			break;
 	}
 }
 
-async function checkUsername() {
-	let username = document.getElementById('input_r_username').value;
-	clearError('error_r_username');
-	enableButton('register_button');
-	showLoader('loader_r_username');
+async function checkUsername(id) {
+	let username = document.getElementById('input_' + id).value;
+	clearError('error_' + id);
+	enableButton('info_submit');
+	showLoader('loader_' + id);
 	const usrnm_response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/username', {
 		username: username
 	});
-	hideLoader('loader_r_username');
+	hideLoader('loader_' + id);
 	if(!usrnm_response.success) {
-		displayError('error_r_username', usrnm_response.message);
-		disableButton('register_button');
+		displayError(('error_' + id), usrnm_response.message);
+		disableButton('info_submit');
 	}
 }
 
-async function checkEmail() {
-	let email = document.getElementById('input_r_email').value;
-	clearError('error_r_email');
-	enableButton('register_button');
-	showLoader('loader_r_email');
+async function checkEmail(id) {
+	let email = document.getElementById('input_' + id).value;
+	clearError('error_' + id);
+	enableButton('info_submit');
+	showLoader('loader_' + id);
 	const email_response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/email', {
 		email: email
 	});
-	hideLoader('loader_r_email');
+	hideLoader('loader_' + id);
 	if(!email_response.success) {
-		displayError('error_r_email', email_response.message);
-		disableButton('register_button');
+		displayError(('error_' + id), email_response.message);
+		disableButton('info_submit');
 	}
 }
 
-function checkPassword() {
-	let password = document.getElementById('input_r_password').value;
-	clearError('error_r_password');
-	enableButton('register_button');
+function checkPassword(id) {
+	let password = document.getElementById('input_' + id).value;
+	clearError('error_' + id);
+	enableButton('info_submit');
 	if(password.length < 8) {
-		displayError('error_r_password', 'Password must be at least 8 characters long!');
-		disableButton('register_button');
+		displayError(('error_' + id), 'Password must be at least 8 characters long!');
+		disableButton('info_submit');
 	}
 }
 
-function checkConfirm() {
-	let password = document.getElementById('input_r_password').value;
-	let confirm = document.getElementById('input_r_confirm').value;
-	clearError('error_r_confirm');
-	enableButton('register_button');
+function checkConfirm(id) {
+	let password = document.getElementById('input_' + id.split('_')[0] + '_password').value;
+	let confirm = document.getElementById('input_' + id).value;
+	clearError('error_' + id);
+	enableButton('info_submit');
 	if(password != confirm) {
-		displayError('error_r_confirm', 'Passwords must match!');
-		disableButton('register_button');
+		displayError(('error_' + id), 'Passwords must match!');
+		disableButton('info_submit');
 	}
 }

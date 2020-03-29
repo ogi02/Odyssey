@@ -15,7 +15,7 @@
 
 <div id='card'>
 
-	<p> Welcome to Odyssey! Log in or register to view content.</p>
+	<p>Welcome to Odyssey! Log in or register to view content.</p>
 
 	<div class='header'>
 		{#if login}
@@ -34,9 +34,11 @@
 
 			<Field type='password' id='l_password' placeholder='Password' has_icon={false} />
 
-			<button id='login_button' type='submit' on:click|preventDefault={async () => {
+			<button id='info_submit' type='submit' on:click|preventDefault={async () => {
 				loggedIn = await loginUser(true);
-				page.redirect('/profile');
+				if(loggedIn == true) {
+					page.redirect('/profile');
+				}
 			}}>Login</button>
 
 			<div class='switch' on:click={toggleLogin}>Don't have an account? Register now!</div>
@@ -53,9 +55,11 @@
 
 			<Field type='password' id='r_confirm' placeholder='Confirm Password' has_icon={false} />
 
-			<button id='register_button' type='submit' on:click|preventDefault={async () => {
+			<button id='info_submit' type='submit' on:click|preventDefault={async () => {
 				loggedIn = await registerUser(false);
-				page.redirect('/profile');
+				if(loggedIn == true) {
+					page.redirect('/profile');
+				}
 			}}>Register</button>
 
 			<div class='switch' on:click={toggleLogin}>Already have an account? Log in!</div>
