@@ -10,6 +10,7 @@ from flask import Blueprint, request, session, jsonify
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
+from flask_logging.log_config import info_log, error_log
 
 profile_bp = Blueprint('profile_bp', __name__)
 
@@ -51,10 +52,13 @@ def upload_picture():
 
 		# Save image
 		image.save(os.path.join(path, filename))
-		# log
+		info_log.info("New %s picture saved for %s" % picture_type % username)
+
 		return jsonify(success=True)
 		
 	else:
+		error_log.error("Image extension is not allowed or doesn't exist!")
+
 		return jsonify(success=False, message='Allowed extensions: "pdf", "png", "jpeg", "jpg", "gif".')
 
 @profile_bp.route('/editProfile', methods = ['POST'])
@@ -69,10 +73,11 @@ def edit_profile():
 	# Change password
 	if password:
 		User.change_password(username, password)
+		info_log.info("Changed password for %s" % username)
 	
 	# Change email
 	if email:
 		User.change_email(username, email)
-
-	# log	
+		info_log.info("Changed email for %s" % username)
+		
 	return jsonify(success=True, message='Profile edited successful!')

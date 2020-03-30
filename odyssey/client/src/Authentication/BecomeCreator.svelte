@@ -45,7 +45,7 @@
 
 	// Cancel button onclick
 	function cancelBecomingCreator() {
-		page.redirect('/');
+		page.redirect('/profile');
 	}
 
 </script>

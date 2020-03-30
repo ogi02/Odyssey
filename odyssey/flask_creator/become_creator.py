@@ -8,6 +8,7 @@ from flask import Blueprint, request, session, jsonify
 # Imports from .py files
 from flask_classes.user import User
 from flask_classes.info import Info
+from flask_logging.log_config import info_log, error_log
 from flask_classes.creator_specific import CreatorSpecific
 
 become_creator_bp = Blueprint('become_creator_bp', __name__)
@@ -57,5 +58,6 @@ def become_creator():
 	)
 	CreatorSpecific(*values).create()
 
-	# log
+	info_log.info("%s became a creator." % session.get("USERNAME"))
+	
 	return jsonify(success=True, message='Successfully updated to creator!')
