@@ -35,9 +35,8 @@ def home(path):
 def check_login():
 	# Check if there is a user logged in
 	if session.get('LOGGED_IN'):
-		print('There is a user logged in')
 		return jsonify(logged_in=True)
-	print('There is not a user logged in')
+		
 	return jsonify(logged_in=False)
 
 if __name__ == '__main__':

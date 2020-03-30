@@ -85,13 +85,13 @@
 
 {:else}
 
-	<img src={cover_picture_src} id="cover_picture">
+	<img src={cover_picture_src} id="cover_picture" on:error={() => cover_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()}>
 
 	<div class="card">
 		
 		<div class='profile_pic'>
 			
-			<img src={profile_picture_src} id="profile_picture">
+			<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()}>
 
 			<div class='toggle' on:click={toggleChangeProfilePic}>Change Profile Pic</div>
 			<div class='toggle' on:click={toggleChangeCoverPic}>Change Cover Pic</div>

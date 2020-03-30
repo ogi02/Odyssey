@@ -6,6 +6,7 @@ from flask import Blueprint, request, session, jsonify
 
 # Imports from .py files
 from flask_classes.user import User
+from flask_logging.log_config import info_log, error_log
 
 authentication_bp = Blueprint('authentication_bp', __name__)
 
@@ -31,7 +32,8 @@ def register():
 	User(*values).create()
 	session['LOGGED_IN'] = True
 	session['USERNAME'] = username
-	# log
+	info_log.info("User %s registered successfully." % username)
+
 	return jsonify(success=True, message='Registration successful!')
 
 @authentication_bp.route('/login', methods=['POST'])
@@ -43,13 +45,15 @@ def login():
 	
 	# Validate user
 	if not user or not user.verify_password(password):
-		# log
+		error_log.error("Login failed!")
+		
 		return jsonify(success=False, message='Incorrect username or password!'), 403 # forbidden
 	
 	# Update session
 	session['LOGGED_IN'] = True
 	session['USERNAME'] = username
-	# log
+	info_log.info("%s logged in successfully." % username)
+
 	return jsonify(success=True)
 
 @authentication_bp.route('/logout')
@@ -57,5 +61,6 @@ def user_logout():
 	# Update session
 	session['USERNAME'] = None
 	session['LOGGED_IN'] = False
-	# log
+	info_log.info("User logged out.")
+
 	return jsonify(success=True, message='successfully logged out')
