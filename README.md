@@ -32,7 +32,7 @@ First, you need to have Python 3 on your machine. To install it:
     ```
     $ sudo add-apt-repository ppa:deadsnakes/ppa
     ```
-	   When prompted press  `Enter`  to continue:
+    When prompted press  `Enter`  to continue:
     ```output
     Press [ENTER] to continue or Ctrl-c to cancel adding it.
     ```
@@ -60,21 +60,22 @@ Check out [this article](https://gist.github.com/kogcyc/07c3e5d1f427c9fa6b99044d
 
 Finally, you need Node JS and `npm`
 1. Install Node JS:
-	```
-	$ sudo apt install nodejs
-	```
+    ```
+    $ sudo apt install nodejs
+    ```
 2. You can verify that Node JS was installed by typing:
-	```
-	$ nodejs -v
-	``` 
+    ```
+    $ nodejs -v
+    ``` 
 3. In this case, you will need to install `npm` as well:
-	```
-	$ sudo apt install npm
-	```
+    ```
+    $ sudo apt install npm
+    ```
 4. Make sure that `npm` is installed successfully by typing:
-	```
-	$ npm -v
-	```
+    ```
+    $ npm -v
+    ```
+
 #### Installation for Mac OS
 
 To install Python 3 on Mac OS go to [this link](https://www.python.org/downloads/mac-osx/) and choose version to download. You will have to go through a quick setup wizard but then you are good to go.
@@ -115,13 +116,13 @@ $ make
 The Makefile runs the following script:
 ```makefile
 all:
-	make flask & make svelte
-	
+    make flask & make svelte
+    
 flask:
-	pipenv install && pipenv run flask run
-	
+    pipenv install && pipenv run flask run
+    
 svelte:
-	cd client/ && npm install && npm run autobuild
+    cd client/ && npm install && npm run autobuild
 ```
 
 ### To Edit
@@ -137,6 +138,11 @@ $ npm install
 `pipenv` will install any libraries used in Flask, whereas `npm` will install any libraries used in Svelte JS.
 When you have finished developing, you can exit the virtual environment by typing:
 `$ exit` in `/odyssey` directory.
+
+### IDE
+
+We have used [Sublime Text 3](https://www.sublimetext.com/3) for developing the project. You can also install `Svelte` from Package Control for Svelte syntax highlighting
+
 
 ### Braching Strategy
 
