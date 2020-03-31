@@ -8,6 +8,9 @@ A website like Patreon, built by two 11 graders with Flask and Svelte JS.
 - [Pipenv](https://pipenv-fork.readthedocs.io/en/latest/) - compatible for Python 3
 - [Node JS](https://nodejs.org/en/), used for its [NPM](https://www.npmjs.com/)(Node Package Manager) - developed with 6.12.0
 
+### Supported Operating Systems
+Currently supported OS are Mac OS, Ubuntu and Windows. You can probably run the project on other OS but you have to install the requirements by yourself. In the documentation there is an installation guide for Mac OS, Ubuntu and Windows.
+
 #### Installation for Windows
 
 You can install Python 3 for Windows from [this link](https://www.python.org/downloads/windows/). At the time of developing the project, the latest Python version is 3.8.2. Keep in mind that if you are using Windows XP or earlier the latest version is Python 3.4.3. 
