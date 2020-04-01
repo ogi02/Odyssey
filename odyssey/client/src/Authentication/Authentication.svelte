@@ -1,6 +1,6 @@
 <script>
 	// Library imports
-	import page from "page.js"
+	import page from "page.js";
 
 	// Component imports
 	import Field from '../Helpers/Field.svelte';

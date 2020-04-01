@@ -20,7 +20,7 @@
 </head>
 <body>
 <div>
-	<div class="full-width-first" class="dark-field">
+	<div class="full-width-first dark-field">
 		<div class="wrap">
 			<div>
 				<p class="motto">Be creative!</p>
@@ -41,13 +41,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="full-width-first" class="white-field">
+	<div class="full-width-first white-field">
 		<div class="wrap-text">
 			<p style="font-size: 2em;">Join today as a...</p>
 		</div>
 		
 	</div>
-	<div class="full-width-first" class="white-field">
+	<div class="full-width-first white-field">
 
 	  <div class="wrap">
 	  	<div>
@@ -89,7 +89,7 @@
 	  	</div>
 	  		  	<div>
 	  		<i class="fa fa-shopping-basket" aria-hidden="true"></i>
-	  		<span>Local Buissines</span>
+	  		<span>Local Business</span>
 	  		<p class="explain-content-type">Take back creative control. Gain freedom and stability with the support of your fans. Do your best creative work.</p>
 	  	</div>
 	  	<div>
@@ -105,7 +105,7 @@
 	  </div>
 	</div>
 
-	<div class="full-width-first" class="dark-field">
+	<div class="full-width-first dark-field">
 	  <div class="wrap">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero</div>
 	</div>
 </div>
@@ -116,7 +116,7 @@
 	font-size: 1.1em;
 }
 .motto{
-	style="text-align: left; 
+	text-align: left; 
 	font-size: 3.1em;
 }
 .button-join {

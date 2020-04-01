@@ -1,3 +1,6 @@
+// Library imports
+import page from "page.js";
+
 // Javascript imports
 import { fetchPost } from '../fetch.js';
 import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
@@ -62,6 +65,8 @@ export async function becomeCreator(result) {
 	const response = await fetchPost('http://localhost:3000/becomeCreator', {
 		result: result
 	});
+
+	page.redirect("/profile");
 }
 
 // Logout function 
