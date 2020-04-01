@@ -4,7 +4,7 @@ import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
 import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../helpers.js';
 
 // Login function
-export async function loginUser(login, dispatch) {
+export async function loginUser(login) {
 	
 	// Clear current errors and check if there are any empty input fields.
 	clearErrorsAndLoaders();
@@ -30,11 +30,14 @@ export async function loginUser(login, dispatch) {
 }
 
 // Register function
-export async function registerUser(login, dispatch) {
+export async function registerUser(login) {
 
 	// Clear current errors and check if there are any empty input fields.
 	clearErrorsAndLoaders();
 	if(!checkEmpty(login)) {
+		return false;
+	}
+	if(!(await checkAllRegistrationInputs())) {
 		return false;
 	}
 
@@ -98,6 +101,16 @@ export async function checkInput(element) {
 	}
 }
 
+// Checks all registration inputs
+async function checkAllRegistrationInputs() {
+	let username = await checkUsername('r_username');
+	let email = await checkEmail('r_email');
+	let password = await checkPassword('r_password');
+	let confirm = await checkConfirm('r_confirm');
+
+	return username && email && password && confirm
+}
+
 // Reactive validation of username field during registration
 async function checkUsername(id) {
 	let username = document.getElementById('input_' + id).value;
@@ -119,7 +132,10 @@ async function checkUsername(id) {
 	if(!usrnm_response.success) {
 		displayError(('error_' + id), usrnm_response.message);
 		disableButton('info_submit');
+		return false;
 	}
+
+	return true;
 }
 
 // Reactive validation of email field during registration and profile editing
@@ -143,7 +159,10 @@ async function checkEmail(id) {
 	if(!email_response.success) {
 		displayError(('error_' + id), email_response.message);
 		disableButton('info_submit');
+		return false;
 	}
+
+	return true;
 }
 
 // Reactive validation of password field during registration and profile editing
@@ -158,7 +177,10 @@ function checkPassword(id) {
 	if(password.length < 8) {
 		displayError(('error_' + id), 'Password must be at least 8 characters long!');
 		disableButton('info_submit');
+		return false;
 	}
+
+	return true;
 }
 
 // Reactive validation of confirm password field during registration and profile editing
@@ -174,5 +196,7 @@ function checkConfirm(id) {
 	if(password != confirm) {
 		displayError(('error_' + id), 'Passwords must match!');
 		disableButton('info_submit');
+		return false;
 	}
+	return true;
 }
