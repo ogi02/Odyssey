@@ -54,7 +54,6 @@
 	}
 
 </script>
-
 {#if change}
 	
 	{#if type_of_change == 'profile'} 
@@ -118,7 +117,6 @@
 	</div>
 
 {/if}
-
 <style>
 	
 .card {
@@ -174,7 +172,7 @@ button:hover, a:hover {
 
 #cover_picture {
 	position: absolute; 
-	top: 3.5em; 
+	top: 3.6em; 
 	left: 0; 
 	min-width: 100%; 
 	width: 100%; 

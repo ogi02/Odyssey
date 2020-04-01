@@ -17,6 +17,7 @@
 
 	// Local variables
 	let loggedIn = false;
+	let home_picture_src = 'images/src/Home.png';
 
 	onMount(async () => { 
 		loggedIn = await checkLogin();
@@ -27,15 +28,15 @@
 
 {#if loggedIn}
 	<nav>
-		<a href="/">Home</a>
-		<a href="profile">Profile</a>
-		<a href="become_a_creator">Become a creator!</a>
-		<a href="login" on:click={async () => loggedIn = await logoutUser()}>Logout</a>
+		<a href="/" class="home-icon"><img src={home_picture_src}></a>
+		<a href="profile" class="navlink">Profile</a>
+		<a href="become_a_creator" class="navlink">Become a creator!</a>
+		<a href="login" class="navlink" on:click={async () => loggedIn = await logoutUser()}>Logout</a>
 	</nav>
 {:else}
 	<nav>
-		<a href="/">Home</a>
-		<a href="login">Log in</a>
+		<a href="/" class="home-icon"><img src={home_picture_src}></a>
+		<a href="login" class="navlink">Log in</a>
 	</nav>
 {/if}
 
@@ -64,23 +65,54 @@
 	nav {
 		position: fixed;
 		top: 0;
+		margin: 0;
 		left: 0;
-		padding: 1.2em 0 1.2em 0;
+		padding: 1.2em 0 1.2em;
 		width: 100%;
-		background-color: tomato;
+		z-index: 1;
+		overflow: hidden;
+		border-bottom: solid 1.5px #080d52;
+		background: rgb(223,240,255);
+		background: linear-gradient(90deg, rgba(223,240,255,1) 0%, rgba(109,178,237,1) 45%, rgba(238,174,202,1) 100%);
 	}
 
-	nav a {
+	nav .navlink {
+		text-decoration: none;
+		color: #010212;
+		font-weight: 450;
+		margin: 0;
+		left: 0;
+		padding: 1.2em 1.2em;
+	}
+
+	nav .navlink:hover{
+		text-decoration: underline;
+		background-color:rgba(41, 94, 179, 0.14);
+		box-shadow: 0 0 9em 0 rgba(41, 94, 179, 1);
+	}
+
+	nav img {
+		position: fixed;
+		margin: 0;
+		top: 0;
+		padding: 0 0.5em;
+		left: 0;
+		width: 3.3em;
+		height: 3.3em;
+	}
+	nav img:hover {
+		opacity: 0.7;
+
+	}
+	nav .home-icon {
 		text-decoration: none;
 		color: white;
 		margin: 0;
 		left: 0;
-		padding: 1.2em;
-	}
+		padding: 1.2em 2.3em;
+		
 
-	nav a:hover{
-		text-decoration: none;
-		background-color: green;
 	}
+	
 	
 </style>
