@@ -40,7 +40,6 @@ class User:
 		return self
 
 	def update_to_creator(username):
-
 		found = db.users.find_one_and_update({'username': username}, {"$set": {'is_creator': True}}, return_document=ReturnDocument.AFTER)
 
 	def find_by_username(username):
@@ -64,9 +63,15 @@ class User:
 		if found:
 			return found
 
+	def get_searched_usernames(value):
+		username = '^' + value
+		print(username)
+		found = db.users.find({'username': {'$regex': username, '$options': 'i'}}).limit(7)
+		if found:
+			return [User(*user.values()).username for user in found]
+
 	def hash_password(password):
 		return sha256_crypt.hash(password)
-
 
 	def verify_password(self, password):
 		return sha256_crypt.verify(password, self.password)

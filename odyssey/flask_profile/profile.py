@@ -17,7 +17,7 @@ profile_bp = Blueprint('profile_bp', __name__)
 upload_folder = './client/public/images'
 
 @profile_bp.route('/profile')
-def user_profile():
+def my_profile():
 	if(session.get('LOGGED_IN')):
 		# Get user from session and information about the user from the database 
 		user = User.get_from_db(session.get('USERNAME'))
@@ -26,6 +26,12 @@ def user_profile():
 		info = json.loads(json_util.dumps(info))
 		return jsonify(success=True, user = user, info = info)
 	return jsonify(success=False)
+
+@profile_bp.route('/profile/<username>', methods=['POST'])
+def user_profile(username):
+	user = User.get_from_db(username)
+	user = json.loads(json_util.dumps(user))
+	return jsonify(success = True, user = user)
 
 @profile_bp.route('/FpCerpd9Z7SIbjmN81Jy/upload_picture', methods=['POST'])
 def upload_picture():
@@ -81,3 +87,16 @@ def edit_profile():
 		info_log.info("Changed email for %s" % username)
 		
 	return jsonify(success=True, message='Profile edited successful!')
+
+@profile_bp.route('/FpCerpd9Z7SIbjmN81Jy/getUsernames', methods = ['POST'])
+def get_usernames():
+	# Get current input state
+	value = request.get_json().get('value')
+
+	print(value)
+
+	usernames = User.get_searched_usernames(value)
+
+	print(usernames)
+
+	return jsonify(success = True, usernames = usernames)
