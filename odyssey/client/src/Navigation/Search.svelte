@@ -3,7 +3,9 @@
 	import page from 'page.js';
 
 	// Javascript imports
+	import { redirect } from './router.js';
 	import { fetchPost } from '../fetch.js';
+	import { username } from '../Profiles/store.js';
 
 	// Local variables
 	let value = '';
@@ -22,10 +24,13 @@
 		}
 	}
 
-	function searchProfile(searchedUsername) {
+	async function searchProfile(searchedUsername) {
 		value = '';
 		document.getElementsByClassName('usernames')[0].style.display = 'none';
-		page.redirect('/profile/' + searchedUsername);
+		let path = '/profile/' + searchedUsername;
+		console.log(path);
+		username.set(searchedUsername)
+		redirect('/profile/' + searchedUsername);
 	}
 
 </script>
@@ -35,8 +40,8 @@
 		<input bind:value={value} id='search' type='text' on:input={async () => await getUsernames()}>
 	</form>
 	<div class='usernames'>
-		{#each foundUsernames as username }
-			<div class='username-box' on:click={() => searchProfile(username)}>{username}</div>
+		{#each foundUsernames as i }
+			<div class='username-box' on:click={async () => await searchProfile(i)}>{i}</div>
 		{/each}
 	</div>
 </div>

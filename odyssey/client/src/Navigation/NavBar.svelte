@@ -3,10 +3,10 @@
 	import page from 'page.js';
 	import { onMount } from 'svelte';
 
+	import { Router, Route, NotFound, redirect } from "./router.js";
+
 	// Component imports
 	import Home from '../Home.svelte';
-	import Route from './Route.svelte';
-	import Router from './Router.svelte';
 	import Search from './Search.svelte';
 	import MyProfile from '../Profiles/MyProfile.svelte';
 	import UserProfile from '../Profiles/UserProfile.svelte';
@@ -19,12 +19,22 @@
 
 	// Local variables
 	let loggedIn = false;
+	let searchedUsername = '';
 	let home_picture_src = 'images/src/Home.png';
 
-	onMount(async () => { 
+	onMount(async () => {
 		loggedIn = await checkLogin();
-		console.log(loggedIn);
 	});
+
+	const guard = async (ctx, next) => {
+		if (!await checkLogin()) {
+			// check if user is logged in
+			redirect("/login");
+		} else {
+			// go to the next callback in the chain
+			next();
+		}
+	};
 
 </script>
 
@@ -34,7 +44,7 @@
 		<a href='profile' class='navlink'>My Profile</a>
 		<a href='become_a_creator' class='navlink'>Become a creator!</a>
 		<a href='login' class='navlink' on:click={async () => loggedIn = await logoutUser()}>Logout</a>
-		<Search/>
+		<Search />
 	</nav>
 {:else}
 	<nav>
@@ -43,27 +53,25 @@
 	</nav>
 {/if}
 
-<Router hashbang={true}>
+<Router>
 	
-	<Route path='/'>
-		<Home />
-	</Route>
+	<Route path='/' component={Home} />
 	
 	<Route path='/login'>
-		<Authentication bind:loggedIn={loggedIn}/>
+		<Authentication bind:loggedIn={loggedIn} />
 	</Route>
 	
-	<Route path='/profile'>
-		<MyProfile />
-	</Route>
+	<Route path='/profile' component={MyProfile} middleware={[guard]} />
 	
-	<Route path='/become_a_creator'>
-		<BecomeCreator />
-	</Route>
+	<Route path='/become_a_creator' component={BecomeCreator} middleware={[guard]} />
 
-	<Route path='/profile/:username'>
+	<Route path='/profile/:username' let:params middleware={[guard]} >
 		<UserProfile />
 	</Route>
+
+	<NotFound>
+		<h1>404 baby</h1>
+	</NotFound>
 
 </Router>
 

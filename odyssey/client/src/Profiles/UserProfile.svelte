@@ -1,9 +1,11 @@
 <script>
 	// Library imports
 	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	// Javascript imports
 	import { fetchPost } from '../fetch.js';
+	import { username } from './username.js';
 
 	// Local variables
 	let profile_picture_src = '';
@@ -11,17 +13,19 @@
 
 	let user = {};
 
-	let username = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-
-	onMount(async() => {
-		// Get users profile and set variables
-		const response = await fetchPost("/profile/" + username, {
-			username: username
+	username.subscribe(async (newValue) => {
+		console.log(newValue);
+		if(newValue == '') {
+			username.set(window.location.href.substr(window.location.href.lastIndexOf('/') + 1));
+			return false;
+		}
+		const response = await fetchPost("/profile/" + newValue, {
+			username: newValue
 		});
 		user = response.user;
 		profile_picture_src = 'images/' + user.username + '/profile_picture';
 		cover_picture_src = 'images/' + user.username + '/cover_picture';
-	});
+	})
 
 </script>
 
