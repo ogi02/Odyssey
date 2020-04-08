@@ -6,6 +6,7 @@
 	// Javascript imports
 	import { fetchPost } from '../js/fetch.js';
 	import { username } from '../js/stores.js';
+	import { followUser } from './profile_management.js';
 
 	// Inherited variables
 	export let params;
@@ -15,6 +16,7 @@
 	let profile_picture_src = '';
 
 	let user = {};
+	let result = {};
 
 	username.subscribe(async (newValue) => {
 		if(newValue == '') {
@@ -27,7 +29,14 @@
 		user = response.user;
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
+
+		result = {
+			profile_name: user.username
+		};
+
 	})
+
+
 
 </script>
 
@@ -51,7 +60,7 @@
 		<a href="#"><i class="fa fa-youtube"></i></a> 
 	</div>
 
-	<button>Follow</button>
+	<button on:click={async () => await followUser(result)}>Follow</button>
 
 </div>
 

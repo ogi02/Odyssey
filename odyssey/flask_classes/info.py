@@ -54,7 +54,7 @@ class Info:
 			},
 			'bio': self.bio,
 			'working_on': self.working_on,
-			'following': [[]],
+			'following': [],
 			'patreoning': [[]]
 		}
 		result = db.info_collection.insert_one(info)
@@ -70,5 +70,20 @@ class Info:
 	def become_patreon(self, creator_id, tier_id):
 		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
 
+	def follow(active_user_id, user_id):
+		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
+
+	def is_following(active_user_id, user_id):
+		active_user_id = ObjectId(active_user_id)
+		user_id = ObjectId(user_id)
+		found = db.info_collection.find_one({'user_id': active_user_id,'following': {"$in": [ObjectId(user_id)]}})
+		if found:
+			return True
+		return False
+
+	def unfollow(active_user_id, user_id):
+		active_user_id = ObjectId(active_user_id)
+		user_id = ObjectId(user_id)
+		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$pull": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
 
 
