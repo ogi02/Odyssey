@@ -3,8 +3,8 @@
 	import Field from "../Helpers/Field.svelte";
 
 	// Javascript imports
-	import { fetchPost } from '../fetch.js';
-	import { displayError } from '../helpers.js'
+	import { fetchPost } from '../js/fetch.js';
+	import { displayError } from '../js/helpers.js'
 
 	// Inherited variables
 	export let change;

@@ -1,79 +1,77 @@
 <script>
 	// Library imports
-	import page from 'page.js';
+	import router from 'page';
 	import { onMount } from 'svelte';
-
-	import { Router, Route, NotFound, redirect } from "./router.js";
-
+	
 	// Component imports
-	import Home from '../Home.svelte';
 	import Search from './Search.svelte';
-	import MyProfile from '../Profiles/MyProfile.svelte';
-	import UserProfile from '../Profiles/UserProfile.svelte';
-	import BecomeCreator from '../Authentication/BecomeCreator.svelte';
-	import Authentication from '../Authentication/Authentication.svelte';
 	
 	// Javascript imports
-	import { checkLogin } from '../helpers.js';
+	import routes from '../js/routes'
+	import { loggedIn } from '../js/stores.js';
+	import { checkLogin } from '../js/helpers.js';
 	import { logoutUser, loginUser } from '../Authentication/authentication_management.js';	
 
 	// Local variables
-	let loggedIn = false;
-	let searchedUsername = '';
-	let home_picture_src = 'images/src/Home.png';
+	let page;
+	let params;
+	let userLoggedIn;
+	let home_picture_src = '/images/src/Home.png';
 
 	onMount(async () => {
-		loggedIn = await checkLogin();
+		await loggedIn.set(await checkLogin());
+
+		// Loop around all of the routes and create a new instance of
+		// router for reach one with some rudimentary checks.
+		routes.forEach(route => {
+			router(
+				route.path, 
+				
+				// Set the params variable to the context.
+				// We use this on the component initialisation
+				(ctx, next) => {
+					params = ctx.params
+					next()
+				},
+				
+				// Check if auth is valid. If so, set the page to the component
+				// otherwise redirect to login.
+				() => {
+					if (route.auth && !$loggedIn) {
+						router.redirect('/login');
+					} else {
+						page = route.component;
+					}
+				}
+			)
+		});
+
+		router.start();
 	});
 
-	const guard = async (ctx, next) => {
-		if (!await checkLogin()) {
-			// check if user is logged in
-			redirect("/login");
-		} else {
-			// go to the next callback in the chain
-			next();
-		}
-	};
+	const unsubscribe = loggedIn.subscribe(value => {
+		userLoggedIn = value;
+	});
 
 </script>
 
-{#if loggedIn}
+{#if userLoggedIn}
 	<nav>
 		<a href='/' class='home-icon'><img src={home_picture_src}></a>
-		<a href='profile' class='navlink'>My Profile</a>
-		<a href='become_a_creator' class='navlink'>Become a creator!</a>
-		<a href='login' class='navlink' on:click={async () => loggedIn = await logoutUser()}>Logout</a>
+		<a href='/profile' class='navlink'>My Profile</a>
+		<a href='/become_a_creator' class='navlink'>Become a creator!</a>
+		<a href='/login' class='navlink' on:click={async () => await logoutUser()}>Logout</a>
 		<Search />
 	</nav>
 {:else}
 	<nav>
 		<a href='/' class='home-icon'><img src={home_picture_src}></a>
-		<a href='login' class='navlink'>Log in</a>
+		<a href='/login' class='navlink'>Log in</a>
+		<Search />
 	</nav>
 {/if}
 
-<Router>
-	
-	<Route path='/' component={Home} />
-	
-	<Route path='/login'>
-		<Authentication bind:loggedIn={loggedIn} />
-	</Route>
-	
-	<Route path='/profile' component={MyProfile} middleware={[guard]} />
-	
-	<Route path='/become_a_creator' component={BecomeCreator} middleware={[guard]} />
-
-	<Route path='/profile/:username' let:params middleware={[guard]} >
-		<UserProfile />
-	</Route>
-
-	<NotFound>
-		<h1>404 baby</h1>
-	</NotFound>
-
-</Router>
+<svelte:component this={page} params={params} />
 
 <style>
 

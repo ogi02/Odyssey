@@ -1,15 +1,12 @@
 <script>
 	// Library imports
-	import page from "page.js";
+	import router from 'page';
 
 	// Component imports
 	import Field from '../Helpers/Field.svelte';
 
 	// Javascript imports
 	import { loginUser, registerUser } from './authentication_management.js';
-
-	// Inherited variables
-	export let loggedIn;
 
 	// Local variables
 	let login = true;
@@ -44,10 +41,7 @@
 				<Field type='password' id='l_password' placeholder='Password' has_icon={false} />
 
 				<button id='info_submit' type='submit' on:click|preventDefault={async () => {
-					loggedIn = await loginUser(true);
-					if(loggedIn == true) {
-						page.redirect('/profile');
-					}
+					await loginUser(true);
 				}}>Login</button>
 
 				<div class='switch' on:click={toggleLogin}>Don't have an account? Register now!</div>
@@ -65,10 +59,7 @@
 				<Field type='password' id='r_confirm' placeholder='Confirm Password' has_icon={false} />
 
 				<button id='info_submit' type='submit' on:click|preventDefault={async () => {
-					loggedIn = await registerUser(false);
-					if(loggedIn == true) {
-						page.redirect('/profile');
-					}
+					await registerUser(false);
 				}}>Register</button>
 
 				<div class='switch' on:click={toggleLogin}>Already have an account? Log in!</div>
@@ -86,6 +77,10 @@
 	.switch:hover {
 		text-decoration: underline;
 		cursor: pointer;
+	}
+
+	#card {
+		margin-top: 100px;
 	}
 
 </style>

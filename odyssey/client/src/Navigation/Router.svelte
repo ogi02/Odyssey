@@ -10,7 +10,7 @@
 </script>
 
 <script>
-	import page from "page.js";
+	import router from "page";
 	import { onMount, onDestroy } from "svelte";
 	export let disabled = false;
 	export let basePath = undefined;

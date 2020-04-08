@@ -1,10 +1,11 @@
 // Library imports
-import page from "page.js";
+import router from 'page';
 
 // Javascript imports
-import { fetchPost } from '../fetch.js';
+import { loggedIn } from '../js/stores.js';
+import { fetchPost } from '../js/fetch.js';
 import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
-import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../helpers.js';
+import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../js/helpers.js';
 
 // Login function
 export async function loginUser(login) {
@@ -29,7 +30,8 @@ export async function loginUser(login) {
 		displayError('error_l_password', response.message)
 		return false;
 	}
-	return true;
+	loggedIn.set(true);
+	router.redirect('/profile');
 }
 
 // Register function
@@ -54,7 +56,8 @@ export async function registerUser(login) {
 	const response = await fetchPost('http://localhost:3000/register', {
 		username: username, email: email, name: name, password: password
 	});
-	return true;
+	loggedIn.set(true);
+	router.redirect('/profile');
 }
 
 // Become creator function 
@@ -66,18 +69,14 @@ export async function becomeCreator(result) {
 		result: result
 	});
 
-	page.redirect("/profile");
+	router.redirect("/profile");
 }
 
 // Logout function 
 export async function logoutUser() {
-	// loggedIn is used for rendering the Authentication component after logout
-	let loggedIn = false;
-
 	// Fetch post request for logout
-	const res = await fetch('http://localhost:3000/logout');
-	const response = await res.json();
-	return loggedIn;
+	await fetch('http://localhost:3000/logout');
+	loggedIn.set(false);
 }
 
 // Reactive input validation for registration, login and profile edit

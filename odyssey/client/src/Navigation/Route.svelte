@@ -3,7 +3,7 @@
 	export let path = "/";
 	export let component = null;
 	export let middleware = [];
-	// page.js params placeholder
+	// page params placeholder
 	let params = {};
 	register({ path, component, middleware });
 	$: if ($activeRoute.path === path) {

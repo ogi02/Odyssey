@@ -1,12 +1,12 @@
 <script>
 	// Library imports
-	import page from "page.js"
+	import router from 'page';
 
 	// Component imports
 	import Countries from '../Helpers/Countries.svelte';
 
 	// Javascript imports
-	import { fetchPost } from '../fetch.js';
+	import { fetchPost } from '../js/fetch.js';
 	import { becomeCreator } from './authentication_management.js';
 
 	// Local Variables
@@ -45,7 +45,7 @@
 
 	// Cancel button onclick
 	function cancelBecomingCreator() {
-		page.redirect('/profile');
+		router.redirect('/profile');
 	}
 
 </script>

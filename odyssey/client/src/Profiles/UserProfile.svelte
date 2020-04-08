@@ -4,38 +4,40 @@
 	import { writable } from 'svelte/store';
 
 	// Javascript imports
-	import { fetchPost } from '../fetch.js';
-	import { username } from './username.js';
+	import { fetchPost } from '../js/fetch.js';
+	import { username } from '../js/stores.js';
+
+	// Inherited variables
+	export let params;
 
 	// Local variables
-	let profile_picture_src = '';
 	let cover_picture_src = '';
+	let profile_picture_src = '';
 
 	let user = {};
 
 	username.subscribe(async (newValue) => {
-		console.log(newValue);
 		if(newValue == '') {
 			username.set(window.location.href.substr(window.location.href.lastIndexOf('/') + 1));
 			return false;
 		}
-		const response = await fetchPost("/profile/" + newValue, {
+		const response = await fetchPost("http://localhost:3000/profile/" + newValue, {
 			username: newValue
 		});
 		user = response.user;
-		profile_picture_src = 'images/' + user.username + '/profile_picture';
-		cover_picture_src = 'images/' + user.username + '/cover_picture';
+		profile_picture_src = '/images/' + user.username + '/profile_picture';
+		cover_picture_src = '/images/' + user.username + '/cover_picture';
 	})
 
 </script>
 
-<img src={cover_picture_src} id="cover_picture" on:error={() => cover_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/cover_picture'}>
+<img src={cover_picture_src} id="cover_picture" on:error={() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture'}>
 
 <div class="card">
 
 	<div class='profile_pic'>
 
-		<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/profile_picture'}>
+		<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture'}>
 
 	</div>
 

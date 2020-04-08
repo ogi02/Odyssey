@@ -5,7 +5,7 @@
 	import Error from './Error.svelte';
 
 	// Javascript imports
-	import { fetchPost } from '../fetch.js';
+	import { fetchPost } from '../js/fetch.js';
 	import { checkInput } from '../Authentication/authentication_management.js'
 
 	// Inherited variables

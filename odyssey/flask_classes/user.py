@@ -40,7 +40,11 @@ class User:
 		return self
 
 	def update_to_creator(username):
-		found = db.users.find_one_and_update({'username': username}, {"$set": {'is_creator': True}}, return_document=ReturnDocument.AFTER)
+		found = db.users.find_one_and_update(
+			{'username': username},
+			{"$set": {'is_creator': True}},
+			return_document=ReturnDocument.AFTER
+		)
 
 	def find_by_username(username):
 		found = db.users.find_one({'username': username})
@@ -63,10 +67,14 @@ class User:
 		if found:
 			return found
 
-	def get_searched_usernames(value):
+	def get_searched_usernames(value, excluded):
 		username = '^' + value
-		print(username)
-		found = db.users.find({'username': {'$regex': username, '$options': 'i'}}).limit(7)
+		found = db.users.find(
+			{'$and': [
+				{'username': {'$regex': username, '$options': 'i'}},
+				{'username': {'$ne': excluded}}
+			]}
+		).limit(7)
 		if found:
 			return [User(*user.values()).username for user in found]
 
@@ -78,10 +86,18 @@ class User:
 
 	def change_password(username, new_password):
 		new_password = User.hash_password(new_password)
-		change = db.users.find_one_and_update({'username': username}, {"$set": {'password': new_password}}, return_document=ReturnDocument.AFTER)
+		change = db.users.find_one_and_update(
+			{'username': username},
+			{"$set": {'password': new_password}},
+			return_document=ReturnDocument.AFTER
+		)
 
 	def change_email(username, new_email):
-		change = db.users.find_one_and_update({'username': username}, {"$set": {'email': new_email}}, return_document=ReturnDocument.AFTER)
+		change = db.users.find_one_and_update(
+			{'username': username},
+			{"$set": {'email': new_email}},
+			return_document=ReturnDocument.AFTER
+		)
 
 
 

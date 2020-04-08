@@ -1,11 +1,10 @@
 <script>
 	// Library imports
-	import page from 'page.js';
+	import router from 'page';
 
 	// Javascript imports
-	import { redirect } from './router.js';
-	import { fetchPost } from '../fetch.js';
-	import { username } from '../Profiles/store.js';
+	import { fetchPost } from '../js/fetch.js';
+	import { username } from '../js/stores.js';
 
 	// Local variables
 	let value = '';
@@ -27,17 +26,16 @@
 	async function searchProfile(searchedUsername) {
 		value = '';
 		document.getElementsByClassName('usernames')[0].style.display = 'none';
-		let path = '/profile/' + searchedUsername;
-		console.log(path);
 		username.set(searchedUsername)
-		redirect('/profile/' + searchedUsername);
+		router.redirect('/profile/' + searchedUsername);
 	}
 
 </script>
 
 <div class='main'>
 	<form autocomplete='off'>
-		<input bind:value={value} id='search' type='text' on:input={async () => await getUsernames()}>
+		<input bind:value={value} id='search' type='text' placeholder='Search..' 
+			on:input={async () => await getUsernames()}>
 	</form>
 	<div class='usernames'>
 		{#each foundUsernames as i }
