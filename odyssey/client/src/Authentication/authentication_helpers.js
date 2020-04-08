@@ -1,6 +1,6 @@
 // Javascript imports
-import { fetchPost } from '../fetch.js';
-import { displayError } from '../helpers.js';
+import { fetchPost } from '../js/fetch.js';
+import { displayError } from '../js/helpers.js';
 
 // Clears all errors and loaders in forms of any kind
 export function clearErrorsAndLoaders() {
@@ -17,10 +17,10 @@ export function clearErrorsAndLoaders() {
 }
 
 // Checks if there is any empty input in login and registration form
-export function checkEmpty(login) {
+export function checkEmpty(isLogin) {
 	let is_valid = true;
 	// If user is filling in login form
-	if(login) {
+	if(isLogin) {
 		let username = document.getElementById('input_l_username').value;
 		let password = document.getElementById('input_l_password').value;
 		if(username == '') {

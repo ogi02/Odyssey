@@ -4,49 +4,58 @@ import json
 from bson import json_util, ObjectId
 
 # Third party library imports
+from flask_session import Session
 from flask import Blueprint, request, session, jsonify
 
 # Imports from .py files
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
+from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
-profile_bp = Blueprint('profile_bp', __name__)
+profile_bp = Blueprint("profile_bp", __name__)
 
-upload_folder = './client/public/images'
+upload_folder = "./client/public/images"
 
-@profile_bp.route('/profile')
-def user_profile():
-	if(session.get('LOGGED_IN')):
+@profile_bp.route("/profile")
+def my_profile():
+	print(ActiveUser.logged_in)
+	if(ActiveUser.logged_in):
 		# Get user from session and information about the user from the database 
-		user = User.get_from_db(session.get('USERNAME'))
+		user = User.get_from_db(ActiveUser.username)
 		user = json.loads(json_util.dumps(user))
-		info = Info.find_by_user_id(user.get('_id').get('$oid'))
+		info = Info.find_by_user_id(user.get("_id").get("$oid"))
 		info = json.loads(json_util.dumps(info))
 		return jsonify(success=True, user = user, info = info)
 	return jsonify(success=False)
 
-@profile_bp.route('/FpCerpd9Z7SIbjmN81Jy/upload_picture', methods=['POST'])
+@profile_bp.route("/profile/<username>", methods=["POST"])
+def user_profile(username):
+	user = User.get_from_db(username)
+	user = json.loads(json_util.dumps(user))
+	return jsonify(success = True, user = user)
+
+@profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/upload_picture", methods=["POST"])
 def upload_picture():
 	# Get image from request
-	image = request.files['image']
+	image = request.files["image"]
 
 	# Check image type
-	picture_type = request.args.get('type')
+	picture_type = request.args.get("type")
 
 	# Get user
-	username = session.get('USERNAME')
+	username = ActiveUser.username
 	
 	# Validate image
 	if allowed_image(image.filename):
-		# Define path where the image will go ('public/images/{user's username}/)
+		# Define path where the image will go ("public/images/{user"s username}/)
 		path = os.path.join(upload_folder, username)
 
 		# Name for the picture
-		filename = picture_type + '_picture'
+		filename = picture_type + "_picture"
 		
-		# Check if path exists and create one if it doesn't
+		# Check if path exists and create one if it doesn"t
 		if not os.path.exists(path):
 			os.makedirs(path)
 
@@ -59,16 +68,16 @@ def upload_picture():
 	else:
 		error_log.error("Image extension is not allowed or doesn't exist!")
 
-		return jsonify(success=False, message='Allowed extensions: "pdf", "png", "jpeg", "jpg", "gif".')
+		return jsonify(success=False, message="Allowed extensions: 'pdf', 'png', 'jpeg', 'jpg', 'gif'.")
 
-@profile_bp.route('/editProfile', methods = ['POST'])
+@profile_bp.route("/editProfile", methods = ["POST"])
 def edit_profile():
 	# Get user from session
-	username = session.get('USERNAME')
+	username = ActiveUser.username
 
-	# Get user's new email and password
-	password = request.get_json().get('password')
-	email = request.get_json().get('email')
+	# Get user"s new email and password
+	password = request.get_json().get("password")
+	email = request.get_json().get("email")
 	
 	# Change password
 	if password:
@@ -80,4 +89,13 @@ def edit_profile():
 		User.change_email(username, email)
 		info_log.info("Changed email for %s" % username)
 		
-	return jsonify(success=True, message='Profile edited successful!')
+	return jsonify(success=True, message="Profile edited successful!")
+
+@profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/getUsernames", methods = ["POST"])
+def get_usernames():
+	# Get current input state
+	value = request.get_json().get("value")
+
+	usernames = User.get_searched_usernames(value, ActiveUser.username)
+
+	return jsonify(success = True, usernames = usernames)

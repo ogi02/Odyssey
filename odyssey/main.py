@@ -1,6 +1,10 @@
 # Third party library imports
 from flask_cors import CORS
+from flask_session import Session
 from flask import Flask, send_from_directory, jsonify, session
+
+# Imports from .py files
+from flask_classes.active_user import ActiveUser
 
 # Blueprint imports
 from flask_profile.profile import profile_bp
@@ -10,8 +14,11 @@ from flask_authentication.authentication import authentication_bp
 from flask_validators.username_validator import username_validator_bp
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'OCML3BRawWEUeaxcuKHLpw'
+app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
 CORS(app)
+
+ActiveUser.logged_in = False
+ActiveUser.username = None
 
 # Register blueprints
 app.register_blueprint(profile_bp)
@@ -20,24 +27,24 @@ app.register_blueprint(authentication_bp)
 app.register_blueprint(email_validator_bp)
 app.register_blueprint(username_validator_bp)
 
-@app.route('/')
+@app.route("/")
 def base():
 	# Main path
-	return send_from_directory('client/public', 'index.html')
+	return send_from_directory("client/public", "index.html")
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
 def home(path):
 	# Default path
-	return send_from_directory('client/public', path)
+	return send_from_directory("client/public", path)
 
-@app.route('/checkLogin')
+@app.route("/checkLogin")
 def check_login():
 	# Check if there is a user logged in
-	if session.get('LOGGED_IN'):
+	if ActiveUser.logged_in:
 		return jsonify(logged_in=True)
 		
 	return jsonify(logged_in=False)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 	app.run(debug=True)

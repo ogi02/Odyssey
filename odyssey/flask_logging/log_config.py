@@ -6,8 +6,8 @@ info_log.setLevel(logging.INFO)
 error_log = logging.getLogger('error_log')
 error_log.setLevel(logging.ERROR)
 
-info_handling = RotatingFileHandler('./info.log', maxBytes = 1000, backupCount = 1)
-error_handling = RotatingFileHandler('./error.log', maxBytes = 1000, backupCount = 1)
+info_handling = RotatingFileHandler('./logs/info.log', maxBytes = 1000, backupCount = 1)
+error_handling = RotatingFileHandler('./logs/error.log', maxBytes = 1000, backupCount = 1)
 
 formatting = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 info_handling.setFormatter(formatting)

@@ -12,6 +12,8 @@ pymongo = {extras = ["srv"],version = "*"}
 passlib = "*"
 flask-pymongo = "*"
 flask-cors = "*"
+flask-session = "*"
+werkzeug = "==0.16.0"
 
 [requires]
 python_version = "3.7"

@@ -16,8 +16,7 @@
 		"svelte": "^3.0.0"
 	},
 	"dependencies": {
-		"page.js": "^4.13.3",
-		"sirv-cli": "^0.4.4",
-		"svelte-routing": "^1.4.2"
+		"page": "^1.11.5",
+		"sirv-cli": "^0.4.4"
 	}
 }

@@ -3,8 +3,8 @@
 	import Error from '../Helpers/Error.svelte';
 
 	// Javascript imports
-	import { displayError, clearError } from '../helpers.js';
-	import { fetchFilePost } from '../fetch.js';
+	import { displayError, clearError } from '../js/helpers.js';
+	import { fetchFilePost } from '../js/fetch.js';
 
 	// Inherited variables
 	export let username;

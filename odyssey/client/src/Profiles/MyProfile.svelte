@@ -7,7 +7,7 @@
 	import EditProfile from './EditProfile.svelte';
 
 	// Javascript imports
-	import { fetchGet } from '../fetch.js';
+	import { fetchGet } from '../js/fetch.js';
 	
 	// Local variables
 	let profile_picture_src = '';
@@ -23,7 +23,8 @@
 	
 	onMount(async() => {
 		// Get users profile and set variables
-		const response = await fetchGet("/profile");
+		const response = await fetchGet("http://localhost:3000/profile");
+		console.log(response);
 		user = response.user;
 		info = response.info;
 		if(info != null) {
@@ -31,8 +32,8 @@
 			shipping_info = response.info.shipping_info;
 		}
 		// Time is put for easier reactive update if the user uploads a new picture
-		profile_picture_src = 'images/' + user.username + '/profile_picture?t=' + new Date().getTime();
-		cover_picture_src = 'images/' + user.username + '/cover_picture?t=' + new Date().getTime();
+		profile_picture_src = '/images/' + user.username + '/profile_picture?t=' + new Date().getTime();
+		cover_picture_src = '/images/' + user.username + '/cover_picture?t=' + new Date().getTime();
 	});
 
 	// Trigger change of profile picture
@@ -84,13 +85,16 @@
 
 {:else}
 
-	<img src={cover_picture_src} id="cover_picture" on:error={() => cover_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()}>
+	<img src={cover_picture_src} id="cover_picture" on:error={
+		() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()
+	}>
 
 	<div class="card">
 		
 		<div class='profile_pic'>
 			
-			<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = 'images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()}>
+			<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = 
+				'/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()}>
 
 			<div class='toggle' on:click={toggleChangeProfilePic}>Change Profile Pic</div>
 			<div class='toggle' on:click={toggleChangeCoverPic}>Change Cover Pic</div>

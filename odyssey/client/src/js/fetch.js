@@ -15,8 +15,7 @@ export async function fetchPost(url, data) {
 			'Accept': 'application/json'
 		},
 		body: JSON.stringify(data),
-		}
-	);
+	});
 	const response = await res.json();
 	return response;
 }
