@@ -67,8 +67,8 @@ class Info:
 		if found:
 			return found
 
-	def become_patreon(self, creator_id, tier_id):
-		found = db.info_collection.find_one_and_update({'user_id': self.user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
+	def become_patreon(active_user_id, creator_id, tier_id):
+		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
 
 	def follow(active_user_id, user_id):
 		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)

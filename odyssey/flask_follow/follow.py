@@ -14,6 +14,7 @@ from flask_logging.log_config import info_log, error_log
 
 follow_bp = Blueprint('follow_bp', __name__)
 
+
 @follow_bp.route('/follow', methods=['POST'])
 def follow():
 	# Get user from session
@@ -35,3 +36,45 @@ def follow():
 	info_log.info("%s started following %s." % (user.get('username'), profile_name))
 	
 	return jsonify(success=True, message='Successfully followed another profile!')
+
+@follow_bp.route('/unfollow', methods=['POST'])
+def unfollow():
+	# Get user from session
+	user = User.get_from_db(ActiveUser.username)
+	print(ActiveUser.username)
+	user_id = user.get('_id')
+
+	# Get information about the profile to be followed
+	result = request.get_json().get('result')
+	profile_name = result.get('profile_name')
+	print (profile_name)
+	user_to_follow = User.get_from_db(profile_name)
+	profile_id = user_to_follow.get('_id')
+
+	# Update in DB
+	Info.unfollow(user_id,profile_id)
+
+	# Log
+	info_log.info("%s stopped following %s." % (user.get('username'), profile_name))
+	
+	return jsonify(success=True, message='Successfully unfollowed another profile!')
+
+@follow_bp.route('/isFollowing', methods=['POST'])
+def is_following():
+	# Get user from session
+	user = User.get_from_db(ActiveUser.username)
+	print(ActiveUser.username)
+	user_id = user.get('_id')
+
+	# Get information about the profile to be followed
+	result = request.get_json().get('result')
+	profile_name = result.get('profile_name')
+	print (profile_name)
+	user_to_follow = User.get_from_db(profile_name)
+	profile_id = user_to_follow.get('_id')
+
+	# Update in DB
+	if Info.is_following(user_id,profile_id):
+		return jsonify(following=True)
+
+	return jsonify(following=False)

@@ -6,7 +6,7 @@
 	// Javascript imports
 	import { fetchPost } from '../js/fetch.js';
 	import { username } from '../js/stores.js';
-	import { followUser } from './profile_management.js';
+	import { followUser, unfollowUser, isFollowing } from './profile_management.js';
 
 	// Inherited variables
 	export let params;
@@ -14,7 +14,7 @@
 	// Local variables
 	let cover_picture_src = '';
 	let profile_picture_src = '';
-
+	let is_following = false;
 	let user = {};
 	let result = {};
 
@@ -26,6 +26,7 @@
 		const response = await fetchPost("http://localhost:3000/profile/" + newValue, {
 			username: newValue
 		});
+
 		user = response.user;
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
@@ -34,6 +35,7 @@
 			profile_name: user.username
 		};
 
+		is_following = await isFollowing(result);
 	})
 
 
@@ -60,7 +62,11 @@
 		<a href="#"><i class="fa fa-youtube"></i></a> 
 	</div>
 
-	<button on:click={async () => await followUser(result)}>Follow</button>
+	{#if is_following}
+		<button on:click={async () => is_following = await unfollowUser(result)}>Unfollow</button>
+	{:else}
+		<button on:click={async () => is_following = await followUser(result)}>Follow</button>
+	{/if}
 
 </div>
 
