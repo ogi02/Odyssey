@@ -11,26 +11,22 @@ from flask_classes.info import Info
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
-
 follow_bp = Blueprint('follow_bp', __name__)
-
 
 @follow_bp.route('/follow', methods=['POST'])
 def follow():
 	# Get user from session
 	user = User.get_from_db(ActiveUser.username)
-	print(ActiveUser.username)
 	user_id = user.get('_id')
 
 	# Get information about the profile to be followed
 	result = request.get_json().get('result')
 	profile_name = result.get('profile_name')
-	print (profile_name)
 	user_to_follow = User.get_from_db(profile_name)
 	profile_id = user_to_follow.get('_id')
 
 	# Update in DB
-	Info.follow(user_id,profile_id)
+	Info.follow(user_id, profile_id)
 
 	# Log
 	info_log.info("%s started following %s." % (user.get('username'), profile_name))

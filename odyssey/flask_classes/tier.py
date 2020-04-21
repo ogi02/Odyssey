@@ -29,6 +29,7 @@ class Tier:
 		found = db.tier_collection.find({'user_id': user_id})
 		if found:
 			return found
+			
 	def find_by_name(user_id, name):
 		user_id = ObjectId(user_id)
 		found = db.tier_collection.find_one({'user_id': user_id, 'name': name})

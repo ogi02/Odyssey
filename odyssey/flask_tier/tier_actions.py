@@ -12,7 +12,6 @@ from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 from flask_classes.tier import Tier
 
-
 tier_actions_bp = Blueprint('tier_actions_bp', __name__)
 
 @tier_actions_bp.route('/addTier', methods=['POST'])

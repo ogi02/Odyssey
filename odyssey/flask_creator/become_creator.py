@@ -20,6 +20,8 @@ def become_creator():
 	user = User.get_from_db(ActiveUser.username)
 	user_id = user.get('_id')
 
+	User.update_to_creator(user.get('username'))
+
 	# Get information about the future creator
 	result = request.get_json().get('result')
 	
@@ -27,12 +29,38 @@ def become_creator():
 	values = (
 		None,
 		user_id,
-		result.get('benefits'),
-		result.get('price'),
-		result.get('name'),
+		result.get('country_of_residence'),
+		result.get('country_for_shipping'),
+		result.get('full_name'),
+		result.get('address'),
+		result.get('suite'),
+		result.get('city'),
+		result.get('state'),
+		result.get('postal_code'),
+		result.get('phone_number'),
+		result.get('facebook'), 
+		result.get('twitter'),
+		result.get('instagram'), 
+		result.get('webtoon'),
+		result.get('twitch'),
+		result.get('youtube'),
+		result.get('bio'),
+		result.get('working_on'),
+		None,
+		None
 	)
-	Tier(*values).create()
+	Info(*values).create()
 
-	info_log.info("%s added a new tier named %s." % (ActiveUser.username, return)
+	# Tuple with user's creator specific information
+	values = (
+		None,
+		user_id,
+		None,
+		None,
+		result.get('content_type')
+	)
+	CreatorSpecific(*values).create()
+
+	info_log.info("%s became a creator." % ActiveUser.username)
 	
 	return jsonify(success=True, message='Successfully updated to creator!')

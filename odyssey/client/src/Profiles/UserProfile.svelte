@@ -9,13 +9,19 @@
 	import { followUser, unfollowUser, isFollowing } from './profile_management.js';
 
 	// Inherited variables
-	export let params;
+	export const params;
 
 	// Local variables
 	let cover_picture_src = '';
 	let profile_picture_src = '';
+	
 	let is_following = false;
+	
 	let user = {};
+	let info = {};
+	let tiers = {};
+	let is_creator;
+	
 	let result = {};
 
 	username.subscribe(async (newValue) => {
@@ -30,6 +36,14 @@
 		user = response.user;
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
+
+		is_creator = user.is_creator;
+
+		if(is_creator) {
+			info = response.info;
+			tiers = response.tier;
+			console.log(tiers);
+		}
 
 		result = {
 			profile_name: user.username
@@ -66,6 +80,17 @@
 		<button on:click={async () => is_following = await unfollowUser(result)}>Unfollow</button>
 	{:else}
 		<button on:click={async () => is_following = await followUser(result)}>Follow</button>
+	{/if}
+
+	{#if is_creator}
+		{#each tiers as tier}
+			<div class='tier-box'>
+				<h3>{tier.name}</h3>
+				<h4>${tier.price}</h4>
+				<p style="color: #666">PER MONTH</p>
+				<p>{tier.benefits}</p>
+			</div>
+		{/each}
 	{/if}
 
 </div>
@@ -127,6 +152,10 @@
 		height: 45%; 
 		min-height: 300px; 
 		object-fit: cover;
+	}
+
+	.tier-box {
+		border: 1px solid #444;
 	}
 
 </style>
