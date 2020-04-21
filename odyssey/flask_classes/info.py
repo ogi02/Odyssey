@@ -55,7 +55,13 @@ class Info:
 			'bio': self.bio,
 			'working_on': self.working_on,
 			'following': [],
-			'patreoning': [[]]
+			'patreoning': [
+				{
+					'creator_id',
+					'tier_id'
+
+				}
+			]
 		}
 		result = db.info_collection.insert_one(info)
 		return self
@@ -67,8 +73,22 @@ class Info:
 		if found:
 			return found
 
-	def become_patreon(active_user_id, creator_id, tier_id):
-		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'patreoning': [[ObjectId(creator_id), ObjectId(tier_id)]]}}, return_document=ReturnDocument.AFTER)
+	def become_patreon(user_id, creator_id, tier_id):
+		found = db.info_collection.find_one_and_update({'user_id': ObjectId(user_id)}, {"$addToSet": {'patreoning': {'creator_id': ObjectId(creator_id), 'tier_id': ObjectId(tier_id)}}}, return_document=ReturnDocument.AFTER)
+
+	def is_patreon(user_id, creator_id):
+		user_id = ObjectId(user_id)
+		creator_id = ObjectId(creator_id)
+		found = db.info_collection.find_one({'user_id': user_id,'patreoning': {"$elemMatch": {'creator_id': creator_id}}})
+		if found:
+			return True
+		return False
+
+	def get_tier_id(user_id, creator_id):
+		found = db.info_collection.find_one({'patreoning.creator_id': creator_id}, {'patreoning': {"$elemMatch": {'creator_id': creator_id}}})
+		if found:
+			tier_id = found.get('patreoning')[0].get('tier_id')
+			return tier_id
 
 	def follow(active_user_id, user_id):
 		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
@@ -85,5 +105,4 @@ class Info:
 		active_user_id = ObjectId(active_user_id)
 		user_id = ObjectId(user_id)
 		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$pull": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
-
 

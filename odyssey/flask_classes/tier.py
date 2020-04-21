@@ -36,3 +36,9 @@ class Tier:
 		if found:
 			return found
 
+	def find_by_id(tier_id):
+		tier_id = ObjectId(tier_id)
+		found = db.tier_collection.find_one({'_id': tier_id})
+		if found:
+			return found
+
