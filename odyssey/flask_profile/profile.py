@@ -11,6 +11,7 @@ from flask import Blueprint, request, session, jsonify
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
+from flask_classes.tier import Tier
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
@@ -20,20 +21,38 @@ upload_folder = "./client/public/images"
 
 @profile_bp.route("/profile")
 def my_profile():
-	print(ActiveUser.logged_in)
 	if(ActiveUser.logged_in):
 		# Get user from session and information about the user from the database 
 		user = User.get_from_db(ActiveUser.username)
 		user = json.loads(json_util.dumps(user))
-		info = Info.find_by_user_id(user.get("_id").get("$oid"))
-		info = json.loads(json_util.dumps(info))
-		return jsonify(success=True, user = user, info = info)
+		
+		if(user.get('is_creator')):
+			info = Info.find_by_user_id(user.get("_id").get("$oid"))
+			info = json.loads(json_util.dumps(info))
+
+			tier = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
+			tier = json.loads(json_util.dumps(tier))
+
+			return jsonify(success=True, user = user, info = info, tier = tier)
+			
+		return jsonify(success=True, user = user)
+		
 	return jsonify(success=False)
 
 @profile_bp.route("/profile/<username>", methods=["POST"])
 def user_profile(username):
 	user = User.get_from_db(username)
 	user = json.loads(json_util.dumps(user))
+	if(user.get('is_creator')):
+		# Get info is user is creator
+		info = Info.find_by_user_id(user.get("_id").get("$oid"))
+		info = json.loads(json_util.dumps(info))
+
+		tier = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
+		tier = json.loads(json_util.dumps(tier))
+		
+		return jsonify(success = True, user = user, info = info, tier = tier)
+
 	return jsonify(success = True, user = user)
 
 @profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/upload_picture", methods=["POST"])

@@ -67,7 +67,7 @@
 	<nav>
 		<a href='/' class='home-icon'><img src={home_picture_src}></a>
 		<a href='/login' class='navlink'>Log in</a>
-		<Search />
+		<!-- <Search /> -->
 	</nav>
 {/if}
 
