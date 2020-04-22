@@ -15,7 +15,7 @@ from flask_classes.tier import Tier
 tier_actions_bp = Blueprint('tier_actions_bp', __name__)
 
 @tier_actions_bp.route('/addTier', methods=['POST'])
-def add_tier():
+def create_tier():
 	# Get user from session
 	user = User.get_from_db(ActiveUser.username)
 	user_id = user.get('_id')
@@ -40,14 +40,14 @@ def add_tier():
 @tier_actions_bp.route('/chooseTier', methods=['POST'])
 def choose_tier():
 	# Get user from session
-	user = User.get_from_db(ActiveUser.username)
-	user_id = user.get('_id')
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser_id = activeUser.get('_id')
 
 	# Get information about the future creator
 	result = request.get_json().get('result')
 	
-	Info.become_patreon(user_id,result.get('user_id'), result.get('_id'))
+	Info.become_patreon(activeUser_id, result.get('creator_id'), result.get('tier_id'))
 
-	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('name')))
+	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('tier_id')))
 	
 	return jsonify(success=True, message='Successfully added new tier!')

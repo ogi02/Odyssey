@@ -21,12 +21,12 @@ upload_folder = "./client/public/images"
 
 @profile_bp.route("/profile")
 def my_profile():
-	if(ActiveUser.logged_in):
+	if ActiveUser.logged_in:
 		# Get user from session and information about the user from the database 
 		user = User.get_from_db(ActiveUser.username)
 		user = json.loads(json_util.dumps(user))
 		
-		if(user.get('is_creator')):
+		if user.get('is_creator'):
 			info = Info.find_by_user_id(user.get("_id").get("$oid"))
 			info = json.loads(json_util.dumps(info))
 
@@ -41,19 +41,31 @@ def my_profile():
 
 @profile_bp.route("/profile/<username>", methods=["POST"])
 def user_profile(username):
-	user = User.get_from_db(username)
-	user = json.loads(json_util.dumps(user))
-	if(user.get('is_creator')):
+	searchedUser = User.get_from_db(username)
+	searchedUser = json.loads(json_util.dumps(searchedUser))
+	searchedUser_id = searchedUser.get('_id').get('$oid')
+
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = json.loads(json_util.dumps(activeUser))
+	activeUser_id = activeUser.get('_id').get('$oid')
+
+	if searchedUser.get('is_creator'):
 		# Get info is user is creator
-		info = Info.find_by_user_id(user.get("_id").get("$oid"))
+		info = Info.find_by_user_id(searchedUser_id)
 		info = json.loads(json_util.dumps(info))
 
-		tier = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
+		tier = Tier.find_all_by_user_id(searchedUser_id)
 		tier = json.loads(json_util.dumps(tier))
-		
-		return jsonify(success = True, user = user, info = info, tier = tier)
 
-	return jsonify(success = True, user = user)
+		if Info.is_patreon(searchedUser_id, activeUser_id):
+			# Get tier id of chosen tier
+			tier_id = get_tier_id(searchedUser_id, activeUser_id)
+
+			return jsonify(success = True, user = searchedUser, info = info, tier = tier, tier_id = tier_id)
+		
+		return jsonify(success = True, user = searchedUser, info = info, tier = tier)
+
+	return jsonify(success = True, user = searchedUser)
 
 @profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/upload_picture", methods=["POST"])
 def upload_picture():

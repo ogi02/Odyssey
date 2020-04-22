@@ -59,7 +59,6 @@ class Info:
 				{
 					'creator_id',
 					'tier_id'
-
 				}
 			]
 		}
