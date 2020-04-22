@@ -42,3 +42,7 @@ class Tier:
 		if found:
 			return found
 
+	def delete_tier(tier_id):
+		tier_id = ObjectId(tier_id)
+		db.tier_collection.delete_one({'_id': tier_id})
+		

@@ -73,8 +73,6 @@ class Info:
 		if found:
 			return found
 
-	def become_patreon(user_id, creator_id, tier_id):
-		found = db.info_collection.find_one_and_update({'user_id': ObjectId(user_id)}, {"$addToSet": {'patreoning': {'creator_id': ObjectId(creator_id), 'tier_id': ObjectId(tier_id)}}}, return_document=ReturnDocument.AFTER)
 
 	def is_patreon(user_id, creator_id):
 		user_id = ObjectId(user_id)
@@ -84,6 +82,16 @@ class Info:
 			return True
 		return False
 
+	def choose_tier(user_id, creator_id, tier_id):
+		found = Info.is_patreon(user_id, creator_id)
+		if(found):
+			db.info_collection.update_one({'user_id': ObjectId(user_id),'patreoning.creator_id': ObjectId(creator_id)}, {"$set": {'patreoning.$.tier_id': ObjectId(tier_id)}})
+		else:
+			db.info_collection.update_one({'user_id': ObjectId(user_id)}, {"$addToSet": {'patreoning': {'creator_id': ObjectId(creator_id), 'tier_id': ObjectId(tier_id)}}})
+
+	def unsubscribe_from_tier(user_id, creator_id, tier_id):
+		db.info_collection.update_one({'user_id': ObjectId(user_id),'patreoning.creator_id': ObjectId(creator_id)}, {"$pull": {'patreoning': {'creator_id': ObjectId(creator_id), 'tier_id': ObjectId(tier_id)}}})
+
 	def get_tier_id(user_id, creator_id):
 		found = db.info_collection.find_one({'patreoning.creator_id': creator_id}, {'patreoning': {"$elemMatch": {'creator_id': creator_id}}})
 		if found:
@@ -91,7 +99,7 @@ class Info:
 			return tier_id
 
 	def follow(active_user_id, user_id):
-		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$addToSet": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
+		db.info_collection.update_one({'user_id': active_user_id}, {"$addToSet": {'following': ObjectId(user_id)}})
 
 	def is_following(active_user_id, user_id):
 		active_user_id = ObjectId(active_user_id)
@@ -104,5 +112,5 @@ class Info:
 	def unfollow(active_user_id, user_id):
 		active_user_id = ObjectId(active_user_id)
 		user_id = ObjectId(user_id)
-		found = db.info_collection.find_one_and_update({'user_id': active_user_id}, {"$pull": {'following': ObjectId(user_id)}}, return_document=ReturnDocument.AFTER)
+		db.info_collection.update_one({'user_id': active_user_id}, {"$pull": {'following': ObjectId(user_id)}})
 
