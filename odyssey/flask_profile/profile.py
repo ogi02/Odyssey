@@ -30,10 +30,12 @@ def my_profile():
 			info = Info.find_by_user_id(user.get("_id").get("$oid"))
 			info = json.loads(json_util.dumps(info))
 
-			tier = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
-			tier = json.loads(json_util.dumps(tier))
+			tiers = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
+			tiers = json.loads(json_util.dumps(tiers))
 
-			return jsonify(success=True, user = user, info = info, tier = tier)
+			print(tiers)
+
+			return jsonify(success=True, user = user, info = info, tiers = tiers)
 			
 		return jsonify(success=True, user = user)
 		

@@ -4,6 +4,7 @@
 
 	// Component imports
 	import ChangePic from './ChangePic.svelte';
+	import CreateTier from './CreateTier.svelte';
 	import EditProfile from './EditProfile.svelte';
 
 	// Javascript imports
@@ -16,21 +17,27 @@
 
 	let user = {};
 	let info = {};
+	let tiers = [];
 	let social_media_links = {};
 	let shipping_info = {};
 
 	let change = false;
+	let addTierFlag = false;
 	
 	onMount(async() => {
 		// Get users profile and set variables
 		const response = await fetchGet("http://localhost:3000/profile");
-		console.log(response);
+		
 		user = response.user;
-		info = response.info;
-		if(info != null) {
-			social_media_links = response.info.social_media_links;
+
+		if(user.is_creator) {
+			info = response.info;
+			tiers = response.tiers;
 			shipping_info = response.info.shipping_info;
+			social_media_links = response.info.social_media_links;
+			console.log(tiers);
 		}
+		
 		// Time is put for easier reactive update if the user uploads a new picture
 		profile_picture_src = '/images/' + user.username + '/profile_picture?t=' + new Date().getTime();
 		cover_picture_src = '/images/' + user.username + '/cover_picture?t=' + new Date().getTime();
@@ -52,6 +59,11 @@
 	function toggleEditProfile() {
 		type_of_change = 'profile_info';
 		change = true;
+	}
+
+	// Trigger add tier
+	function toggleAddTier() {
+		addTierFlag = true;
 	}
 
 </script>
@@ -82,6 +94,12 @@
 		/>
 
 	{/if}
+
+{:else if addTierFlag}
+
+	<CreateTier
+		bind:addTierFlag={addTierFlag}
+	/>
 
 {:else}
 
@@ -116,7 +134,31 @@
 			<a href="#"><i class="fa fa-youtube"></i></a> 
 		</div>
 
-		<p><button>Follow</button></p>
+		<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
+
+		{#each tiers as tier}
+
+			<div class='tier-box'>
+			
+				<h3>{tier.name}</h3>
+				<h4>{tier.price}</h4>
+				<p style="color: #666">PER MONTH</p>
+			
+				<h4>Benefits</h4>
+
+				<ul>
+				
+					{#each tier.benefits as benefit} 
+						
+						<li class='benefits'>{benefit}</li>
+					
+					{/each}
+
+				</ul>
+
+			</div>
+			
+		{/each}
 
 	</div>
 
@@ -183,6 +225,14 @@ button:hover, a:hover {
 	height: 45%; 
 	min-height: 300px; 
 	object-fit: cover;
+}
+
+.tier-box {
+	border: 1px solid #444;
+}
+
+.benefits {
+	text-align: left;
 }
 
 </style>

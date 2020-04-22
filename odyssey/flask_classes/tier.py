@@ -7,7 +7,7 @@ from pymongo import ReturnDocument
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 db = client.tier
 class Tier:
-	def __init__(self, _id, user_id, benefits, price, name ):
+	def __init__(self, _id, user_id, benefits, price, name):
 		self._id = _id
 		self.user_id = user_id
 		self.benefits = benefits

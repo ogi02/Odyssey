@@ -14,7 +14,7 @@ from flask_classes.tier import Tier
 
 tier_actions_bp = Blueprint('tier_actions_bp', __name__)
 
-@tier_actions_bp.route('/addTier', methods=['POST'])
+@tier_actions_bp.route('/createTier', methods=['POST'])
 def create_tier():
 	# Get user from session
 	user = User.get_from_db(ActiveUser.username)

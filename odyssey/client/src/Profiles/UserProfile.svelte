@@ -42,7 +42,7 @@
 
 		if(is_creator) {
 			info = response.info;
-			tiers = response.tier;
+			tiers = response.tiers;
 		}
 
 		result = {
