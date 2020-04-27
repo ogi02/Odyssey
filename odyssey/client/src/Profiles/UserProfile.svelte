@@ -8,9 +8,6 @@
 	import { username } from '../js/stores.js';
 	import { followUser, unfollowUser, isFollowing } from './profile_management.js';
 
-	// Inherited variables
-	// export const params;
-
 	// Local variables
 	let cover_picture_src = '';
 	let profile_picture_src = '';
@@ -42,8 +39,6 @@
 			tiers = response.tiers;
 			subscribedTierId = response.tier_id;
 		}
-
-		console.log(subscribedTierId);
 
 		result = {
 			profile_name: user.username

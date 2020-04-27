@@ -63,8 +63,6 @@ def user_profile(username):
 		else:
 			tier_id = -1
 
-		print(tier_id)
-
 		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id))
 
 	return jsonify(success = True, user = searchedUser)

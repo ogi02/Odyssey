@@ -82,19 +82,15 @@
 		<Error id='benefits_error' message='' />
 
 		{#each benefits as benefit, i}
-
 			<div>
 
 				<input type='text' class='benefits' bind:value={benefit} placeholder='Benefit'>
 			
 				{#if benefits.length > 1}
-
 					<button id={i} class='remove' on:click|preventDefault={() => removeTier(i)}>Remove</button>
-
 				{/if}
 
 			</div>
-
 		{/each}
 
 		<p>Keep in mind that all of the benefits for the previous tiers will be applied for this tier.</p>
