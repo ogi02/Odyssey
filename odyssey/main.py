@@ -9,7 +9,7 @@ from flask_classes.active_user import ActiveUser
 # Blueprint imports
 from flask_follow.follow import follow_bp
 from flask_profile.profile import profile_bp
-from flask_profile.tier_actions import tier_actions_bp
+from flask_tier.tier_actions import tier_actions_bp
 from flask_creator.become_creator import become_creator_bp
 from flask_validators.email_validator import email_validator_bp
 from flask_authentication.authentication import authentication_bp

@@ -21,7 +21,8 @@ export default [
 	},
 	{
 		path: '/profile/:username',
-		component: UserProfile
+		component: UserProfile,
+		auth: true
 	},
 	{
 		path: '/become_a_creator',

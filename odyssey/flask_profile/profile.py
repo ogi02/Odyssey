@@ -11,6 +11,7 @@ from flask import Blueprint, request, session, jsonify
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
+from flask_classes.tier import Tier
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
@@ -20,21 +21,51 @@ upload_folder = "./client/public/images"
 
 @profile_bp.route("/profile")
 def my_profile():
-	print(ActiveUser.logged_in)
-	if(ActiveUser.logged_in):
+	if ActiveUser.logged_in:
 		# Get user from session and information about the user from the database 
 		user = User.get_from_db(ActiveUser.username)
 		user = json.loads(json_util.dumps(user))
-		info = Info.find_by_user_id(user.get("_id").get("$oid"))
-		info = json.loads(json_util.dumps(info))
-		return jsonify(success=True, user = user, info = info)
+		
+		if user.get('is_creator'):
+			info = Info.find_by_user_id(user.get("_id").get("$oid"))
+			info = json.loads(json_util.dumps(info))
+
+			tiers = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
+			tiers = json.loads(json_util.dumps(tiers))
+
+			return jsonify(success=True, user = user, info = info, tiers = tiers)
+			
+		return jsonify(success=True, user = user)
+		
 	return jsonify(success=False)
 
 @profile_bp.route("/profile/<username>", methods=["POST"])
 def user_profile(username):
-	user = User.get_from_db(username)
-	user = json.loads(json_util.dumps(user))
-	return jsonify(success = True, user = user)
+	searchedUser = User.get_from_db(username)
+	searchedUser = json.loads(json_util.dumps(searchedUser))
+	searchedUser_id = searchedUser.get('_id').get('$oid')
+
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = json.loads(json_util.dumps(activeUser))
+	activeUser_id = activeUser.get('_id').get('$oid')
+
+	if searchedUser.get('is_creator'):
+		# Get info is user is creator
+		info = Info.find_by_user_id(searchedUser_id)
+		info = json.loads(json_util.dumps(info))
+
+		tiers = Tier.find_all_by_user_id(searchedUser_id)
+		tiers = json.loads(json_util.dumps(tiers))
+
+		if Info.is_patreon(activeUser_id, searchedUser_id):
+			# Get tier id of chosen tier
+			tier_id = Info.get_tier_id(activeUser_id, searchedUser_id)
+		else:
+			tier_id = -1
+
+		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id))
+
+	return jsonify(success = True, user = searchedUser)
 
 @profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/upload_picture", methods=["POST"])
 def upload_picture():

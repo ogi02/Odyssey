@@ -8,14 +8,17 @@
 	import { username } from '../js/stores.js';
 	import { followUser, unfollowUser, isFollowing } from './profile_management.js';
 
-	// Inherited variables
-	export let params;
-
 	// Local variables
 	let cover_picture_src = '';
 	let profile_picture_src = '';
+	
 	let is_following = false;
+	
 	let user = {};
+	let info = {};
+	let tiers = {};
+	let subscribedTierId;
+	
 	let result = {};
 
 	username.subscribe(async (newValue) => {
@@ -31,12 +34,45 @@
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
 
+		if(user.is_creator) {
+			info = response.info;
+			tiers = response.tiers;
+			subscribedTierId = response.tier_id;
+		}
+
 		result = {
 			profile_name: user.username
 		};
 
 		is_following = await isFollowing(result);
-	})
+	});
+
+	async function chooseTier(self_id) {
+		result = {
+			tier_id: self_id,
+			creator_id: user._id.$oid
+		};
+
+		subscribedTierId = self_id;
+
+		const response = await fetchPost('http://localhost:3000/chooseTier', {
+			result: result
+		});
+	}
+
+	async function removeTier(self_id) {
+		result = {
+			tier_id: self_id,
+			creator_id: user._id.$oid
+		}
+
+		subscribedTierId = null;
+
+		const response = await fetchPost('http://localhost:3000/removeTier', {
+			result: result
+		});
+
+	}
 
 
 
@@ -66,6 +102,25 @@
 		<button on:click={async () => is_following = await unfollowUser(result)}>Unfollow</button>
 	{:else}
 		<button on:click={async () => is_following = await followUser(result)}>Follow</button>
+	{/if}
+
+	{#if user.is_creator}
+		{#each tiers as tier}
+			<div class='tier-box'>
+				
+				<h3>{tier.name}</h3>
+				<h4>${tier.price}</h4>
+				<p style="color: #666">PER MONTH</p>
+
+				{#if tier._id.$oid == subscribedTierId}
+					<button id='{tier._id.$oid}' on:click={async () => await removeTier(tier._id.$oid)}>Remove</button>
+				{:else}
+					<button id='{tier._id.$oid}' on:click={async () => await chooseTier(tier._id.$oid)}>Join</button>
+				{/if}
+				
+				<p>{tier.benefits}</p>
+			</div>
+		{/each}
 	{/if}
 
 </div>
@@ -127,6 +182,10 @@
 		height: 45%; 
 		min-height: 300px; 
 		object-fit: cover;
+	}
+
+	.tier-box {
+		border: 1px solid #444;
 	}
 
 </style>

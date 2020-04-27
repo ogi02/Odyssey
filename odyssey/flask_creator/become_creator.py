@@ -20,6 +20,8 @@ def become_creator():
 	user = User.get_from_db(ActiveUser.username)
 	user_id = user.get('_id')
 
+	User.update_to_creator(user.get('username'))
+
 	# Get information about the future creator
 	result = request.get_json().get('result')
 	
