@@ -46,7 +46,22 @@ def choose_tier():
 	# Get information about the future creator
 	result = request.get_json().get('result')
 	
-	Info.become_patreon(activeUser_id, result.get('creator_id'), result.get('tier_id'))
+	Info.choose_tier(activeUser_id, result.get('creator_id'), result.get('tier_id'))
+
+	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('tier_id')))
+	
+	return jsonify(success=True, message='Successfully added new tier!')
+
+@tier_actions_bp.route('/removeTier', methods=['POST'])
+def unsubscribe_from_tier():
+	# Get user from session
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser_id = activeUser.get('_id')
+
+	# Get information about the future creator
+	result = request.get_json().get('result')
+	
+	Info.unsubscribe_from_tier(activeUser_id, result.get('creator_id'), result.get('tier_id'))
 
 	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('tier_id')))
 	

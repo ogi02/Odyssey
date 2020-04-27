@@ -92,7 +92,9 @@ class Info:
 		db.info_collection.update_one({'user_id': ObjectId(user_id),'patreoning.creator_id': ObjectId(creator_id)}, {"$pull": {'patreoning': {'creator_id': ObjectId(creator_id), 'tier_id': ObjectId(tier_id)}}})
 
 	def get_tier_id(user_id, creator_id):
-		found = db.info_collection.find_one({'patreoning.creator_id': creator_id}, {'patreoning': {"$elemMatch": {'creator_id': creator_id}}})
+		user_id = ObjectId(user_id)
+		creator_id = ObjectId(creator_id)
+		found = db.info_collection.find_one({'user_id': user_id}, {'patreoning': {"$elemMatch": {'creator_id': creator_id}}})
 		if found:
 			tier_id = found.get('patreoning')[0].get('tier_id')
 			return tier_id

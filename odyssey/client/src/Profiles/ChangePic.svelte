@@ -21,7 +21,7 @@
 		clearError('picture_error');
 		if(files == null) {
 			displayError('picture_error', 'Image is required!');
-			return false
+			return false;
 		}
 
 		// Fetch post request for uploading the picture

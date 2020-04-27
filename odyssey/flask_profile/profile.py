@@ -33,8 +33,6 @@ def my_profile():
 			tiers = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
 			tiers = json.loads(json_util.dumps(tiers))
 
-			print(tiers)
-
 			return jsonify(success=True, user = user, info = info, tiers = tiers)
 			
 		return jsonify(success=True, user = user)
@@ -56,16 +54,18 @@ def user_profile(username):
 		info = Info.find_by_user_id(searchedUser_id)
 		info = json.loads(json_util.dumps(info))
 
-		tier = Tier.find_all_by_user_id(searchedUser_id)
-		tier = json.loads(json_util.dumps(tier))
+		tiers = Tier.find_all_by_user_id(searchedUser_id)
+		tiers = json.loads(json_util.dumps(tiers))
 
-		if Info.is_patreon(searchedUser_id, activeUser_id):
+		if Info.is_patreon(activeUser_id, searchedUser_id):
 			# Get tier id of chosen tier
-			tier_id = get_tier_id(searchedUser_id, activeUser_id)
+			tier_id = Info.get_tier_id(activeUser_id, searchedUser_id)
+		else:
+			tier_id = -1
 
-			return jsonify(success = True, user = searchedUser, info = info, tier = tier, tier_id = tier_id)
-		
-		return jsonify(success = True, user = searchedUser, info = info, tier = tier)
+		print(tier_id)
+
+		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id))
 
 	return jsonify(success = True, user = searchedUser)
 

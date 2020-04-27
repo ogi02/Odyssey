@@ -20,7 +20,6 @@
 	let user = {};
 	let info = {};
 	let tiers = {};
-	let is_creator;
 	let subscribedTierId;
 	
 	let result = {};
@@ -38,12 +37,13 @@
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
 
-		is_creator = user.is_creator;
-
-		if(is_creator) {
+		if(user.is_creator) {
 			info = response.info;
 			tiers = response.tiers;
+			subscribedTierId = response.tier_id;
 		}
+
+		console.log(subscribedTierId);
 
 		result = {
 			profile_name: user.username
@@ -109,7 +109,7 @@
 		<button on:click={async () => is_following = await followUser(result)}>Follow</button>
 	{/if}
 
-	{#if is_creator}
+	{#if user.is_creator}
 		{#each tiers as tier}
 			<div class='tier-box'>
 				

@@ -1,6 +1,10 @@
 <script>
+	// Component imports
+	import Error from '../Helpers/Error.svelte';
+
 	// Javascript imports
 	import { fetchPost } from '../js/fetch.js';
+	import { displayError, clearError } from '../js/helpers.js';
 
 	// Inherited variables
 	export let addTierFlag;
@@ -10,14 +14,23 @@
 	let benefits = [''];
 
 	async function addTier() {
+
+		// Clear previous errors
+		clearError('benefits_error');
+
 		// Remove empty benefits from array
-		benefits = benefits.filter(benefit => benefit !== '');
+		let temp = benefits.filter(benefit => benefit.replace(/\s/g, '') !== '');
+
+		if(temp.length == 0) {
+			displayError('benefits_error', 'You must fill in at least one benefit!');
+			return false;
+		}
 
 		// Create result with tier information
 		result = {
 			name: document.getElementById('name').value,
 			price: document.getElementById('price').value,
-			benefits: benefits
+			benefits: temp
 		}
 
 		// Fetch POST request for creating a tier
@@ -27,11 +40,29 @@
 
 		// Get back to profile page
 		addTierFlag = false;
+
+		location.reload();
 	}
 
 	function addBenefitField() {
 		// Add new empty benefit
 		benefits = benefits.concat('');
+	}
+
+	function removeTier(index) {
+		benefits.splice(index, 1);
+		benefits = benefits;
+	}
+
+	function checkForEmptyBenefits() {
+		let emptyBenefits = true;
+		for(let i = 0; i < benefits.length; i++) {
+			if(benefits[i] != '') {
+				emptyBenefits = false;
+			}
+		}
+
+		return emptyBenefits;
 	}
 
 </script>
@@ -46,17 +77,29 @@
 		
 		<input type='number' id='price' placeholder='Price' min='1' max='1000' required>
 
-		<button on:click|preventDefault={() => addBenefitField()}>Add benefit</button>
+		<button id='benefits_button' on:click|preventDefault={() => addBenefitField()}>Add benefit</button>
 
-		{#each benefits as benefit}
+		<Error id='benefits_error' message='' />
 
-			<input type='text' class='benefits' bind:value={benefit} placeholder='Benefit'>
+		{#each benefits as benefit, i}
+
+			<div>
+
+				<input type='text' class='benefits' bind:value={benefit} placeholder='Benefit'>
+			
+				{#if benefits.length > 1}
+
+					<button id={i} class='remove' on:click|preventDefault={() => removeTier(i)}>Remove</button>
+
+				{/if}
+
+			</div>
 
 		{/each}
 
 		<p>Keep in mind that all of the benefits for the previous tiers will be applied for this tier.</p>
 		
-		<button type='submit' on:click|preventDefault={() => addTier()}>Continue</button>
+		<button type='submit' on:click|preventDefault={async () => addTier()}>Continue</button>
 
 	</form>
 
@@ -83,6 +126,18 @@
 	input {
 		display: block;
 		width: 200px;
+	}
+
+	button {
+		display: block;
+	}
+
+	.remove, .benefits {
+		display: inline-block;
+	}
+
+	#benefits_error, #benefits_button {
+		display: inline;
 	}
 
 </style>

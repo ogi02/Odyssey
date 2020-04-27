@@ -35,7 +35,6 @@
 			tiers = response.tiers;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
-			console.log(tiers);
 		}
 		
 		// Time is put for easier reactive update if the user uploads a new picture
@@ -141,7 +140,7 @@
 			<div class='tier-box'>
 			
 				<h3>{tier.name}</h3>
-				<h4>{tier.price}</h4>
+				<h4>${tier.price}</h4>
 				<p style="color: #666">PER MONTH</p>
 			
 				<h4>Benefits</h4>
@@ -157,7 +156,7 @@
 				</ul>
 
 			</div>
-			
+
 		{/each}
 
 	</div>
