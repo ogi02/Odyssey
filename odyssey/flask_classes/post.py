@@ -1,8 +1,8 @@
 from pymongo import ReturnDocument
 from pymongo import MongoClient
 from bson import ObjectId
-from info import Info
-from tier import Tier
+from flask_classes.info import Info
+from flask_classes.tier import Tier
 import datetime
 
 client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
