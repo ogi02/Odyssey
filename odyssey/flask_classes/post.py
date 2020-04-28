@@ -66,7 +66,15 @@ class Post:
 			{"$pull": {'likes': user_id}}
 		)
 
-	def can_view(post_id, user_id):
+	def has_liked_post(user_id, post_id):
+		post_id = ObjectId(post_id)
+		user_id = ObjectId(user_id)
+		found = db.posts_collection.find_one({'id': post_id, 'likes': {"$in": ObjectId(user_id)}})
+		if found:
+			return True
+		return False
+
+	def can_view(user_id, post_id):
 
 		found = Post.find_by_id(post_id)
 		creator_id = found.get('user_id')
