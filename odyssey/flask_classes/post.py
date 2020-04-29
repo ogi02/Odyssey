@@ -45,7 +45,7 @@ class Post:
 
 	def get_likes_count(post_id):
 		post_id = ObjectId(post_id)
-		found = db.posts_collection.find_one({'id': post_id})
+		found = db.posts_collection.find_one({'_id': post_id})
 		if found:
 			post = Post(*found)
 			return post.likes.len()
@@ -69,7 +69,7 @@ class Post:
 	def has_liked_post(user_id, post_id):
 		post_id = ObjectId(post_id)
 		user_id = ObjectId(user_id)
-		found = db.posts_collection.find_one({'id': post_id, 'likes': {"$in": ObjectId(user_id)}})
+		found = db.posts_collection.find_one({'_id': post_id, 'likes': {"$in": ObjectId(user_id)}})
 		if found:
 			return True
 		return False
