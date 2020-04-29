@@ -1,5 +1,3 @@
-import pymongo
-
 from pymongo import MongoClient
 from bson import ObjectId
 from pymongo import ReturnDocument
