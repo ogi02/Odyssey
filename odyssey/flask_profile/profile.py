@@ -98,28 +98,33 @@ def upload_picture():
 	else:
 		error_log.error("Image extension is not allowed or doesn't exist!")
 
-		return jsonify(success=False, message="Allowed extensions: 'pdf', 'png', 'jpeg', 'jpg', 'gif'.")
+		return jsonify(success=False, message="Allowed extensions: 'pdf', 'png', 'jpeg', 'jpg', 'gif'"), 403
 
 @profile_bp.route("/editProfile", methods = ["POST"])
 def edit_profile():
+	# Returned message
+	message = ""
+
 	# Get user from session
 	username = ActiveUser.username
 
 	# Get user"s new email and password
-	password = request.get_json().get("password")
 	email = request.get_json().get("email")
+	password = request.get_json().get("password")
+
+	# Change email
+	if email:
+		User.change_email(username, email)
+		info_log.info("Changed email for %s" % username)
+		message += "Changed email for %s " % username
 	
 	# Change password
 	if password:
 		User.change_password(username, password)
 		info_log.info("Changed password for %s" % username)
-	
-	# Change email
-	if email:
-		User.change_email(username, email)
-		info_log.info("Changed email for %s" % username)
+		message += "Changed password for %s " % username
 		
-	return jsonify(success=True, message="Profile edited successful!")
+	return jsonify(success=True, message=message)
 
 @profile_bp.route("/FpCerpd9Z7SIbjmN81Jy/getUsernames", methods = ["POST"])
 def get_usernames():
