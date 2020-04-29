@@ -1,8 +1,8 @@
 # Built-in imports
 import json
+import pymongo
 
 # Third party library imports
-from flask_session import Session
 from flask import Blueprint, request, jsonify
 
 # Imports from .py files
@@ -30,13 +30,22 @@ def register():
 		None
 	)
 
-	# Create user and update session
-	User(*values).create()
-	ActiveUser.logged_in = True
-	ActiveUser.username = username
-	info_log.info("User %s registered successfully." % username)
+	try:
+		# Create user and update session
+		User(*values).create()
+		ActiveUser.logged_in = True
+		ActiveUser.username = username
+		info_log.info("User %s registered successfully." % username)
 
-	return jsonify(success=True, message="Registration successful!")
+		return jsonify(success=True, message="Registration successful")
+
+	except pymongo.errors.DuplicateKeyError as e:
+		# Catch pymongo exception
+		key = list(e.details.get('keyValue').keys())[0]
+		value = e.details.get('keyValue').get(key)
+		error_log.error("Duplicate %s: %s" % (key, value))
+		return jsonify(success=False, message="Duplicate %s: %s" % (key, value)), 403
+
 
 @authentication_bp.route("/login", methods=["POST"])
 def login():
@@ -49,20 +58,21 @@ def login():
 	if not user or not user.verify_password(password):
 		error_log.error("Login failed!")
 		
-		return jsonify(success=False, message="Incorrect username or password!"), 403 # forbidden
+		return jsonify(success=False, message="Incorrect username or password"), 403 # forbidden
 	
 	# Update session
 	ActiveUser.logged_in = True
 	ActiveUser.username = username
-	info_log.info("%s logged in successfully." % username)
+	info_log.info("%s logged in successfully" % username)
 
-	return jsonify(success=True)
+	return jsonify(success=True, message="%s logged in successfully" % username)
 
 @authentication_bp.route("/logout")
 def user_logout():
 	# Update session
+	username = ActiveUser.username
 	ActiveUser.logged_in = False
 	ActiveUser.username = None
-	info_log.info("User logged out.")
+	info_log.info("%s logged out" % username)
 
-	return jsonify(success=True, message="successfully logged out")
+	return jsonify(success=True, message="%s logged out" % username)

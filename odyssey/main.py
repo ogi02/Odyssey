@@ -1,6 +1,5 @@
 # Third party library imports
 from flask_cors import CORS
-from flask_session import Session
 from flask import Flask, send_from_directory, jsonify, session
 
 # Imports from .py files
