@@ -4,7 +4,6 @@ import json
 from bson import json_util, ObjectId
 
 # Third party library imports
-from flask_session import Session
 from flask import Blueprint, request, session, jsonify
 
 # Imports from .py files
