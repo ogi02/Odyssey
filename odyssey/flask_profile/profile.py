@@ -91,9 +91,9 @@ def upload_picture():
 
 		# Save image
 		image.save(os.path.join(path, filename))
-		info_log.info("New %s picture saved for %s" % (picture_type,username))
+		info_log.info("New %s picture saved for %s" % (picture_type, username))
 
-		return jsonify(success=True)
+		return jsonify(success=True, message="New %s picture saved for %s" % (picture_type, username))
 		
 	else:
 		error_log.error("Image extension is not allowed or doesn't exist!")
