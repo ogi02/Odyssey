@@ -13,7 +13,7 @@ class AuthenticationTest(unittest.TestCase):
 	def setUp(self):
 		app.config["TESTING"] = True
 		self.app = app.test_client()
-		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/test?retryWrites=true&w=majority")
+		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
 		User.db = User.client.user
 
 	# Tear Down - Executed after each test
@@ -83,6 +83,10 @@ class AuthenticationTest(unittest.TestCase):
 		response = self.logout()
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'ogi101 logged out', response.data)
+
+	@classmethod
+	def tearDownClass(cls):
+		User.db.users.remove({})
 
 if __name__ == '__main__':
 	unittest.main()
