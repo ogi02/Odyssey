@@ -16,11 +16,10 @@ jobs:
     - name: Install dependencies
       run: |
         cd odyssey/
-        ls
-        python3 -m pip install --upgrade pip
-        pip install pipenv nose2
+        python3.7 -m pip install --upgrade pip
+        pip install pipenv 
         pipenv install
+        pipenv shell
     - name: Test with nose2
       run: |
-        cd odyssey/
-        pipenv run nose2 -v
+        nose2 -v
