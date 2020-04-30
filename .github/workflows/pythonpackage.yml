@@ -19,7 +19,6 @@ jobs:
         python3.7 -m pip install --upgrade pip
         pip install pipenv 
         pipenv install
-        pipenv shell
     - name: Test with nose2
       run: |
-        nose2 -v
+        pipenv run nose2 -v
