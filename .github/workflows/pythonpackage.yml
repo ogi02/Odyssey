@@ -15,11 +15,12 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        cd ../odyssey/
-        python -m pip install --upgrade pip
+        cd odyssey/
+        ls
+        python3 -m pip install --upgrade pip
         pip install pipenv nose2
         pipenv install
     - name: Test with nose2
       run: |
-        cd ../odyssey/
+        cd odyssey/
         pipenv run nose2 -v
