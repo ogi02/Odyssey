@@ -15,9 +15,5 @@ flask-cors = "*"
 flask-session = "*"
 werkzeug = "==0.16.0"
 
-[scripts]
-test = nose2 -v
-
-
 [requires]
 python_version = "3.7"
