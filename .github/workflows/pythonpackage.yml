@@ -24,4 +24,4 @@ jobs:
     - name: Test with nose2
       run: |
         cd odyssey/
-        pipenv run nose2 -v
+        PYTHONPATH='.' pipenv run nose2 -v
