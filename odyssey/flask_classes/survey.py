@@ -41,69 +41,65 @@ class Survey:
 		result = db.surveys_collection.insert_one(survey)
 		return self
 		
-	def find_surveys_by_user_id(user_id):
+	def find_surveys_by_creator_id(user_id):
 		user_id = ObjectId(user_id)
-		found = db.surveys_collection.find({'user_id': user_id})
+		found = db.surveys_collection.find({'creator_id': user_id})
 		if found:
 			return found
 
 	def find_by_id(survey_id):
-		survey_id = ObjectId(survery_id)
-		found = db.surveys_collection.find_one({'_id': survery_id})
+		survey_id = ObjectId(survey_id)
+		found = db.surveys_collection.find_one({'_id': survey_id})
 		if found:
 			return found
 
-	def get_votes_count_by_option(survery_id, option_number):
-		survery_id = ObjectId(survery_id)
-		found = db.surveys_collection.count({'_id': survery_id, 'votes':{"$elemMatch": {'number': option_number}}})
+	def get_votes_count_by_option(survey_id, option_number):
+		survey_id = ObjectId(survey_id)
+		found = db.surveys_collection.count_documents({'_id': survey_id, 'votes':{"$elemMatch": {'vote': option_number}}})
 		if found:
-			return foundx
+			return found
 
-	def get_all_votes_count(survery_id):
-		survery_id = ObjectId(survery_id)
-		found = db.posts_collection.find_one({'id': survery_id})
+	def get_all_votes_count(survey_id):
+		survey_id = ObjectId(survey_id)
+		found = db.surveys_collection.find_one({'_id': survey_id})
 		if found:
-			survey = Survey(*found)
-			return survey.votes.len()
+			return len(found['votes'])
 
-	def vote(user_id, survery_id, option_number):
-		survery_id = ObjectId(survery_id)
+	def vote(user_id, survey_id, option_number):
+		survey_id = ObjectId(survey_id)
 		user_id = ObjectId(user_id)
 		db.surveys_collection.update_one(
-			{'survery_id': survery_id},
+			{'_id': survey_id},
 			{"$addToSet": {'votes': {'user_id': user_id, 'vote': option_number}}}
 		)
 
-	def has_voted(user_id, survery_id):
-		survery_id = ObjectId(survery_id)
+	def has_voted(user_id, survey_id):
+		survey_id = ObjectId(survey_id)
 		user_id = ObjectId(user_id)
-		if db.surveys_collection.find_one({'survery_id': survery_id, 'votes': {"$in": user_id}}):
+		found = db.surveys_collection.find_one({'_id': survey_id, 'votes': {"$elemMatch": {'user_id': user_id}}})
+		if found:
 			return True
 		return False
 
-	def close(user_id, survery_id):
-		survery_id = ObjectId(survery_id)
-		user_id = ObjectId(user_id)
+	def close(survey_id):
+		survey_id = ObjectId(survey_id)
 		db.surveys_collection.update_one(
-			{'survery_id': survery_id},
-			{'is_open': False}
+			{'_id': survey_id},
+			{"$set":{'is_open': False}}
 		)
+		
 	def get_random_winner(survey_id):
-		survery_id = ObjectId(survery_id)
-		user_id = ObjectId(user_id)
-		survey = Survey(Survey.find_by_id(survery_id))
-		max = survey.votes.len()
-		winner_number = random.randint(0, max)
-		return survey.votes[winner_number]
+		survey_id = ObjectId(survey_id)
+		found = Survey.find_by_id(survey_id)
+		max = Survey.get_all_votes_count(survey_id)
+		winner_number = random.randint(0, max-1)
+		return found['votes'][winner_number].get('user_id')
 
 
-	def get_choose_winner(survery_id, user_id):
-		survery_id = ObjectId(survery_id)
+	def choose_winner(survey_id, user_id):
+		survey_id = ObjectId(survey_id)
 		user_id = ObjectId(user_id)
 		db.surveys_collection.update_one(
-			{'survery_id': survery_id},
-			{'winner': user_id}
+			{'_id': survey_id},
+			{"$set":{'winner': user_id}}
 		)
-
-
-Survey(None, ObjectId("5e7262878494818ae5350a57"), None, None, None, None, None, None, True, None, None, None).create()
