@@ -23,4 +23,4 @@ jobs:
         pipenv install
     - name: Test with nose2
       run: |
-        pipenv run nose2 -v
+        pipenv run "nose2 -v"
