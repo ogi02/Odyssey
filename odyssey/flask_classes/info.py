@@ -55,12 +55,7 @@ class Info:
 			'bio': self.bio,
 			'working_on': self.working_on,
 			'following': [],
-			'patreoning': [
-				{
-					'creator_id',
-					'tier_id'
-				}
-			]
+			'patreoning':[]
 		}
 		result = db.info_collection.insert_one(info)
 		return self
