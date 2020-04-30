@@ -24,6 +24,11 @@
 			return false;
 		}
 
+		if(files[0].size > 2097152) {
+			displayError('picture_error', 'Size must be less than 2 MB');
+			return false;
+		}
+
 		// Fetch post request for uploading the picture
 		const response = await fetchFilePost(
 			('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/upload_picture?type=' + type), files[0]

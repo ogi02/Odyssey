@@ -57,13 +57,11 @@ def unfollow():
 def is_following():
 	# Get user from session
 	user = User.get_from_db(ActiveUser.username)
-	print(ActiveUser.username)
 	user_id = user.get('_id')
 
 	# Get information about the profile to be followed
 	result = request.get_json().get('result')
 	profile_name = result.get('profile_name')
-	print (profile_name)
 	user_to_follow = User.get_from_db(profile_name)
 	profile_id = user_to_follow.get('_id')
 
