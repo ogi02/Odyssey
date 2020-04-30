@@ -23,4 +23,5 @@ jobs:
         pipenv install
     - name: Test with nose2
       run: |
+        cd odyssey/
         pipenv run "nose2 -v"
