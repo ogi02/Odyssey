@@ -15,10 +15,10 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        cd odyssey/
         python3.7 -m pip install --upgrade pip
-        pip install pipenv 
-        pipenv install
+        pip install pipenv
     - name: Test with nose2
       run: |
-        pipenv run python -m tests.test_authentication
+        cd odyssey/
+        pipenv install
+        pipenv run nose2 -v
