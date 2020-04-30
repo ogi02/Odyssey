@@ -100,8 +100,8 @@ def close_survey():
 	
 	return jsonify(success=True, message='Successfully closed survey!')
 
-@survey_actions_bp.route('/chooseWinner', methods=['POST'])
-def choose_winner():
+@survey_actions_bp.route('/chooseWinningOption', methods=['POST'])
+def get_winning_option():
 	# Get user from session
 	activeUser = User.get_from_db(ActiveUser.username)
 	activeUser_id = activeUser.get('_id')
@@ -109,18 +109,11 @@ def choose_winner():
 	# Get information about the survey
 	result = request.get_json().get('result')
 	
-	Survey.choose_winner(result.get('survey_id'), activeUser_id)
-	info_log.info("Successfully anounced winner with id: %s on survey with id: %s" % (activeUser_id, result.get('survey_id')))
+	Survey.get_wining_option(result.get('survey_id'))
+	info_log.info("Successfully option %s won survey with id: %s" % (activeUser_id, result.get('survey_id')))
 	
-	return jsonify(success=True, message='Successfully anounced winner!')
+	return jsonify(success=True, message='Successfully anounced winning option!')
 
 
-@survey_actions_bp.route('/generateRandomWinner', methods=['POST'])
-def generate_random_winner():
-	# Get information about the survey
-	result = request.get_json().get('result')
-	
-	winner_id = Survey.get_random_winner(result.get('survey_id'))
 
-	return jsonify(success=True, winner_id = winner_id)
 	

@@ -88,18 +88,20 @@ class Survey:
 			{"$set":{'is_open': False}}
 		)
 		
-	def get_random_winner(survey_id):
+	def get_wining_option(survey_id):
 		survey_id = ObjectId(survey_id)
 		found = Survey.find_by_id(survey_id)
-		max = Survey.get_all_votes_count(survey_id)
-		winner_number = random.randint(0, max-1)
-		return found['votes'][winner_number].get('user_id')
+		win = None
+		size = len(found['options'])
+		maximum = 0
+		for i in range(0,size):
+			option_votes = Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number'))
+			if option_votes:
+				if Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number')) > maximum:
+					win = found.get('options')[i].get('number')
+					maximum = Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number'))
 
-
-	def choose_winner(survey_id, user_id):
-		survey_id = ObjectId(survey_id)
-		user_id = ObjectId(user_id)
 		db.surveys_collection.update_one(
 			{'_id': survey_id},
-			{"$set":{'winner': user_id}}
+			{"$set": {'winner': win}}
 		)
