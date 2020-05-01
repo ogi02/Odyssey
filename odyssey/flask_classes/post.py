@@ -26,7 +26,6 @@ class Post:
 			'image_path': self.image_path,
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id
-
 		}
 		result = db.posts_collection.insert_one(post)
 		return self

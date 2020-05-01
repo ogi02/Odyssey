@@ -29,29 +29,27 @@
 		// Clear previous possible errors
 		clearError('picture_error');
 
+		// Check for image
+		if(files == null) {
+			displayError('picture_error', 'Image for post is mandatory');
+			return false;
+		}
+
 		// Check for picture size limit
-		if(files.length != 0 && files[0].size > 2097152) {
+		if(files[0].size > 2097152) {
 			displayError('picture_error', 'Size must be less than 2 MB');
 			return false;
 		}
 
-		if(files.length == 0) {
-			const response = await fetchPost('http://localhost:3000/createPostNoImage', {
-				description: description,
-				required_id: required_id
-			});
-		}
-		else {
-			// Fetch post request for uploading the picture
-			const response = await fetchFilePost(
-				('http://localhost:3000/createPostWithImage?description=' + description + '&required_id=' + required_id), files[0]
-			);
+		// Fetch post request for uploading the picture
+		const response = await fetchFilePost(
+			('http://localhost:3000/createPost?description=' + description + '&required_id=' + required_id), files[0]
+		);
 
-			// Check for possible errors
-			if(!response.success) {
-				displayError('picture_error', response.message)
-				return false;
-			}
+		// Check for possible errors
+		if(!response.success) {
+			displayError('picture_error', response.message)
+			return false;
 		}
 
 		createPostFlag = false;
