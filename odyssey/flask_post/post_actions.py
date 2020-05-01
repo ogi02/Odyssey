@@ -39,6 +39,14 @@ def create_post():
 	
 	return jsonify(success=True, message='Successfully created a new post!')
 
+@post_actions_bp.route('/createPostWithImage', methods=['POST'])
+def create_post_with_image():
+	# Get user from session
+	user = User.get_from_db(ActiveUser.username)
+	user_id = user.get('_id')
+
+	
+
 @post_actions_bp.route('/getLikeCount', methods=['POST'])
 def get_like_count():
 	

@@ -1,0 +1,107 @@
+<script>
+	// Component imports
+	import Error from '../Helpers/Error.svelte';
+
+	// Javascript imports
+	import { fetchPost, fetchFilePost } from '../js/fetch.js';
+	import { displayError, clearError } from '../js/helpers.js';
+
+	// Inherited variables
+	export let tiers;
+	export let createPostFlag;
+
+	// Local variables
+	let files;
+	let required_id;
+	let description = '';
+
+	tiers.sort((a, b) => (parseInt(a.price) > parseInt(b.price)) ? 1 : ((parseInt(a.price) < parseInt(b.price)) ? -1 : 0));
+	console.log(tiers);
+
+	async function createPost() {
+		// Get required id for post
+		required_id = document.querySelector('input[name=tier]:checked').value;
+
+		console.log(required_id);
+		console.log(files[0]);
+		console.log(description);
+
+		// Clear previous possible errors
+		clearError('picture_error');
+
+		// Check for picture size limit
+		if(files.length != 0 && files[0].size > 2097152) {
+			displayError('picture_error', 'Size must be less than 2 MB');
+			return false;
+		}
+
+		if(files.length == 0) {
+			const response = await fetchPost('http://localhost:3000/createPostNoImage', {
+				description: description,
+				required_id: required_id
+			});
+		}
+		else {
+			// Fetch post request for uploading the picture
+			const response = await fetchFilePost(
+				('http://localhost:3000/createPostWithImage?description=' + description + '&required_id=' + required_id), files[0]
+			);
+
+			// Check for possible errors
+			if(!response.success) {
+				displayError('picture_error', response.message)
+				return false;
+			}
+		}
+
+		createPostFlag = false;
+		location.reload();
+	}
+
+</script>
+
+<div class='form'>
+
+	<form autocomplete="off">
+
+		<h3>Create a new post!</h3>
+
+		<textarea id='description' placeholder='Description' bind:value={description}></textarea>
+
+		<p>Choose a photo for the post</p>
+		<input type='file' id='img' bind:files>
+
+		<Error id='picture_error' message='' />
+
+		<p>Select which is the lowest tier that can see your post</p>
+		
+		{#each tiers as tier, i}
+			<div>
+				{#if i == 0}
+					<input type="radio" id={tier._id.$oid} name="tier" value={tier._id.$oid} checked="checked">
+				{:else}
+					<input type="radio" id={tier._id.$oid} name="tier" value={tier._id.$oid}>
+				{/if}
+
+				<label for={tier._id.$oid}>{tier.name} ({tier.price}$)</label>
+			</div>
+		{/each}
+
+		<button type='submit' on:click|preventDefault={async () => createPost()}>Create Post</button>
+
+	</form>
+
+</div>
+
+<style>
+
+	.form {
+		margin-top: 80px;
+	}
+
+	input[type=radio],
+	label {
+		display: inline-block;
+	}
+
+</style>
