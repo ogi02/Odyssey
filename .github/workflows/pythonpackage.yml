@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Python package
+name: Odyssey CI
 
 on: [push]
 
@@ -18,9 +15,9 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
+        cd odyssey/
         python -m pip install --upgrade pip
-        pip install pipenv
-        pipenv install
+        pip install -r requirements.txt 
     - name: Test with nose2
       run: |
         nose2 -v
