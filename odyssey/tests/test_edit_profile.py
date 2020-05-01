@@ -54,27 +54,27 @@ class EditProfileTest(unittest.TestCase):
 		User.db = User.client.user
 
 		# create user
-		response = self.register(self, 'ogi', '12345678', 'Ognian Baruh', 'ogi@gmail.com')
+		response = self.register(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678', 'Ognian Baruh', 'ogi@gmail.com')
 
 	def test_01_change_password_only_success(self):
 		response = self.edit_profile(None, 'changedpassword')
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'Changed password for ogi ', response.data)
+		self.assertIn(b'Changed password for _FpCerpd9Z7SIbjmN81Jy_test_profile ', response.data)
 
 	def test_02_change_email_only_success(self):
 		response = self.edit_profile('changed@gmail.com', None)
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'Changed email for ogi ', response.data)
+		self.assertIn(b'Changed email for _FpCerpd9Z7SIbjmN81Jy_test_profile ', response.data)
 
 	def test_03_change_email_and_password_success(self):
 		response = self.edit_profile('new@gmail.com', 'newpassword')
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'Changed email for ogi Changed password for ogi', response.data)
+		self.assertIn(b'Changed email for _FpCerpd9Z7SIbjmN81Jy_test_profile Changed password for _FpCerpd9Z7SIbjmN81Jy_test_profile', response.data)
 
 	def test_04_upload_profile_picture_success(self):
 		response = self.upload_picture("./tests/profile.jpeg", "profile")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'New profile picture saved for ogi', response.data)
+		self.assertIn(b'New profile picture saved for _FpCerpd9Z7SIbjmN81Jy_test_profile', response.data)
 
 	def test_05_upload_profile_picture_fail_disallowed_extension(self):
 		response = self.upload_picture("./tests/wrong_profile_image_format.txt", "profile")
@@ -84,7 +84,7 @@ class EditProfileTest(unittest.TestCase):
 	def test_06_upload_cover_picture_success(self):
 		response = self.upload_picture("./tests/cover.jpeg", "cover")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'New cover picture saved for ogi', response.data)
+		self.assertIn(b'New cover picture saved for _FpCerpd9Z7SIbjmN81Jy_test_profile', response.data)
 
 	def test_07_upload_profile_picture_fail_disallowed_extension(self):
 		response = self.upload_picture("./tests/wrong_cover_image_format.txt", "cover")
