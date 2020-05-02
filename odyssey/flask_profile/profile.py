@@ -11,6 +11,7 @@ from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.tier import Tier
+from flask_classes.post import Post
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
@@ -32,7 +33,10 @@ def my_profile():
 			tiers = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
 			tiers = json.loads(json_util.dumps(tiers))
 
-			return jsonify(success=True, user = user, info = info, tiers = tiers)
+			posts = Post.find_posts_by_user_id(user.get("_id").get("$oid"))
+			posts = json.loads(json_util.dumps(posts))
+
+			return jsonify(success=True, user = user, info = info, tiers = tiers, posts = posts)
 			
 		return jsonify(success=True, user = user)
 		
@@ -56,13 +60,17 @@ def user_profile(username):
 		tiers = Tier.find_all_by_user_id(searchedUser_id)
 		tiers = json.loads(json_util.dumps(tiers))
 
+		posts = Post.find_posts_by_user_id(searchedUser_id)
+		posts = json.loads(json_util.dumps(posts))
+		posts = sorted(posts, key=lambda post: post['date']['$date'], reverse=True)
+
 		if Info.is_patreon(activeUser_id, searchedUser_id):
 			# Get tier id of chosen tier
 			tier_id = Info.get_tier_id(activeUser_id, searchedUser_id)
 		else:
 			tier_id = -1
 
-		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id))
+		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id), posts = posts)
 
 	return jsonify(success = True, user = searchedUser)
 

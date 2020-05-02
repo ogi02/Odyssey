@@ -25,7 +25,6 @@ def create_post():
 	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
-
 	# Get image from request
 	image = request.files["image"]
 
@@ -75,7 +74,6 @@ def create_post():
 
 @post_actions_bp.route('/getLikeCount', methods=['POST'])
 def get_like_count():
-	
 	# Get information about the post
 	result = request.get_json().get('result')
 	count = Post.get_likes_count(result.get('post_id'))
@@ -89,11 +87,11 @@ def like_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get('post_id')
 	
-	Post.add_like(activeUser_id, result.get('post_id'))
+	Post.add_like(activeUser_id, post_id)
 
-	info_log.info("%s liked post with id: %s." % (ActiveUser.username, result.get('post_id')))
+	info_log.info("%s liked post with id: %s." % (ActiveUser.username, post_id))
 	
 	return jsonify(success=True, message='Successfully liked post!')
 
@@ -104,11 +102,11 @@ def unlike_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get('post_id')
 	
-	Post.remove_like(activeUser_id, result.get('post_id'))
+	Post.remove_like(activeUser_id, post_id)
 
-	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, result.get('post_id')))
+	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, post_id))
 	
 	return jsonify(success=True, message='Successfully unliked post!')
 
@@ -119,9 +117,9 @@ def has_liked_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
-	
-	if Post.has_liked_post(activeUser_id, result.get('post_id')):
+	post_id = request.get_json().get("post_id")
+
+	if Post.has_liked_post(activeUser_id, post_id):
 		return jsonify(liked=True)
 	
 	return jsonify(liked=False)
@@ -133,9 +131,9 @@ def can_view_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get("post_id")
 	
-	if Post.can_view(activeUser_id, result.get('post_id')):
-		return jsonify(liked=True)
+	if Post.can_view(activeUser_id, post_id):
+		return jsonify(view=True)
 	
-	return jsonify(liked=False)
+	return jsonify(view=False)

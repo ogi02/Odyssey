@@ -16,15 +16,10 @@
 	let description = '';
 
 	tiers.sort((a, b) => (parseInt(a.price) > parseInt(b.price)) ? 1 : ((parseInt(a.price) < parseInt(b.price)) ? -1 : 0));
-	console.log(tiers);
 
 	async function createPost() {
 		// Get required id for post
 		required_id = document.querySelector('input[name=tier]:checked').value;
-
-		console.log(required_id);
-		console.log(files[0]);
-		console.log(description);
 
 		// Clear previous possible errors
 		clearError('picture_error');

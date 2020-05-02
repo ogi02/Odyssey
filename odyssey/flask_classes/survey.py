@@ -36,7 +36,6 @@ class Survey:
 			'type': self.type,
 			'deadline': self.deadline,
 			'winner': None
-
 		}
 		result = db.surveys_collection.insert_one(survey)
 		return self

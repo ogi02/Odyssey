@@ -9,7 +9,7 @@
 	import EditProfile from './EditProfile.svelte';
 
 	// Javascript imports
-	import { fetchGet } from '../js/fetch.js';
+	import { fetchGet, fetchPost } from '../js/fetch.js';
 	
 	// Local variables
 	let profile_picture_src = '';
@@ -19,6 +19,7 @@
 	let user = {};
 	let info = {};
 	let tiers = [];
+	let posts = [];
 	let social_media_links = {};
 	let shipping_info = {};
 
@@ -35,6 +36,7 @@
 		if(user.is_creator) {
 			info = response.info;
 			tiers = response.tiers;
+			posts = response.posts;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -176,6 +178,18 @@
 
 		{/each}
 
+		{#each posts as post}
+			
+			<div class='post-box'>
+
+				<h3>{post.text}</h3>
+
+				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+				
+			</div>
+
+		{/each}
+
 	</div>
 
 {/if}
@@ -243,8 +257,13 @@ button:hover, a:hover {
 	object-fit: cover;
 }
 
-.tier-box {
+.tier-box, .post-box {
 	border: 1px solid #444;
+}
+
+.post-image {
+	width: 200px;
+	height: auto;
 }
 
 .benefits {
