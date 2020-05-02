@@ -1,9 +1,12 @@
-2020-04-30 10:10:56,507 - info_log - INFO - Changed password for ogi
-2020-04-30 10:10:56,511 - info_log - INFO - New profile picture saved for ogi
-2020-04-30 10:10:56,516 - info_log - INFO - New cover picture saved for ogi
-2020-05-01 00:29:37,970 - info_log - INFO - User ogi101 registered successfully.
-2020-05-01 00:29:40,926 - info_log - INFO - ogi101 logged in successfully
-2020-05-01 00:29:42,506 - info_log - INFO - ogi101 logged out
-2020-05-01 00:30:09,362 - info_log - INFO - User ogi101 registered successfully.
-2020-05-01 00:30:12,348 - info_log - INFO - ogi101 logged in successfully
-2020-05-01 00:30:13,948 - info_log - INFO - ogi101 logged out
+2020-05-02 23:45:07,767 - info_log - INFO - ogi1 liked post with id: 5eadcfd59deb97ba29c4bb51.
+2020-05-02 23:46:21,764 - info_log - INFO - ogi1 unliked post with id: 5eadcfd59deb97ba29c4bb51.
+2020-05-02 23:48:21,355 - info_log - INFO - ogi1 liked post with id: 5eadcfd59deb97ba29c4bb51.
+2020-05-02 23:48:23,181 - info_log - INFO - ogi1 unliked post with id: 5eadcfd59deb97ba29c4bb51.
+2020-05-02 23:49:29,637 - info_log - INFO - ogi1 logged out
+2020-05-02 23:49:34,948 - info_log - INFO - test logged in successfully
+2020-05-02 23:50:05,747 - info_log - INFO - test added a new post
+2020-05-02 23:50:11,938 - info_log - INFO - test logged out
+2020-05-02 23:50:16,801 - info_log - INFO - ogi1 logged in successfully
+2020-05-02 23:56:02,496 - info_log - INFO - ogi1 logged in successfully
+2020-05-02 23:57:44,503 - info_log - INFO - ogi1 logged in successfully
+2020-05-03 00:00:06,774 - info_log - INFO - ogi1 logged in successfully

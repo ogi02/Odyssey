@@ -17,9 +17,13 @@
 	let user = {};
 	let info = {};
 	let tiers = {};
+	let posts = {};
 	let subscribedTierId;
 	
 	let result = {};
+
+	let loadedPosts = 0;
+	let allPostsLoaded = false;
 
 	username.subscribe(async (newValue) => {
 		if(newValue == '') {
@@ -37,14 +41,21 @@
 		if(user.is_creator) {
 			info = response.info;
 			tiers = response.tiers;
+			posts = response.posts;
 			subscribedTierId = response.tier_id;
 		}
+
+		posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 
 		result = {
 			profile_name: user.username
 		};
 
 		is_following = await isFollowing(result);
+
+		await loadMorePosts();
+
+		console.log(posts);
 	});
 
 	async function chooseTier(self_id) {
@@ -74,6 +85,56 @@
 
 	}
 
+	async function isLiked(post_id) {
+		const response = await fetchPost('http://localhost:3000/hasLikedPost', {
+			post_id: post_id
+		});
+
+		let temp = response.liked;
+
+		return temp;
+	}
+
+	async function canView(post_id) {
+		const response = await fetchPost('http://localhost:3000/canViewPost', {
+			post_id: post_id
+		});
+
+		let temp = response.view;
+
+		return temp;
+	}
+
+	async function likePost(post_id) {
+		const response = await fetchPost('http://localhost:3000/likePost', {
+			post_id: post_id
+		});
+
+		posts.find(post => post._id.$oid === post_id).isLiked = true;
+		posts = posts;
+	}
+
+	async function unlikePost(post_id) {
+		const response = await fetchPost('http://localhost:3000/unlikePost', {
+			post_id: post_id
+		});
+
+		posts.find(post => post._id.$oid === post_id).isLiked = false;
+		posts = posts;
+	}
+
+	async function loadMorePosts() {
+		for(let i = loadedPosts; i < loadedPosts + 1; i++) {
+			if(posts.length == (loadedPosts + i)) {
+				allPostsLoaded = true;
+				loadedPosts += i;
+				return;
+			}
+			posts[i].isLiked = await isLiked(posts[i]._id.$oid);
+			posts[i].canView = await canView(posts[i]._id.$oid);
+		}
+		loadedPosts += 1;
+	}
 
 
 </script>
@@ -105,6 +166,7 @@
 	{/if}
 
 	{#if user.is_creator}
+		
 		{#each tiers as tier}
 			<div class='tier-box'>
 				
@@ -119,8 +181,43 @@
 				{/if}
 				
 				<p>{tier.benefits}</p>
+
 			</div>
 		{/each}
+
+		{#each posts as post, i}
+			
+			{#if i < loadedPosts}
+				<div class='post-box'>
+
+					{#if post.canView}
+
+						<h3>{post.text}</h3>
+
+						<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+
+						{#if post.isLiked}
+							<button on:click={async () => await unlikePost(post._id.$oid)}>Unlike</button>
+						{:else}
+							<button on:click={async () => await likePost(post._id.$oid)}>Like</button>
+						{/if}
+
+					{:else}
+
+						<h3>You can't view this post</h3>
+
+					{/if}
+						
+				</div>
+
+			{/if}
+
+		{/each}
+
+		{#if !allPostsLoaded}
+			<button on:click={async () => await loadMorePosts()}>Load More</button>
+		{/if}
+
 	{/if}
 
 </div>
@@ -184,8 +281,13 @@
 		object-fit: cover;
 	}
 
-	.tier-box {
+	.tier-box, .post-box {
 		border: 1px solid #444;
+	}
+
+	.post-image {
+		width: 200px;
+		height: auto;
 	}
 
 </style>

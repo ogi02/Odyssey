@@ -5,10 +5,11 @@
 	// Component imports
 	import ChangePic from './ChangePic.svelte';
 	import CreateTier from './CreateTier.svelte';
+	import CreatePost from '../Posts/CreatePost.svelte';
 	import EditProfile from './EditProfile.svelte';
 
 	// Javascript imports
-	import { fetchGet } from '../js/fetch.js';
+	import { fetchGet, fetchPost } from '../js/fetch.js';
 	
 	// Local variables
 	let profile_picture_src = '';
@@ -18,11 +19,13 @@
 	let user = {};
 	let info = {};
 	let tiers = [];
+	let posts = [];
 	let social_media_links = {};
 	let shipping_info = {};
 
 	let change = false;
 	let addTierFlag = false;
+	let createPostFlag = false;
 	
 	onMount(async() => {
 		// Get users profile and set variables
@@ -33,6 +36,7 @@
 		if(user.is_creator) {
 			info = response.info;
 			tiers = response.tiers;
+			posts = response.posts;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -63,6 +67,11 @@
 	// Trigger add tier
 	function toggleAddTier() {
 		addTierFlag = true;
+	}
+
+	// Trigger create post
+	function toggleCreatePost() {
+		createPostFlag = true;
 	}
 
 </script>
@@ -100,6 +109,13 @@
 		bind:addTierFlag={addTierFlag}
 	/>
 
+{:else if createPostFlag && user.is_creator}
+
+	<CreatePost
+		bind:createPostFlag={createPostFlag}
+		tiers={tiers}
+	/>
+
 {:else}
 
 	<img src={cover_picture_src} id="cover_picture" on:error={
@@ -133,7 +149,10 @@
 			<a href="#"><i class="fa fa-youtube"></i></a> 
 		</div>
 
-		<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
+		{#if user.is_creator}
+			<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
+			<div class='toggle' on:click={toggleCreatePost}>Create Post</div>
+		{/if}
 
 		{#each tiers as tier}
 
@@ -155,6 +174,18 @@
 
 				</ul>
 
+			</div>
+
+		{/each}
+
+		{#each posts as post}
+			
+			<div class='post-box'>
+
+				<h3>{post.text}</h3>
+
+				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+				
 			</div>
 
 		{/each}
@@ -226,8 +257,13 @@ button:hover, a:hover {
 	object-fit: cover;
 }
 
-.tier-box {
+.tier-box, .post-box {
 	border: 1px solid #444;
+}
+
+.post-image {
+	width: 200px;
+	height: auto;
 }
 
 .benefits {

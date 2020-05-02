@@ -21,12 +21,11 @@ class Post:
 	def create(self):
 		post = {
 			'user_id': self.user_id,
-			'likes': self.likes,
+			'likes': [],
 			'date': self.date,
 			'image_path': self.image_path,
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id
-
 		}
 		result = db.posts_collection.insert_one(post)
 		return self
@@ -45,31 +44,31 @@ class Post:
 
 	def get_likes_count(post_id):
 		post_id = ObjectId(post_id)
-		found = db.posts_collection.find_one({'id': post_id})
+		found = db.posts_collection.find_one({'_id': post_id})
 		if found:
 			post = Post(*found)
 			return post.likes.len()
 
 	def add_like(user_id, post_id):
+		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
-		user_id = ObjectId(post_id)
 		db.posts_collection.update_one(
-			{'post_id': post_id},
+			{'_id': post_id},
 			{"$addToSet": {'likes': user_id}}
 		)
 
 	def remove_like(user_id, post_id):
+		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
-		user_id = ObjectId(post_id)
 		db.posts_collection.update_one(
-			{'post_id': post_id},
+			{'_id': post_id},
 			{"$pull": {'likes': user_id}}
 		)
 
 	def has_liked_post(user_id, post_id):
-		post_id = ObjectId(post_id)
 		user_id = ObjectId(user_id)
-		found = db.posts_collection.find_one({'id': post_id, 'likes': {"$in": ObjectId(user_id)}})
+		post_id = ObjectId(post_id)
+		found = db.posts_collection.find_one({'_id': post_id, 'likes': {"$in": [user_id]}})
 		if found:
 			return True
 		return False
@@ -78,7 +77,7 @@ class Post:
 
 		found = Post.find_by_id(post_id)
 		creator_id = found.get('user_id')
-		restriction_type_id =  found.get('restriction_type_id')
+		restriction_type_id = found.get('restriction_type_id')
 		if not Info.is_patreon(user_id, creator_id):
 			return False
 				

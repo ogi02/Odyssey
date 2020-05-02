@@ -1,4 +1,5 @@
-# Built-in imports 
+# Built-in imports
+import os
 import json
 import datetime
 from bson import json_util, ObjectId
@@ -7,41 +8,72 @@ from bson import json_util, ObjectId
 from flask import Blueprint, request, jsonify
 
 # Imports from .py files
+from helpers import allowed_image
 from flask_classes.user import User
+from flask_classes.post import Post
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
-from flask_classes.post import Post
+
+upload_folder = "./client/public/images"
 
 post_actions_bp = Blueprint('post_actions_bp', __name__)
 
 @post_actions_bp.route('/createPost', methods=['POST'])
 def create_post():
 	# Get user from session
-	user = User.get_from_db(ActiveUser.username)
+	username = ActiveUser.username
+	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
-	# Get information about the future post
-	result = request.get_json().get('result')
-	
-	# Tuple with user's information
-	values = (
-		None,
-		user_id,
-		None,
-		datetime.datetime.now(),
-		result.get('image_path'),
-		result.get('text'),
-		result.get('restriction_type_id')
-	)
-	Post(*values).create()
+	# Get image from request
+	image = request.files["image"]
 
-	info_log.info("%s added a new post" % ActiveUser.username)
+	# Check image type
+	description = request.args.get("description")
+	required_id = request.args.get("required_id")
+
+	# Get time of post creation
+	now = datetime.datetime.now()
 	
-	return jsonify(success=True, message='Successfully created a new post!')
+	# Validate image
+	if allowed_image(image.filename):
+
+		# Tuple with user's information
+		values = (
+			None,
+			user_id,
+			None,
+			now, # date
+			now.strftime("%m-%d-%Y-%H-%M-%S"), # image_path
+			description,
+			required_id
+		)
+		Post(*values).create()
+
+		# Define path where the image will go ("public/images/{user"s username}/)
+		path = os.path.join(upload_folder, username)
+
+		# Name for the picture
+		filename = now
+		
+		# Check if path exists and create one if it doesn"t
+		if not os.path.exists(path):
+			os.makedirs(path)
+
+		# Save image
+		image.save(os.path.join(path, now.strftime("%m-%d-%Y-%H-%M-%S")))
+		info_log.info("%s added a new post" % username)
+	
+		return jsonify(success=True, message='Successfully created a new post!')
+		
+	else:
+		error_log.error("Image extension is not allowed or doesn't exist!")
+
+		return jsonify(success=False, message="Allowed extensions: 'pdf', 'png', 'jpeg', 'jpg', 'gif'"), 403
+
 
 @post_actions_bp.route('/getLikeCount', methods=['POST'])
 def get_like_count():
-	
 	# Get information about the post
 	result = request.get_json().get('result')
 	count = Post.get_likes_count(result.get('post_id'))
@@ -55,11 +87,11 @@ def like_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get('post_id')
 	
-	Post.add_like(activeUser_id, result.get('post_id'))
+	Post.add_like(activeUser_id, post_id)
 
-	info_log.info("%s liked post with id: %s." % (ActiveUser.username, result.get('post_id')))
+	info_log.info("%s liked post with id: %s." % (ActiveUser.username, post_id))
 	
 	return jsonify(success=True, message='Successfully liked post!')
 
@@ -70,11 +102,11 @@ def unlike_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get('post_id')
 	
-	Post.remove_like(activeUser_id, result.get('post_id'))
+	Post.remove_like(activeUser_id, post_id)
 
-	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, result.get('post_id')))
+	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, post_id))
 	
 	return jsonify(success=True, message='Successfully unliked post!')
 
@@ -85,9 +117,9 @@ def has_liked_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
-	
-	if Post.has_liked_post(activeUser_id, result.get('post_id')):
+	post_id = request.get_json().get("post_id")
+
+	if Post.has_liked_post(activeUser_id, post_id):
 		return jsonify(liked=True)
 	
 	return jsonify(liked=False)
@@ -99,9 +131,9 @@ def can_view_post():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
-	result = request.get_json().get('result')
+	post_id = request.get_json().get("post_id")
 	
-	if Post.can_view(activeUser_id, result.get('post_id')):
-		return jsonify(liked=True)
+	if Post.can_view(activeUser_id, post_id):
+		return jsonify(view=True)
 	
-	return jsonify(liked=False)
+	return jsonify(view=False)
