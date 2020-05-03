@@ -21,7 +21,12 @@ class AuthenticationTest(unittest.TestCase):
 		User.db = User.client.user
 
 		# create user
-		response = self.register(self, 'ogi', '12345678', 'Ognian Baruh', 'ogi@gmail.com')
+		response = self.register(self,
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile',
+			'12345678',
+			'Ognian Baruh',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com'
+		)
 
 	# Tear Down Class - Executed after the last test
 	@classmethod
@@ -62,22 +67,22 @@ class AuthenticationTest(unittest.TestCase):
 			)
 
 	def test_01_validate_username_success_free(self):
-		response = self.check_username("freeusername")
+		response = self.check_username("_FpCerpd9Z7SIbjmN81Jy_free_username")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'Username freeusername is not taken', response.data)
+		self.assertIn(b'Username _FpCerpd9Z7SIbjmN81Jy_free_username is not taken', response.data)
 
 	def test_02_validate_username_success_taken(self):
-		response = self.check_username("ogi")
+		response = self.check_username("_FpCerpd9Z7SIbjmN81Jy_test_profile")
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'An account with such username already exists', response.data)
 
 	def test_03_validate_email_success_free(self):
-		response = self.check_email("free@email.com")
+		response = self.check_email("_FpCerpd9Z7SIbjmN81Jy_free_gmail@email.com")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'Email free@email.com is not taken', response.data)
+		self.assertIn(b'Email _FpCerpd9Z7SIbjmN81Jy_free_gmail@email.com is not taken', response.data)
 
 	def test_04_validate_email_success_taken(self):
-		response = self.check_email("ogi@gmail.com")
+		response = self.check_email("_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com")
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'An account with such email already exists', response.data)
 

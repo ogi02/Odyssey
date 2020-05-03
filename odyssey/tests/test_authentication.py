@@ -50,24 +50,39 @@ class AuthenticationTest(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 
 	def test_02_valid_user_registration(self):
-		response = self.register('ogi101', '12345678', 'Ognian Baruh', 'ogi101@baruh.net')
+		response = self.register(
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile',
+			'12345678',
+			'Ognian Baruh',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile@baruh.net'
+		)
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'Registration successful', response.data)
 
 	def test_03_invalid_user_registration_duplicate_username(self):
-		response = self.register('ogi101', '12345678', 'Ognian Baruh', 'ogi101_2@baruh.net')
+		response = self.register(
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile',
+			'12345678',
+			'Ognian Baruh',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile_2@baruh.net'
+		)
 		self.assertEqual(response.status_code, 403)
-		self.assertIn(b'Duplicate username: ogi101', response.data)
+		self.assertIn(b'Duplicate username: _FpCerpd9Z7SIbjmN81Jy_test_profile', response.data)
 
 	def test_04_invalid_user_registration_duplicate_email(self):
-		response = self.register('ogi101_2', '12345678', 'Ognian Baruh', 'ogi101@baruh.net')
+		response = self.register(
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile_2',
+			'12345678',
+			'Ognian Baruh',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile@baruh.net'
+		)
 		self.assertEqual(response.status_code, 403)
-		self.assertIn(b'Duplicate email: ogi101@baruh.net', response.data)
+		self.assertIn(b'Duplicate email: _FpCerpd9Z7SIbjmN81Jy_test_profile@baruh.net', response.data)
 
 	def test_05_valid_user_login(self):
-		response = self.login('ogi101', '12345678')
+		response = self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'ogi101 logged in successfully', response.data)
+		self.assertIn(b'_FpCerpd9Z7SIbjmN81Jy_test_profile logged in successfully', response.data)
 
 	def test_06_invalid_user_login_username_does_not_exist(self):
 		response = self.login('invalid', '12345678')
@@ -75,14 +90,14 @@ class AuthenticationTest(unittest.TestCase):
 		self.assertIn(b'Incorrect username or password', response.data)
 
 	def test_07_invalid_user_login_incorrect_password(self):
-		response = self.login('ogi101', 'incorrect')
+		response = self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile', 'incorrect')
 		self.assertEqual(response.status_code, 403)
 		self.assertIn(b'Incorrect username or password', response.data)
 
 	def test_08_valid_user_logout(self):
 		response = self.logout()
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'ogi101 logged out', response.data)
+		self.assertIn(b'_FpCerpd9Z7SIbjmN81Jy_test_profile logged out', response.data)
 
 	@classmethod
 	def tearDownClass(cls):

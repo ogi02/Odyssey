@@ -54,7 +54,12 @@ class EditProfileTest(unittest.TestCase):
 		User.db = User.client.user
 
 		# create user
-		response = self.register(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678', 'Ognian Baruh', 'ogi@gmail.com')
+		response = self.register(self, 
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile',
+			'12345678',
+			'Ognian Baruh',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com'
+		)
 
 	def test_01_change_password_only_success(self):
 		response = self.edit_profile(None, 'changedpassword')
