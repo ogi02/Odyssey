@@ -43,15 +43,14 @@
 		profile_picture_src = '/images/' + user.username + '/profile_picture';
 		cover_picture_src = '/images/' + user.username + '/cover_picture';
 
-		if(user.is_creator) {
+		if(user.role == "creator") {
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;
 			surveys = response.surveys;
 			subscribedTierId = response.tier_id;
+			posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 		}
-
-		posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 
 		follow_result = {
 			profile_name: user.username
@@ -59,8 +58,11 @@
 
 		is_following = await isFollowing(follow_result);
 
-		await loadMorePosts();
-		await loadMoreSurveys();
+		if (user.role == "creator") {
+			await loadMorePosts();
+			await loadMoreSurveys();
+
+		}
 
 	});
 
@@ -226,7 +228,7 @@
 		<button on:click={async () => is_following = await followUser(follow_result)}>Follow</button>
 	{/if}
 
-	{#if user.is_creator}
+	{#if user.role == "creator"}
 		
 		{#each tiers as tier}
 			<div class='tier-box'>

@@ -36,7 +36,7 @@
 		
 		user = response.user;
 
-		if(user.is_creator) {
+		if(user.role == "creator") {
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;
@@ -144,20 +144,20 @@
 
 	{/if}
 
-{:else if addTierFlag && user.is_creator}
+{:else if addTierFlag && user.role == "creator"}
 
 	<CreateTier
 		bind:addTierFlag={addTierFlag}
 	/>
 
-{:else if createPostFlag && user.is_creator}
+{:else if createPostFlag && user.role == "creator"}
 
 	<CreatePost
 		bind:createPostFlag={createPostFlag}
 		tiers={tiers}
 	/>
 
-{:else if createSurveyFlag && user.is_creator}
+{:else if createSurveyFlag && user.role == "creator"}
 
 	<CreateSurvey
 		bind:createSurveyFlag={createSurveyFlag}
@@ -197,7 +197,7 @@
 			<a href="#"><i class="fa fa-youtube"></i></a> 
 		</div>
 
-		{#if user.is_creator}
+		{#if user.role == "creator"}
 			<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
 			<div class='toggle' on:click={toggleCreatePost}>Create Post</div>
 			<div class='toggle' on:click={toggleCreateSurvey}>Create Survey</div>

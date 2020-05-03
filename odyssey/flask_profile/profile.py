@@ -27,7 +27,7 @@ def my_profile():
 		user = User.get_from_db(ActiveUser.username)
 		user = json.loads(json_util.dumps(user))
 		
-		if user.get('is_creator'):
+		if user.get('role') == "creator":
 			info = Info.find_by_user_id(user.get("_id").get("$oid"))
 			info = json.loads(json_util.dumps(info))
 
@@ -56,7 +56,7 @@ def user_profile(username):
 	activeUser = json.loads(json_util.dumps(activeUser))
 	activeUser_id = activeUser.get('_id').get('$oid')
 
-	if searchedUser.get('is_creator'):
+	if searchedUser.get('role') == "creator":
 		# Get info is user is creator
 		info = Info.find_by_user_id(searchedUser_id)
 		info = json.loads(json_util.dumps(info))
