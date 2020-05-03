@@ -49,20 +49,9 @@
 		benefits = benefits.concat('');
 	}
 
-	function removeTier(index) {
+	function removeBenefit(index) {
 		benefits.splice(index, 1);
 		benefits = benefits;
-	}
-
-	function checkForEmptyBenefits() {
-		let emptyBenefits = true;
-		for(let i = 0; i < benefits.length; i++) {
-			if(benefits[i] != '') {
-				emptyBenefits = false;
-			}
-		}
-
-		return emptyBenefits;
 	}
 
 </script>
@@ -87,7 +76,7 @@
 				<input type='text' class='benefits' bind:value={benefit} placeholder='Benefit'>
 			
 				{#if benefits.length > 1}
-					<button id={i} class='remove' on:click|preventDefault={() => removeTier(i)}>Remove</button>
+					<button id={i} class='remove' on:click|preventDefault={() => removeBenefit(i)}>Remove</button>
 				{/if}
 
 			</div>

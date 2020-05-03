@@ -2,6 +2,8 @@ import pymongo
 from pymongo import ReturnDocument
 from pymongo import MongoClient
 from bson import ObjectId
+from flask_classes.info import Info
+from flask_classes.tier import Tier
 import datetime
 import random
 
@@ -9,7 +11,7 @@ client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb
 db = client.survey
 
 class Survey:
-	def __init__(self, _id, creator_id, votes, date, image_path, text, restriction_type_id, options, is_open, type, deadline, winner):
+	def __init__(self, _id, creator_id, votes, date, image_path, text, restriction_type_id, options, is_open, deadline, winner):
 		self._id = _id;
 		self.creator_id = creator_id
 		self.votes = votes
@@ -19,7 +21,6 @@ class Survey:
 		self.restriction_type_id = restriction_type_id
 		self.options = options
 		self.is_open = is_open
-		self.type = type
 		self.deadline = deadline
 		self.winner = winner
 
@@ -31,9 +32,8 @@ class Survey:
 			'image_path': self.image_path,
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id,
-			'options': [],
+			'options': self.options,
 			'is_open': True,
-			'type': self.type,
 			'deadline': self.deadline,
 			'winner': None
 		}
@@ -94,8 +94,28 @@ class Survey:
 		size = len(found['options'])
 		maximum = 0
 		for i in range(0,size):
-			option_votes = Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number'))
+			option_votes = Survey.get_votes_count_by_option(survey_id, i)
 			if option_votes:
-				if Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number')) > maximum:
-					win = found.get('options')[i].get('number')
-					maximum = Survey.get_votes_count_by_option(survey_id, found.get('options')[i].get('number'))
+				if Survey.get_votes_count_by_option(survey_id, i) > maximum:
+					win = found.get('options')[i]
+					maximum = Survey.get_votes_count_by_option(survey_id, i)
+		db.surveys_collection.update_one(
+			{'_id': survey_id},
+			{"$set":{'winner': win}}
+		)
+		return win
+
+	def can_view(user_id, survey_id):
+
+		found = Survey.find_by_id(ObjectId(survey_id))
+		creator_id = found.get('creator_id')
+		restriction_type_id = found.get('restriction_type_id')
+		if not Info.is_patreon(user_id, creator_id):
+			return False
+				
+		current_tier = Tier.find_by_id(Info.get_tier_id(user_id, creator_id))
+		minimum_tier = Tier.find_by_id(restriction_type_id)
+
+		if current_tier.get('price') >= minimum_tier.get('price'):
+			return True
+		return False

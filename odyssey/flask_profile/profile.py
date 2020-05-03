@@ -12,6 +12,7 @@ from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.tier import Tier
 from flask_classes.post import Post
+from flask_classes.survey import Survey
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
@@ -36,7 +37,10 @@ def my_profile():
 			posts = Post.find_posts_by_user_id(user.get("_id").get("$oid"))
 			posts = json.loads(json_util.dumps(posts))
 
-			return jsonify(success=True, user = user, info = info, tiers = tiers, posts = posts)
+			surveys = Survey.find_surveys_by_creator_id(user.get("_id").get("$oid"))
+			surveys = json.loads(json_util.dumps(surveys))
+
+			return jsonify(success=True, user = user, info = info, tiers = tiers, posts = posts, surveys = surveys)
 			
 		return jsonify(success=True, user = user)
 		
@@ -64,13 +68,25 @@ def user_profile(username):
 		posts = json.loads(json_util.dumps(posts))
 		posts = sorted(posts, key=lambda post: post['date']['$date'], reverse=True)
 
+		surveys = Survey.find_surveys_by_creator_id(searchedUser_id)
+		surveys = json.loads(json_util.dumps(surveys))
+		surveys = sorted(surveys, key=lambda survey: survey['date']['$date'], reverse=True)
+
 		if Info.is_patreon(activeUser_id, searchedUser_id):
 			# Get tier id of chosen tier
 			tier_id = Info.get_tier_id(activeUser_id, searchedUser_id)
 		else:
 			tier_id = -1
 
-		return jsonify(success = True, user = searchedUser, info = info, tiers = tiers, tier_id = str(tier_id), posts = posts)
+		return jsonify(
+			success = True,
+			user = searchedUser,
+			info = info,
+			tiers = tiers,
+			tier_id = str(tier_id),
+			posts = posts,
+			surveys = surveys
+		)
 
 	return jsonify(success = True, user = searchedUser)
 

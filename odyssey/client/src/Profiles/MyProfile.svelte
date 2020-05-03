@@ -5,8 +5,9 @@
 	// Component imports
 	import ChangePic from './ChangePic.svelte';
 	import CreateTier from './CreateTier.svelte';
-	import CreatePost from '../Posts/CreatePost.svelte';
 	import EditProfile from './EditProfile.svelte';
+	import CreatePost from '../Posts/CreatePost.svelte';
+	import CreateSurvey from '../Surveys/CreateSurvey.svelte';
 
 	// Javascript imports
 	import { fetchGet, fetchPost } from '../js/fetch.js';
@@ -20,12 +21,14 @@
 	let info = {};
 	let tiers = [];
 	let posts = [];
+	let surveys = [];
 	let social_media_links = {};
 	let shipping_info = {};
 
 	let change = false;
 	let addTierFlag = false;
 	let createPostFlag = false;
+	let createSurveyFlag = false;
 	
 	onMount(async() => {
 		// Get users profile and set variables
@@ -37,6 +40,7 @@
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;
+			surveys = response.surveys;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -74,6 +78,43 @@
 		createPostFlag = true;
 	}
 
+	// Trigger create survey
+	function toggleCreateSurvey() {
+		createSurveyFlag = true;
+	}
+
+	// Close survey
+	async function closeSurvey(survey_id) {
+		const response = await fetchPost('http://localhost:3000/closeSurvey', {
+			survey_id: survey_id
+		});
+
+		surveys.find(survey => survey._id.$oid === survey_id).is_open = false;
+		surveys = surveys;
+	}
+
+	//Set winner
+	async function electWinner(survey_id) {
+		const response = await fetchPost('http://localhost:3000/chooseWinningOption', {
+			survey_id: survey_id
+		});
+
+		surveys.find(survey => survey._id.$oid === survey_id).winner = response.winner;
+		surveys = surveys;
+	}
+
+	// Get voted per option
+	async function getVotesPerOption(survey_id, option_id) {
+		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
+			survey_id: survey_id,
+			option_id: option_id
+		});
+
+		let temp = response.vote_count;
+
+		return temp;
+	}
+
 </script>
 {#if change}
 	
@@ -103,7 +144,7 @@
 
 	{/if}
 
-{:else if addTierFlag}
+{:else if addTierFlag && user.is_creator}
 
 	<CreateTier
 		bind:addTierFlag={addTierFlag}
@@ -115,6 +156,13 @@
 		bind:createPostFlag={createPostFlag}
 		tiers={tiers}
 	/>
+
+{:else if createSurveyFlag && user.is_creator}
+
+	<CreateSurvey
+		bind:createSurveyFlag={createSurveyFlag}
+		tiers={tiers}
+	/>	
 
 {:else}
 
@@ -152,6 +200,7 @@
 		{#if user.is_creator}
 			<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
 			<div class='toggle' on:click={toggleCreatePost}>Create Post</div>
+			<div class='toggle' on:click={toggleCreateSurvey}>Create Survey</div>
 		{/if}
 
 		{#each tiers as tier}
@@ -186,6 +235,33 @@
 
 				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
 				
+			</div>
+
+		{/each}
+		{#each surveys as survey}
+			
+			<div class='post-box'>
+
+				<h3>{survey.text}</h3>
+
+				<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
+
+				{#if survey.is_open == true}
+					{#each survey.options as option, i}
+						<p>{option}</p>
+						{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+							<p>{vote_count || 0}</p>
+						{/await}
+								
+					{/each}
+					<button on:click={async () => {
+						await closeSurvey(survey._id.$oid);
+						await electWinner(survey._id.$oid);
+					}}>Close</button>
+
+				{:else}
+					<p>{survey.winner}</p>
+				{/if}
 			</div>
 
 		{/each}
