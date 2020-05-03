@@ -61,7 +61,6 @@
 
 		await loadMorePosts();
 		await loadMoreSurveys();
-		console.log(surveys);
 
 	});
 
