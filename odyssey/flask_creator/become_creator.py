@@ -49,7 +49,7 @@ def become_creator():
 		None,
 		None
 	)
-	Info(*values).create()
+	Info(*values).update()
 
 	# Tuple with user's creator specific information
 	values = (

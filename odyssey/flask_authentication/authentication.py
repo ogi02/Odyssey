@@ -7,6 +7,7 @@ from flask import Blueprint, request, jsonify
 
 # Imports from .py files
 from flask_classes.user import User
+from flask_classes.info import Info
 from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
@@ -33,6 +34,11 @@ def register():
 	try:
 		# Create user and update session
 		User(*values).create()
+
+		user_id = User.get_from_db(username).get('_id')
+
+		Info.create(user_id)
+
 		ActiveUser.logged_in = True
 		ActiveUser.username = username
 		info_log.info("User %s registered successfully." % username)
