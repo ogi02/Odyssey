@@ -21,6 +21,7 @@
 	let info = {};
 	let tiers = [];
 	let posts = [];
+	let surveys = [];
 	let social_media_links = {};
 	let shipping_info = {};
 
@@ -39,6 +40,7 @@
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;
+			surveys = response.surveys;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -80,6 +82,27 @@
 	function toggleCreateSurvey() {
 		createSurveyFlag = true;
 	}
+
+	// Close survey
+	async function closeSurvey(survey_id) {
+		const response = await fetchPost('http://localhost:3000/closeSurvey', {
+			survey_id: survey_id
+		});
+
+		surveys.find(survey => survey._id.$oid === survey_id).is_open = false;
+		surveys = surveys;
+	}
+
+	//Set winner
+	async function electWinner(survey_id) {
+		const response = await fetchPost('http://localhost:3000/chooseWinningOption', {
+			survey_id: survey_id
+		});
+
+		surveys.find(survey => survey._id.$oid === survey_id).winner = response.winner;
+		surveys = surveys;
+	}
+
 
 </script>
 {#if change}
@@ -201,6 +224,26 @@
 
 				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
 				
+			</div>
+
+		{/each}
+		{#each surveys as survey}
+			
+			<div class='post-box'>
+
+				<h3>{survey.text}</h3>
+
+				<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
+
+				{#if survey.is_open == true}
+					<button on:click={async () => {
+						await closeSurvey(survey._id.$oid);
+						await electWinner(survey._id.$oid);
+					}}>Close</button>
+
+				{:else}
+					<p>{survey.winner}</p>
+				{/if}
 			</div>
 
 		{/each}

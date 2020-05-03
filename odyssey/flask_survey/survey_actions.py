@@ -90,40 +90,46 @@ def vote_on_survey():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the survey
-	result = request.get_json().get('result')
+	survey_id = request.get_json().get("survey_id")
+	option_id = request.get_json().get("option_id")
 	
-	Survey.vote(activeUser_id, result.get('survey_id'), result.get('option_number'))
+	Survey.vote(activeUser_id, survey_id, option_id)
 
-	info_log.info("%s voted on survey with id: %s." % (ActiveUser.username, result.get('survey_id')))
+	info_log.info("%s voted on survey with id: %s." % (ActiveUser.username, survey_id))
 	
 	return jsonify(success=True, message='Successfully voted on survey!')
 
-@survey_actions_bp.route('/VoteCountByOption', methods=['POST'])
+@survey_actions_bp.route('/voteCountByOption', methods=['POST'])
 def get_votes_by_option():
 	# Get information about the survey
-	result = request.get_json().get('result')
+	survey_id = request.get_json().get("survey_id")
+	option_id = request.get_json().get("option_id")
 	
-	count = Survey.get_votes_count_by_option(result.get('survey_id'), result.get('option_number'))
+	count = Survey.get_votes_count_by_option(survey_id, option_id)
 
-	return jsonify(success=True, count = count)
+	return jsonify(success=True, vote_count = count)
 
 @survey_actions_bp.route('/hasVotedOnSurvey', methods=['POST'])
 def has_voted_on_survey():
+	# Get user from session
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser_id = activeUser.get('_id')
+
 	# Get information about the survey
-	result = request.get_json().get('result')
+	survey_id = request.get_json().get("survey_id")
 	
-	if Survey.has_voted(activeUser_id, result.get('survey_id')):
-		return jsonify(liked=True)
+	if Survey.has_voted(activeUser_id, survey_id):
+		return jsonify(voted=True)
 	
-	return jsonify(liked=False)
+	return jsonify(voted=False)
 
 @survey_actions_bp.route('/closeSurvey', methods=['POST'])
 def close_survey():
 	# Get information about the survey
-	result = request.get_json().get('result')
+	survey_id = request.get_json().get("survey_id")
 	
-	Survey.close(result.get('survey_id'))
-	info_log.info("Successfully closed survey with id: %s" % result.get('survey_id'))
+	Survey.close(survey_id)
+	info_log.info("Successfully closed survey with id: %s" % survey_id)
 	
 	return jsonify(success=True, message='Successfully closed survey!')
 
@@ -134,9 +140,25 @@ def get_winning_option():
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the survey
-	result = request.get_json().get('result')
+	survey_id = request.get_json().get("survey_id")
 
-	Survey.get_wining_option(result.get('survey_id'))
-	info_log.info("Successfully option %s won survey with id: %s" % (activeUser_id, result.get('survey_id')))
+	Survey.get_wining_option(survey_id)
 
-	return jsonify(success=True, message='Successfully anounced winning option!')
+	win = Survey.get_wining_option(survey_id)
+	info_log.info("Successfully option %s won survey with id: %s" % (activeUser_id, survey_id))
+
+	return jsonify(success=True, message='Successfully anounced winning option!', winner = win)
+
+@survey_actions_bp.route('/canViewSurvey', methods=['POST'])
+def can_view_survey():
+	# Get user from session
+	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser_id = activeUser.get('_id')
+
+	# Get information about the post
+	survey_id = request.get_json().get("survey_id")
+	
+	if Survey.can_view(activeUser_id, survey_id):
+		return jsonify(view=True)
+	
+	return jsonify(view=False)

@@ -18,6 +18,7 @@
 	let info = {};
 	let tiers = {};
 	let posts = {};
+	let surveys = {};
 	let subscribedTierId;
 	
 	let result = {};
@@ -25,6 +26,9 @@
 
 	let loadedPosts = 0;
 	let allPostsLoaded = false;
+
+	let loadedSurveys = 0;
+	let allSurveysLoaded = false;
 
 	username.subscribe(async (newValue) => {
 		if(newValue == '') {
@@ -43,6 +47,7 @@
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;
+			surveys = response.surveys;
 			subscribedTierId = response.tier_id;
 		}
 
@@ -55,6 +60,8 @@
 		is_following = await isFollowing(follow_result);
 
 		await loadMorePosts();
+		await loadMoreSurveys();
+		console.log(surveys);
 
 	});
 
@@ -95,7 +102,7 @@
 		return temp;
 	}
 
-	async function canView(post_id) {
+	async function canViewPost(post_id) {
 		const response = await fetchPost('http://localhost:3000/canViewPost', {
 			post_id: post_id
 		});
@@ -131,9 +138,64 @@
 				return;
 			}
 			posts[i].isLiked = await isLiked(posts[i]._id.$oid);
-			posts[i].canView = await canView(posts[i]._id.$oid);
+			posts[i].canView = await canViewPost(posts[i]._id.$oid);
 		}
 		loadedPosts += 10;
+	}
+
+	async function hasVoted(survey_id) {
+		const response = await fetchPost('http://localhost:3000/hasVotedOnSurvey', {
+			survey_id: survey_id
+		});
+
+		let temp = response.voted;
+
+		return temp;
+	}
+
+	async function canViewSurvey(survey_id) {
+		const response = await fetchPost('http://localhost:3000/canViewSurvey', {
+			survey_id: survey_id
+		});
+
+		let temp = response.view;
+
+		return temp;
+	}
+
+	async function voteOnSurvey(survey_id, option_id) {
+		const response = await fetchPost('http://localhost:3000/voteOnSurvey', {
+			survey_id: survey_id,
+			option_id: option_id
+		});
+
+		surveys.find(survey => survey._id.$oid === survey_id).hasVoted = true;
+		surveys = surveys;
+	}
+
+	async function getVotesPerOption(survey_id, option_id) {
+		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
+			survey_id: survey_id,
+			option_id: option_id
+		});
+
+		let temp = response.vote_count;
+
+		return temp;
+	}
+
+	async function loadMoreSurveys() {
+		for(let i = loadedSurveys; i < loadedSurveys + 10; i++) {
+			if(surveys.length == (loadedSurveys + i)) {
+				allSurveysLoaded = true;
+				loadedSurveys += i;
+				return;
+			}
+			surveys[i].hasVoted = await hasVoted(surveys[i]._id.$oid);
+			surveys[i].canView = await canViewSurvey(surveys[i]._id.$oid);
+
+		}
+		loadedSurveys += 10;
 	}
 
 
@@ -216,6 +278,51 @@
 
 		{#if !allPostsLoaded}
 			<button on:click={async () => await loadMorePosts()}>Load More</button>
+		{/if}
+
+		{#each surveys as survey, i}
+			
+			{#if i < loadedSurveys}
+				
+				{#if survey.canView}
+					{#if survey.is_open == true}
+						<div class='post-box'>
+							<h3>{survey.text}</h3>
+
+							<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
+							
+							{#if survey.hasVoted == false}
+
+								{#each survey.options as option, i}
+									<p>{option}</p>
+									<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
+								
+								{/each}
+							{:else}
+								{#each survey.options as option, i}
+									<p>{option}</p>
+									{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+										<p>{vote_count || 0}</p>
+									{/await}
+								
+								{/each}
+								
+							{/if}
+						</div>
+					{/if}
+
+				{:else}
+
+					<h3>You can't view this survey</h3>
+
+				{/if}
+					
+			{/if}
+
+		{/each}
+
+		{#if !allSurveysLoaded}
+			<button on:click={async () => await loadMoreSurveys()}>Load More</button>
 		{/if}
 
 	{/if}
