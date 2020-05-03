@@ -117,6 +117,7 @@ class FollowTest(unittest.TestCase):
 	@classmethod
 	def tearDownClass(cls):
 		User.db.users.remove({})
+		Info.db.info_collection.remove({})
 
 if __name__ == '__main__':
 	unittest.main()

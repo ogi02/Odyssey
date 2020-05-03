@@ -33,9 +33,9 @@ def create_tier():
 	)
 	Tier(*values).create()
 
-	info_log.info("%s added a new tier named %s." % (ActiveUser.username, result.get('name')))
+	info_log.info("%s added a new tier named %s" % (ActiveUser.username, result.get('name')))
 	
-	return jsonify(success=True, message='Successfully added new tier!')
+	return jsonify(success=True, message="%s added a new tier named %s" % (ActiveUser.username, result.get('name')))
 
 @tier_actions_bp.route('/chooseTier', methods=['POST'])
 def choose_tier():
@@ -48,9 +48,11 @@ def choose_tier():
 	
 	Info.choose_tier(activeUser_id, result.get('creator_id'), result.get('tier_id'))
 
-	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('tier_id')))
+	tier_name = Tier.find_by_id(result.get('tier_id')).get('name')
+
+	info_log.info("%s subscribed tier %s" % (ActiveUser.username, tier_name))
 	
-	return jsonify(success=True, message='Successfully added new tier!')
+	return jsonify(success=True, message="%s subscribed to tier %s" % (ActiveUser.username, tier_name))
 
 @tier_actions_bp.route('/removeTier', methods=['POST'])
 def unsubscribe_from_tier():
@@ -63,6 +65,8 @@ def unsubscribe_from_tier():
 	
 	Info.unsubscribe_from_tier(activeUser_id, result.get('creator_id'), result.get('tier_id'))
 
-	info_log.info("%s became patreon with tier %s." % (ActiveUser.username, result.get('tier_id')))
+	tier_name = Tier.find_by_id(result.get('tier_id')).get('name')
+
+	info_log.info("%s unsubscribed from tier %s" % (ActiveUser.username, tier_name))
 	
-	return jsonify(success=True, message='Successfully added new tier!')
+	return jsonify(success=True, message="%s unsubscribed from tier %s" % (ActiveUser.username, tier_name))

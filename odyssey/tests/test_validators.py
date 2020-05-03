@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from main import app
 
 from flask_classes.user import User
+from flask_classes.info import Info
 
 class AuthenticationTest(unittest.TestCase):
 
@@ -16,9 +17,12 @@ class AuthenticationTest(unittest.TestCase):
 		app.config["TESTING"] = True
 		self.app = app.test_client()
 		
-		# config database
+		# config databases
 		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
 		User.db = User.client.user
+
+		Info.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Info.db = Info.client.info
 
 		# create user
 		response = self.register(self,
@@ -32,6 +36,7 @@ class AuthenticationTest(unittest.TestCase):
 	@classmethod
 	def tearDownClass(cls):
 		User.db.users.remove({})
+		Info.db.info_collection.remove({})
 
 	# Set Up - Executed before each test
 	def setUp(self):

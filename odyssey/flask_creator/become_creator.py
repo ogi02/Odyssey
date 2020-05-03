@@ -61,6 +61,6 @@ def become_creator():
 	)
 	CreatorSpecific(*values).create()
 
-	info_log.info("%s became a creator." % ActiveUser.username)
+	info_log.info("%s became a creator" % ActiveUser.username)
 	
-	return jsonify(success=True, message='Successfully updated to creator!')
+	return jsonify(success=True, message="%s became a creator" % ActiveUser.username)
