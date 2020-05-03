@@ -21,6 +21,7 @@
 	let subscribedTierId;
 	
 	let result = {};
+	let follow_result = {};
 
 	let loadedPosts = 0;
 	let allPostsLoaded = false;
@@ -47,15 +48,14 @@
 
 		posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 
-		result = {
+		follow_result = {
 			profile_name: user.username
 		};
 
-		is_following = await isFollowing(result);
+		is_following = await isFollowing(follow_result);
 
 		await loadMorePosts();
 
-		console.log(posts);
 	});
 
 	async function chooseTier(self_id) {
@@ -124,7 +124,7 @@
 	}
 
 	async function loadMorePosts() {
-		for(let i = loadedPosts; i < loadedPosts + 1; i++) {
+		for(let i = loadedPosts; i < loadedPosts + 10; i++) {
 			if(posts.length == (loadedPosts + i)) {
 				allPostsLoaded = true;
 				loadedPosts += i;
@@ -133,7 +133,7 @@
 			posts[i].isLiked = await isLiked(posts[i]._id.$oid);
 			posts[i].canView = await canView(posts[i]._id.$oid);
 		}
-		loadedPosts += 1;
+		loadedPosts += 10;
 	}
 
 
@@ -160,9 +160,9 @@
 	</div>
 
 	{#if is_following}
-		<button on:click={async () => is_following = await unfollowUser(result)}>Unfollow</button>
+		<button on:click={async () => is_following = await unfollowUser(follow_result)}>Unfollow</button>
 	{:else}
-		<button on:click={async () => is_following = await followUser(result)}>Follow</button>
+		<button on:click={async () => is_following = await followUser(follow_result)}>Follow</button>
 	{/if}
 
 	{#if user.is_creator}
