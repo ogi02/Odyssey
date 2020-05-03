@@ -19,6 +19,7 @@
 	let tiers = {};
 	let posts = {};
 	let surveys = {};
+	let giveaways = {};
 	let subscribedTierId;
 	
 	let result = {};
@@ -29,6 +30,9 @@
 
 	let loadedSurveys = 0;
 	let allSurveysLoaded = false;
+
+	let loadedGiveaways = 0;
+	let allGiveawaysLoaded = false;
 
 	username.subscribe(async (newValue) => {
 		if(newValue == '') {
@@ -48,6 +52,7 @@
 			tiers = response.tiers;
 			posts = response.posts;
 			surveys = response.surveys;
+			giveaways = response.giveaways;
 			subscribedTierId = response.tier_id;
 			posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 		}
@@ -61,7 +66,7 @@
 		if (user.role == "creator") {
 			await loadMorePosts();
 			await loadMoreSurveys();
-
+			await loadMoreGiveaways();
 		}
 
 	});
@@ -90,7 +95,6 @@
 		const response = await fetchPost('http://localhost:3000/removeTier', {
 			result: result
 		});
-
 	}
 
 	async function isLiked(post_id) {
@@ -199,6 +203,49 @@
 		loadedSurveys += 10;
 	}
 
+	async function canViewGiveaway(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/canViewGiveaway', {
+			giveaway_id: giveaway_id
+		});
+
+		let temp = response.view;
+
+		return temp;
+	}
+
+	async function hasJoined(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/hasJoinedGiveaway', {
+			giveaway_id: giveaway_id
+		});
+
+		let temp = response.joined;
+
+		return temp;
+	}
+
+	async function loadMoreGiveaways() {
+		for(let i = loadedGiveaways; i < loadedGiveaways + 10; i++) {
+			if(giveaways.length == (loadedGiveaways + i)) {
+				allGiveawaysLoaded = true;
+				loadedGiveaways += i;
+				return;
+			}
+			giveaways[i].hasJoined = await hasJoined(giveaways[i]._id.$oid);
+			giveaways[i].canView = await canViewGiveaway(giveaways[i]._id.$oid);
+
+		}
+		loadedGiveaways += 10;
+	}
+
+	async function joinGiveaway(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/joinGiveaway', {
+			giveaway_id: giveaway_id,
+		});
+
+		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).hasJoined = true;
+		giveaways = giveaways;
+	}
+
 
 </script>
 
@@ -230,6 +277,8 @@
 
 	{#if user.role == "creator"}
 		
+		<!-- Tiers -->
+
 		{#each tiers as tier}
 			<div class='tier-box'>
 				
@@ -247,6 +296,8 @@
 
 			</div>
 		{/each}
+
+		<!-- Posts -->
 
 		{#each posts as post, i}
 			
@@ -278,8 +329,10 @@
 		{/each}
 
 		{#if !allPostsLoaded}
-			<button on:click={async () => await loadMorePosts()}>Load More</button>
+			<button on:click={async () => await loadMorePosts()}>Load More Posts</button>
 		{/if}
+
+		<!-- Surveys -->
 
 		{#each surveys as survey, i}
 			
@@ -323,7 +376,42 @@
 		{/each}
 
 		{#if !allSurveysLoaded}
-			<button on:click={async () => await loadMoreSurveys()}>Load More</button>
+			<button on:click={async () => await loadMoreSurveys()}>Load More Surveys</button>
+		{/if}
+
+		<!-- Giveaways -->
+
+		{#each giveaways as giveaway, i}
+			
+			{#if i < loadedGiveaways}
+				<div class='post-box'>
+
+					{#if giveaway.canView}
+
+						<h3>{giveaway.text}</h3>
+
+						<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
+
+						{#if giveaway.hasJoined == false}
+							<button on:click={async () => await joinGiveaway(giveaway._id.$oid)}>Join</button>
+						{:else}
+							<p>You have already joined this giveaway!</p>
+						{/if}
+
+					{:else}
+
+						<h3>You can't view this giveaway</h3>
+
+					{/if}
+						
+				</div>
+
+			{/if}
+
+		{/each}
+
+		{#if !allGiveawaysLoaded}
+			<button on:click={async () => await loadMoreGiveaways()}>Load More Giveaways</button>
 		{/if}
 
 	{/if}
