@@ -5,8 +5,9 @@
 	// Component imports
 	import ChangePic from './ChangePic.svelte';
 	import CreateTier from './CreateTier.svelte';
-	import CreatePost from '../Posts/CreatePost.svelte';
 	import EditProfile from './EditProfile.svelte';
+	import CreatePost from '../Posts/CreatePost.svelte';
+	import CreateSurvey from '../Surveys/CreateSurvey.svelte';
 
 	// Javascript imports
 	import { fetchGet, fetchPost } from '../js/fetch.js';
@@ -26,6 +27,7 @@
 	let change = false;
 	let addTierFlag = false;
 	let createPostFlag = false;
+	let createSurveyFlag = false;
 	
 	onMount(async() => {
 		// Get users profile and set variables
@@ -74,6 +76,11 @@
 		createPostFlag = true;
 	}
 
+	// Trigger create survey
+	function toggleCreateSurvey() {
+		createSurveyFlag = true;
+	}
+
 </script>
 {#if change}
 	
@@ -103,7 +110,7 @@
 
 	{/if}
 
-{:else if addTierFlag}
+{:else if addTierFlag && user.is_creator}
 
 	<CreateTier
 		bind:addTierFlag={addTierFlag}
@@ -115,6 +122,13 @@
 		bind:createPostFlag={createPostFlag}
 		tiers={tiers}
 	/>
+
+{:else if createSurveyFlag && user.is_creator}
+
+	<CreateSurvey
+		bind:createSurveyFlag={createSurveyFlag}
+		tiers={tiers}
+	/>	
 
 {:else}
 
@@ -152,6 +166,7 @@
 		{#if user.is_creator}
 			<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
 			<div class='toggle' on:click={toggleCreatePost}>Create Post</div>
+			<div class='toggle' on:click={toggleCreateSurvey}>Create Survey</div>
 		{/if}
 
 		{#each tiers as tier}
