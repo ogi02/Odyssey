@@ -29,9 +29,9 @@ def follow():
 	Info.follow(user_id, profile_id)
 
 	# Log
-	info_log.info("%s started following %s." % (user.get('username'), profile_name))
+	info_log.info("%s started following %s" % (user.get('username'), profile_name))
 	
-	return jsonify(success=True, message='Successfully followed another profile!')
+	return jsonify(success=True, message="%s started following %s" % (user.get('username'), profile_name))
 
 @follow_bp.route('/unfollow', methods=['POST'])
 def unfollow():
@@ -49,9 +49,9 @@ def unfollow():
 	Info.unfollow(user_id,profile_id)
 
 	# Log
-	info_log.info("%s stopped following %s." % (user.get('username'), profile_name))
+	info_log.info("%s stopped following %s" % (user.get('username'), profile_name))
 	
-	return jsonify(success=True, message='Successfully unfollowed another profile!')
+	return jsonify(success=True, message="%s stopped following %s" % (user.get('username'), profile_name))
 
 @follow_bp.route('/isFollowing', methods=['POST'])
 def is_following():
@@ -66,7 +66,7 @@ def is_following():
 	profile_id = user_to_follow.get('_id')
 
 	# Update in DB
-	if Info.is_following(user_id,profile_id):
+	if Info.is_following(user_id, profile_id):
 		return jsonify(following=True)
 
 	return jsonify(following=False)
