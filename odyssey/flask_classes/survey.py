@@ -99,7 +99,6 @@ class Survey:
 				if Survey.get_votes_count_by_option(survey_id, i) > maximum:
 					win = found.get('options')[i]
 					maximum = Survey.get_votes_count_by_option(survey_id, i)
-		print(win)
 		db.surveys_collection.update_one(
 			{'_id': survey_id},
 			{"$set":{'winner': win}}

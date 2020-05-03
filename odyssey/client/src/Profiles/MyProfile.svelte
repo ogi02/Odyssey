@@ -103,6 +103,17 @@
 		surveys = surveys;
 	}
 
+	// Get voted per option
+	async function getVotesPerOption(survey_id, option_id) {
+		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
+			survey_id: survey_id,
+			option_id: option_id
+		});
+
+		let temp = response.vote_count;
+
+		return temp;
+	}
 
 </script>
 {#if change}
@@ -236,6 +247,13 @@
 				<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
 
 				{#if survey.is_open == true}
+					{#each survey.options as option, i}
+						<p>{option}</p>
+						{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+							<p>{vote_count || 0}</p>
+						{/await}
+								
+					{/each}
 					<button on:click={async () => {
 						await closeSurvey(survey._id.$oid);
 						await electWinner(survey._id.$oid);
