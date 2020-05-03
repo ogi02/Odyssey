@@ -9,13 +9,13 @@ class User:
 	client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
 	db = client.user
 
-	def __init__(self, _id, username, password, name, email, is_creator):
+	def __init__(self, _id, username, password, name, email, role):
 		self._id = _id
 		self.username = username
 		self.password = password
 		self.name = name
 		self.email = email
-		self.is_creator = is_creator
+		self.role = role
 
 	def create(self):
 		user = {
@@ -23,7 +23,7 @@ class User:
 			'password': self.password,
 			'name': self.name,
 			'email': self.email,
-			'is_creator': False
+			'role': "user"
 		}
 		result = User.db.users.insert_one(user)
 		return self
@@ -34,7 +34,7 @@ class User:
 			'password': self.password,
 			'name': self.name,
 			'email': self.email,
-			'is_creator': True
+			'role': "creator"
 		}
 		result = User.db.users.insert_one(user)
 		return self
@@ -42,7 +42,7 @@ class User:
 	def update_to_creator(username):
 		found = User.db.users.find_one_and_update(
 			{'username': username},
-			{"$set": {'is_creator': True}},
+			{"$set": {'role': "creator"}},
 			return_document=ReturnDocument.AFTER
 		)
 
