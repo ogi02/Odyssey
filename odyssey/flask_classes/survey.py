@@ -9,7 +9,7 @@ client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb
 db = client.survey
 
 class Survey:
-	def __init__(self, _id, creator_id, votes, date, image_path, text, restriction_type_id, options, is_open, type, deadline, winner):
+	def __init__(self, _id, creator_id, votes, date, image_path, text, restriction_type_id, options, is_open, deadline, winner):
 		self._id = _id;
 		self.creator_id = creator_id
 		self.votes = votes
@@ -19,7 +19,6 @@ class Survey:
 		self.restriction_type_id = restriction_type_id
 		self.options = options
 		self.is_open = is_open
-		self.type = type
 		self.deadline = deadline
 		self.winner = winner
 
@@ -31,9 +30,8 @@ class Survey:
 			'image_path': self.image_path,
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id,
-			'options': [],
+			'options': self.options,
 			'is_open': True,
-			'type': self.type,
 			'deadline': self.deadline,
 			'winner': None
 		}

@@ -37,7 +37,7 @@ export async function fetchFilePost(url, file) {
 export async function fetchFileJsonPost(url, data, file) {
 	const formData = new FormData()
 	formData.append('image', file);
-	formData.append('data', data);
+	formData.append('data', JSON.stringify(data));
 
 	const res = await fetch(url, {
 		method: "POST",
