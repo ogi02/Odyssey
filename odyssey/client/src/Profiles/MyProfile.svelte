@@ -23,7 +23,7 @@
 	let tiers = [];
 	let posts = [];
 	let surveys = [];
-	let giveaways = [];
+	let giveaways = [];	
 	let shipping_info = {};
 	let social_media_links = {};
 
@@ -44,7 +44,7 @@
 			tiers = response.tiers;
 			posts = response.posts;
 			surveys = response.surveys;
-			giveaways = response.giveaways
+			giveaways = response.giveaways;
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -87,9 +87,9 @@
 		createSurveyFlag = true;
 	}
 
-	// Trigger create giveaway
-	function toggleCreateGiveaway() {
-		createGiveawayFlag = true;
+	// Trigger create giveaway	
+	function toggleCreateGiveaway() {	
+		createGiveawayFlag = true;	
 	}
 
 	// Close survey
@@ -102,7 +102,7 @@
 		surveys = surveys;
 	}
 
-	// Set winner
+	//Set winner
 	async function electWinner(survey_id) {
 		const response = await fetchPost('http://localhost:3000/chooseWinningOption', {
 			survey_id: survey_id
@@ -112,7 +112,7 @@
 		surveys = surveys;
 	}
 
-	// Get votes per option
+	// Get voted per option
 	async function getVotesPerOption(survey_id, option_id) {
 		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
 			survey_id: survey_id,
@@ -124,48 +124,54 @@
 		return temp;
 	}
 
-	// Close giveaway
-	async function closeGiveaway(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/closeGiveaway', {
-			giveaway_id: giveaway_id
+	// Get likes on post
+	async function getLikesOnPost(post_id) {
+		const response = await fetchPost('http://localhost:3000/getLikeCount', {
+			post_id: post_id
 		});
 
-		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).is_open = false;
-		giveaways = giveaways;
-	}
-
-	// Generate random giveaway winner
-	async function pickRandomGiveawayWinner(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/generateRandomWinner', {
-			giveaway_id: giveaway_id
-		});
-
-		let temp = response.winner_id;
+		let temp = response.like_count;
 
 		return temp;
 	}
 
-	// Select giveaway winner
-	async function chooseGiveawayWinner(giveaway_id, winner_id) {
-		const response = await fetchPost('http://localhost:3000/chooseGiveawayWinner', {
-			winner_id: winner_id,
-			giveaway_id: giveaway_id
-		});
+	// Close giveaway	
+	async function closeGiveaway(giveaway_id) {	
+		const response = await fetchPost('http://localhost:3000/closeGiveaway', {	
+			giveaway_id: giveaway_id	
+		});	
+		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).is_open = false;	
+		giveaways = giveaways;	
+	}	
 
-		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).winner = response.winner;
-		giveaways = giveaways;
+	// Generate random giveaway winner	
+	async function pickRandomGiveawayWinner(giveaway_id) {	
+		const response = await fetchPost('http://localhost:3000/generateRandomWinner', {	
+			giveaway_id: giveaway_id	
+		});	
+		let temp = response.winner_id;	
+		return temp;	
 	}
 
-	// Get participants in giveaway
-	async function getParticipantCount(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/getTotalContestantsCount', {
-			giveaway_id: giveaway_id,
-		});
-
-		let temp = response.participant_count;
-
-		return temp;
+	// Select giveaway winner	
+	async function chooseGiveawayWinner(giveaway_id, winner_id) {	
+		const response = await fetchPost('http://localhost:3000/chooseGiveawayWinner', {	
+			winner_id: winner_id,	
+			giveaway_id: giveaway_id	
+		});	
+		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).winner = response.winner;	
+		giveaways = giveaways;	
 	}
+
+	// Get participants in giveaway	
+	async function getParticipantCount(giveaway_id) {	
+		const response = await fetchPost('http://localhost:3000/getTotalContestantsCount', {	
+			giveaway_id: giveaway_id,	
+		});	
+		let temp = response.participant_count;	
+		return temp;	
+	}	
+
 
 </script>
 {#if change}
@@ -214,13 +220,12 @@
 	<CreateSurvey
 		bind:createSurveyFlag={createSurveyFlag}
 		tiers={tiers}
-	/>
+	/>	
 
-{:else if createGiveawayFlag && user.role == "creator"}
-
-	<CreateGiveaway
-		bind:createGiveawayFlag={createGiveawayFlag}
-		tiers={tiers}
+{:else if createGiveawayFlag && user.role == "creator"}	
+	<CreateGiveaway	
+		bind:createGiveawayFlag={createGiveawayFlag}	
+		tiers={tiers}	
 	/>
 
 {:else}
@@ -239,7 +244,7 @@
 			<div class='toggle' on:click={toggleChangeProfilePic}>Change Profile Pic</div>
 			<div class='toggle' on:click={toggleChangeCoverPic}>Change Cover Pic</div>
 			<div class='toggle' on:click={toggleEditProfile}>Edit Profile</div>
-
+			
 		</div>
 
 		<h1>{user.username}</h1>
@@ -263,47 +268,37 @@
 			<div class='toggle' on:click={toggleCreateGiveaway}>Create Giveaway</div>
 		{/if}
 
-		<!-- Tiers -->
-
-		{#each tiers as tier}
-
-			<div class='tier-box'>
-			
-				<h3>{tier.name}</h3>
-				<h4>${tier.price}</h4>
-				<p style="color: #666">PER MONTH</p>
-			
-				<h4>Benefits</h4>
-
-				<ul>
-				
-					{#each tier.benefits as benefit} 
-						
-						<li class='benefits'>{benefit}</li>
+		<div class="tiers-container">
+			{#each tiers as tier}
+				<div class='tier-box'>
 					
-					{/each}
+					<h3 class="tier-name">{tier.name}</h3>
+					<p class="tier-price">${tier.price}</p>
+					<p class="tier-price-per-month">PER MONTH</p>
+					<ul>
+						{#each tier.benefits as benefit}
+							<li style="text-align: left;">{benefit}</li>
+						{/each}	
+					</ul>
+				</div>
+			{/each}
+		</div>
 
-				</ul>
+		<div class="posts-container">
+			{#each posts as post, i}
 
-			</div>
+				<div class='post-box'>
+					<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+					<div class="text-container">
+						<h3>{post.text}</h3>
+						{#await getLikesOnPost(post._id.$oid, i) then like_count}
+							<p><i class="fa fa-heart" aria-hidden="true"></i>  {like_count || 0}</p>
+						{/await}
+					</div>
+				</div>
 
-		{/each}
-
-		<!-- Posts -->
-
-		{#each posts as post}
-			
-			<div class='post-box'>
-
-				<h3>{post.text}</h3>
-
-				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
-				
-			</div>
-
-		{/each}
-
-		<!-- Surveys -->
+			{/each}
+		</div>
 
 		{#each surveys as survey}
 			
@@ -321,7 +316,6 @@
 						{/await}
 								
 					{/each}
-					
 					<button on:click={async () => {
 						await closeSurvey(survey._id.$oid);
 						await electWinner(survey._id.$oid);
@@ -333,46 +327,35 @@
 			</div>
 
 		{/each}
-
-		<!-- Giveaways -->
-
-		{#each giveaways as giveaway}
-			
-			<div class='post-box'>
-
-				<h3>{giveaway.text}</h3>
-
-				<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
-
-				{#if giveaway.is_open == true}
-					
-					<p>Number of contestants: </p>
-					{#await getParticipantCount(giveaway._id.$oid) then participants}
-						<p>{participants || 0}</p>
-
-						{#if participants}
-
-							<button on:click={async () => {
-								await closeGiveaway(giveaway._id.$oid);
-								let winner_id = await pickRandomGiveawayWinner(giveaway._id.$oid);
-								await chooseGiveawayWinner(giveaway._id.$oid, winner_id);
-							}}>Generate Winner</button>
-
-						{/if}
-
-					{/await}
-
-				{:else}
-					<p>{giveaway.winner}</p>
-				{/if}
-			</div>
-
+		
+		{#each giveaways as giveaway}	
+				
+			<div class='post-box'>	
+				<h3>{giveaway.text}</h3>	
+				<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
+				{#if giveaway.is_open == true}	
+						
+					<p>Number of contestants: </p>	
+					{#await getParticipantCount(giveaway._id.$oid) then participants}	
+						<p>{participants || 0}</p>	
+						{#if participants}	
+							<button on:click={async () => {	
+								await closeGiveaway(giveaway._id.$oid);	
+								let winner_id = await pickRandomGiveawayWinner(giveaway._id.$oid);	
+								await chooseGiveawayWinner(giveaway._id.$oid, winner_id);	
+							}}>Generate Winner</button>	
+						{/if}	
+					{/await}	
+				{:else}	
+					<p>{giveaway.winner}</p>	
+				{/if}	
+			</div>	
 		{/each}
 
 	</div>
 
 {/if}
-
+<link href='https://fonts.googleapis.com/css?family=Calistoga' rel='stylesheet'>
 <style>
 	
 .card {
@@ -415,7 +398,6 @@ button:hover, a:hover {
 
 .toggle:hover {
 	background-color: #eee;
-	cursor: pointer;
 }
 
 #profile_picture {
@@ -437,18 +419,128 @@ button:hover, a:hover {
 	min-height: 300px; 
 	object-fit: cover;
 }
+.tier-box{
+	border: 6px solid;
+		border-image-source: linear-gradient(#9dcff2, 	#efacca);
+		border-image-slice: 1;
+		outline: solid  2px #0f1930;
+	min-width: 18em;
+	max-width: 18em;	
+	min-height: 23em;
+	margin: 10px;
 
-.tier-box, .post-box {
-	border: 1px solid #444;
+}
+.post-box {
+	border: 2px solid #0f1930;
+	min-width: 40em;
+	max-width: 30em;	
+	min-height: 23em;
+	margin: 10px;
+}
+
+.tier-name{
+	font-size: 1.3em;
+	background-color: #9dcff2;
+	margin: 0;
+	padding: 0.7em;
+	margin-bottom: 1em;
+}
+
+.tier-price{
+	font-size: 1.7em;
+	color: black;
+	padding: 0;
+	margin: 0;
+	font-family: "Calistoga";
+	text-align: center;
+}
+
+.tier-price-per-month{
+	font-size: 0.8em;
+	color: grey;
+	padding: 0.5em;
+	margin: 0;
+	font-weight: bold;
 }
 
 .post-image {
-	width: 200px;
-	height: auto;
+	width: 40.2em;
+	padding: 2px;
+	margin: -3px;
+	height: 25em;
+	margin-top: -4px;
+}
+.post-image-cant-view{
+	filter: blur(18px) brightness(0.5);
+	width: 40.2em;
+	padding: 2px;
+	margin: -5px -10px -10px -5px;
+	height: 25em;
+	margin-top: -4px;
 }
 
-.benefits {
-	text-align: left;
+.tiers-container{
+	display: flex;
+	flex-shrink: 0;
+	justify-content: center;
+
+}
+.posts-container{
+	display: flex;
+	margin: 4em;
+	flex-shrink: 0;
+	justify-content: center;
+}
+.text-container{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 1em;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.follow-button{
+	max-width: 8em;
+	margin-bottom: 3em;
+}
+
+.join-button{
+	max-width: 8em;
+	margin-top: 1em;
+}
+
+li{
+	margin: 0.4em;
+}
+.fa-heart-o:hover{
+	color: red;
+}
+.fa-heart{
+	color: red;
+	transition: 0.3s ease-out;
+}
+.fa-heart:hover{
+	color: black;
+	transition: 0.3s;
+}
+
+.view-post-container {
+	position: relative;
+	text-align: center;
+	overflow: hidden;
+	min-width: 10em;
+	color: white;
+}
+
+.centered-text-over-image{
+	position: absolute;
+	font-weight: bold;
+	font-size: 1.5em;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 </style>
