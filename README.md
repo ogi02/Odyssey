@@ -160,10 +160,10 @@ We have used [Sublime Text 3](https://www.sublimetext.com/3) for developing the 
 
 ### Libraries
 
-[Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend
-[Svelte JS](https://svelte.dev/) for frontend and REST API
-[Page JS](https://visionmedia.github.io/page.js/) for routing web page
-[PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database
+[Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend \
+[Svelte JS](https://svelte.dev/) for frontend and REST API \
+[Page JS](https://visionmedia.github.io/page.js/) for routing web page \
+[PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database \
 [Python Dotenv](https://pypi.org/project/python-dotenv/) for app configurations
 
 ### Contributing
