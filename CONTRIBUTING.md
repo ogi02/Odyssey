@@ -19,8 +19,7 @@ project in Ora and the repository in Github.
 
 ## Rules
 
-1. We are following GitHub Flow as a braching strategy. More information about the strategy can be found in the [README.md]
-(https://github.com/ogi02/Odyssey/blob/master/README.md)
+1. We are following GitHub Flow as a braching strategy. More information about the strategy can be found in the [README.md](https://github.com/ogi02/Odyssey/blob/master/README.md)
 2. One task in Ora = one pull request in Github. The pull requests must be with the same name as the tasks in Ora.
 3. Branches can be merged only by the project owners ([Gabriela Yoncheva](https://github.com/GabrielaY) or 
 [Ognian Baruh](https://github.com/ogi02)).
