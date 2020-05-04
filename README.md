@@ -166,6 +166,10 @@ We have used [Sublime Text 3](https://www.sublimetext.com/3) for developing the 
 [PyMongo](https://api.mongodb.com/python/current/tutorial.html) as database
 [Python Dotenv](https://pypi.org/project/python-dotenv/) for app configurations
 
+### Contributing
+
+If you want to become a contributor, check out [CONTRIBUTING.md](https://github.com/ogi02/Odyssey/blob/master/CONTRIBUTING.md)
+
 ### Creators
 
 [Gabriela Yoncheva](https://github.com/GabrielaY) \
