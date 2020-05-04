@@ -23,6 +23,10 @@ project in Ora and the repository in Github.
 2. One task in Ora = one pull request in Github. The pull requests must be with the same name as the tasks in Ora.
 3. Branches can be merged only by the project owners ([Gabriela Yoncheva](https://github.com/GabrielaY) or 
 [Ognian Baruh](https://github.com/ogi02)).
+4. Tests are mandatory - integration tests for Flask and manual/automation tests for Svelte. Contact the project owners for
+more information about tests.
+5. Project is tested on every push. If the tests don't pass, you must go back and fix the code. If you think that the tests should
+be modified contact the project owners and other contributors for their opinion.
 
 ## Commit Messages Formatting
 
