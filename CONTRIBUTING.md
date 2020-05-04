@@ -28,6 +28,15 @@ more information about tests.
 5. Project is tested on every push. If the tests don't pass, you must go back and fix the code. If you think that the tests should
 be modified contact the project owners and other contributors for their opinion.
 
+## Pull requests formatting
+
+- The name of the task in Ora and the name of the pull request should be the same.
+- In the message explain what has been changed in the code.
+- Add reviewers. The project owners are mandatory reviewers and you can add other contributors.
+- Add assigness. In the most cases it will only be you.
+- Add labels.
+- Pull requests that are not following the rules won't be accepted.
+
 ## Commit Messages Formatting
 
 - [Update] "commit message"
