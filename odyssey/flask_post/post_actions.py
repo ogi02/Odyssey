@@ -75,10 +75,11 @@ def create_post():
 @post_actions_bp.route('/getLikeCount', methods=['POST'])
 def get_like_count():
 	# Get information about the post
-	result = request.get_json().get('result')
-	count = Post.get_likes_count(result.get('post_id'))
+	post_id = request.get_json().get('post_id')
+
+	count = Post.get_likes_count(post_id)
 		
-	return jsonify(success=True, count = count)
+	return jsonify(success=True, like_count = count)
 
 @post_actions_bp.route('/likePost', methods=['POST'])
 def like_post():

@@ -46,9 +46,7 @@ class Post:
 		post_id = ObjectId(post_id)
 		found = db.posts_collection.find_one({'_id': post_id})
 		if found:
-			post = Post(*found)
-			return post.likes.len()
-
+			return len(found['likes'])
 	def add_like(user_id, post_id):
 		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
@@ -84,8 +82,7 @@ class Post:
 		current_tier = Tier.find_by_id(Info.get_tier_id(user_id, creator_id))
 		minimum_tier = Tier.find_by_id(restriction_type_id)
 
-		if current_tier.get('price') >= minimum_tier.get('price'):
+		if int(current_tier.get('price')) >= int(minimum_tier.get('price')):
 			return True
-
 		return False
 
