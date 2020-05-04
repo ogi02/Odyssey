@@ -116,6 +116,6 @@ class Survey:
 		current_tier = Tier.find_by_id(Info.get_tier_id(user_id, creator_id))
 		minimum_tier = Tier.find_by_id(restriction_type_id)
 
-		if current_tier.get('price') >= minimum_tier.get('price'):
+		if int(current_tier.get('price')) >= int(minimum_tier.get('price')):
 			return True
 		return False
