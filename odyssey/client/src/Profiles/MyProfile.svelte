@@ -8,6 +8,7 @@
 	import EditProfile from './EditProfile.svelte';
 	import CreatePost from '../Posts/CreatePost.svelte';
 	import CreateSurvey from '../Surveys/CreateSurvey.svelte';
+	import CreateGiveaway from '../Giveaways/CreateGiveaway.svelte';
 
 	// Javascript imports
 	import { fetchGet, fetchPost } from '../js/fetch.js';
@@ -22,13 +23,15 @@
 	let tiers = [];
 	let posts = [];
 	let surveys = [];
-	let social_media_links = {};
+	let giveaways = [];
 	let shipping_info = {};
+	let social_media_links = {};
 
 	let change = false;
 	let addTierFlag = false;
 	let createPostFlag = false;
 	let createSurveyFlag = false;
+	let createGiveawayFlag = false;
 	
 	onMount(async() => {
 		// Get users profile and set variables
@@ -41,6 +44,7 @@
 			tiers = response.tiers;
 			posts = response.posts;
 			surveys = response.surveys;
+			giveaways = response.giveaways
 			shipping_info = response.info.shipping_info;
 			social_media_links = response.info.social_media_links;
 		}
@@ -83,6 +87,11 @@
 		createSurveyFlag = true;
 	}
 
+	// Trigger create giveaway
+	function toggleCreateGiveaway() {
+		createGiveawayFlag = true;
+	}
+
 	// Close survey
 	async function closeSurvey(survey_id) {
 		const response = await fetchPost('http://localhost:3000/closeSurvey', {
@@ -93,7 +102,7 @@
 		surveys = surveys;
 	}
 
-	//Set winner
+	// Set winner
 	async function electWinner(survey_id) {
 		const response = await fetchPost('http://localhost:3000/chooseWinningOption', {
 			survey_id: survey_id
@@ -103,7 +112,7 @@
 		surveys = surveys;
 	}
 
-	// Get voted per option
+	// Get votes per option
 	async function getVotesPerOption(survey_id, option_id) {
 		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
 			survey_id: survey_id,
@@ -111,6 +120,49 @@
 		});
 
 		let temp = response.vote_count;
+
+		return temp;
+	}
+
+	// Close giveaway
+	async function closeGiveaway(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/closeGiveaway', {
+			giveaway_id: giveaway_id
+		});
+
+		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).is_open = false;
+		giveaways = giveaways;
+	}
+
+	// Generate random giveaway winner
+	async function pickRandomGiveawayWinner(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/generateRandomWinner', {
+			giveaway_id: giveaway_id
+		});
+
+		let temp = response.winner_id;
+
+		return temp;
+	}
+
+	// Select giveaway winner
+	async function chooseGiveawayWinner(giveaway_id, winner_id) {
+		const response = await fetchPost('http://localhost:3000/chooseGiveawayWinner', {
+			winner_id: winner_id,
+			giveaway_id: giveaway_id
+		});
+
+		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).winner = response.winner;
+		giveaways = giveaways;
+	}
+
+	// Get participants in giveaway
+	async function getParticipantCount(giveaway_id) {
+		const response = await fetchPost('http://localhost:3000/getTotalContestantsCount', {
+			giveaway_id: giveaway_id,
+		});
+
+		let temp = response.participant_count;
 
 		return temp;
 	}
@@ -162,7 +214,14 @@
 	<CreateSurvey
 		bind:createSurveyFlag={createSurveyFlag}
 		tiers={tiers}
-	/>	
+	/>
+
+{:else if createGiveawayFlag && user.role == "creator"}
+
+	<CreateGiveaway
+		bind:createGiveawayFlag={createGiveawayFlag}
+		tiers={tiers}
+	/>
 
 {:else}
 
@@ -201,7 +260,10 @@
 			<div class='toggle' on:click={toggleAddTier}>Add Tier</div>
 			<div class='toggle' on:click={toggleCreatePost}>Create Post</div>
 			<div class='toggle' on:click={toggleCreateSurvey}>Create Survey</div>
+			<div class='toggle' on:click={toggleCreateGiveaway}>Create Giveaway</div>
 		{/if}
+
+		<!-- Tiers -->
 
 		{#each tiers as tier}
 
@@ -227,6 +289,8 @@
 
 		{/each}
 
+		<!-- Posts -->
+
 		{#each posts as post}
 			
 			<div class='post-box'>
@@ -238,6 +302,9 @@
 			</div>
 
 		{/each}
+
+		<!-- Surveys -->
+
 		{#each surveys as survey}
 			
 			<div class='post-box'>
@@ -254,6 +321,7 @@
 						{/await}
 								
 					{/each}
+					
 					<button on:click={async () => {
 						await closeSurvey(survey._id.$oid);
 						await electWinner(survey._id.$oid);
@@ -266,9 +334,45 @@
 
 		{/each}
 
+		<!-- Giveaways -->
+
+		{#each giveaways as giveaway}
+			
+			<div class='post-box'>
+
+				<h3>{giveaway.text}</h3>
+
+				<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
+
+				{#if giveaway.is_open == true}
+					
+					<p>Number of contestants: </p>
+					{#await getParticipantCount(giveaway._id.$oid) then participants}
+						<p>{participants || 0}</p>
+
+						{#if participants}
+
+							<button on:click={async () => {
+								await closeGiveaway(giveaway._id.$oid);
+								let winner_id = await pickRandomGiveawayWinner(giveaway._id.$oid);
+								await chooseGiveawayWinner(giveaway._id.$oid, winner_id);
+							}}>Generate Winner</button>
+
+						{/if}
+
+					{/await}
+
+				{:else}
+					<p>{giveaway.winner}</p>
+				{/if}
+			</div>
+
+		{/each}
+
 	</div>
 
 {/if}
+
 <style>
 	
 .card {
@@ -311,6 +415,7 @@ button:hover, a:hover {
 
 .toggle:hover {
 	background-color: #eee;
+	cursor: pointer;
 }
 
 #profile_picture {

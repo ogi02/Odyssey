@@ -2,6 +2,8 @@ import pymongo
 from pymongo import ReturnDocument
 from pymongo import MongoClient
 from bson import ObjectId
+from flask_classes.info import Info
+from flask_classes.tier import Tier
 import datetime
 import random
 
@@ -9,7 +11,7 @@ client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb
 db = client.giveaway
 
 class Giveaway:
-	def __init__(self, _id, creator_id, contestants, date, image_path, text, restriction_type_id, is_open, type, deadline, winner):
+	def __init__(self, _id, creator_id, contestants, date, image_path, text, restriction_type_id, is_open, deadline, winner):
 		self._id = _id;
 		self.creator_id = creator_id
 		self.contestants = contestants
@@ -18,7 +20,6 @@ class Giveaway:
 		self.text = text
 		self.restriction_type_id = restriction_type_id
 		self.is_open = is_open
-		self.type = type
 		self.deadline = deadline
 		self.winner = winner
 
@@ -31,7 +32,6 @@ class Giveaway:
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id,
 			'is_open': True,
-			'type': self.type,
 			'deadline': self.deadline,
 			'winner': None
 
@@ -83,15 +83,31 @@ class Giveaway:
 	def get_random_winner(giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
 		found = Giveaway.find_by_id(giveaway_id)
-		max = Giveaway.get_all_contestants_count(giveaway_id)
-		winner_number = random.randint(0, max-1)
+		maxx = Giveaway.get_all_contestants_count(giveaway_id)
+		winner_number = random.randint(0, maxx-1)
 		return found['contestants'][winner_number]
 
-
-	def choose_winner(giveaway_id, user_id):
+	def choose_winner(giveaway_id, username):
 		giveaway_id = ObjectId(giveaway_id)
-		user_id = ObjectId(user_id)
 		db.giveaways_collection.update_one(
 			{'_id': giveaway_id},
-			{"$set":{'winner': user_id}}
+			{"$set":{'winner': username}}
 		)
+
+	def can_view(user_id, giveaway_id):
+
+		user_id = ObjectId(user_id)
+		giveaway_id = ObjectId(giveaway_id)
+
+		found = Giveaway.find_by_id(giveaway_id)
+		creator_id = found.get('creator_id')
+		restriction_type_id = found.get('restriction_type_id')
+		if not Info.is_patreon(user_id, creator_id):
+			return False
+				
+		current_tier = Tier.find_by_id(Info.get_tier_id(user_id, creator_id))
+		minimum_tier = Tier.find_by_id(restriction_type_id)
+
+		if current_tier.get('price') >= minimum_tier.get('price'):
+			return True
+		return False
