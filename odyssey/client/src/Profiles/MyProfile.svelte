@@ -300,57 +300,63 @@
 			{/each}
 		</div>
 
-		{#each surveys as survey}
-			
-			<div class='post-box'>
-
-				<h3>{survey.text}</h3>
-
-				<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
-
-				{#if survey.is_open == true}
-					{#each survey.options as option, i}
-						<p>{option}</p>
-						{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
-							<p>{vote_count || 0}</p>
-						{/await}
-								
-					{/each}
-					<button on:click={async () => {
-						await closeSurvey(survey._id.$oid);
-						await electWinner(survey._id.$oid);
-					}}>Close</button>
-
-				{:else}
-					<p>{survey.winner}</p>
-				{/if}
-			</div>
-
-		{/each}
-		
-		{#each giveaways as giveaway}	
+		<div class="posts-container">
+			{#each surveys as survey}
 				
-			<div class='post-box'>	
-				<h3>{giveaway.text}</h3>	
-				<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
-				{#if giveaway.is_open == true}	
-						
-					<p>Number of contestants: </p>	
-					{#await getParticipantCount(giveaway._id.$oid) then participants}	
-						<p>{participants || 0}</p>	
-						{#if participants}	
-							<button on:click={async () => {	
-								await closeGiveaway(giveaway._id.$oid);	
-								let winner_id = await pickRandomGiveawayWinner(giveaway._id.$oid);	
-								await chooseGiveawayWinner(giveaway._id.$oid, winner_id);	
-							}}>Generate Winner</button>	
-						{/if}	
-					{/await}	
-				{:else}	
-					<p>{giveaway.winner}</p>	
-				{/if}	
-			</div>	
-		{/each}
+				<div class='post-box'>
+
+					<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
+
+					<div class="text-container">
+						<h3>{survey.text}</h3>
+					</div>
+					{#if survey.is_open == true}
+						{#each survey.options as option, i}
+							<p>{option}</p>
+							{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+								<p>{vote_count || 0}</p>
+							{/await}
+									
+						{/each}
+						<button on:click={async () => {
+							await closeSurvey(survey._id.$oid);
+							await electWinner(survey._id.$oid);
+						}}>Close</button>
+
+					{:else}
+						<p>Winning option: {survey.winner}</p>
+					{/if}
+				</div>
+
+			{/each}
+		</div>
+		<div class="posts-container">
+			{#each giveaways as giveaway}	
+					
+				<div class='post-box'>	
+					<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
+					<div class="text-container">
+						<h3>{giveaway.text}</h3>	
+					</div>
+					{#if giveaway.is_open == true}	
+							
+						<p>Number of contestants: </p>	
+						{#await getParticipantCount(giveaway._id.$oid) then participants}	
+							<p>{participants || 0}</p>	
+							{#if participants}	
+								<button on:click={async () => {	
+									await closeGiveaway(giveaway._id.$oid);	
+									let winner_id = await pickRandomGiveawayWinner(giveaway._id.$oid);	
+									await chooseGiveawayWinner(giveaway._id.$oid, winner_id);	
+								}}>Generate Winner</button>	
+							{/if}	
+						{/await}	
+					{:else}	
+						<p>{giveaway.winner}</p>	
+					{/if}	
+				</div>	
+			{/each}
+		</div>
 
 	</div>
 
@@ -489,6 +495,7 @@ button:hover, a:hover {
 	display: flex;
 	margin: 4em;
 	flex-shrink: 0;
+	flex-wrap: wrap;
 	justify-content: center;
 }
 .text-container{

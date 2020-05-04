@@ -333,71 +333,96 @@
 			<button on:click={async () => await loadMorePosts()}>Load More</button>
 		{/if}
 
-
-		{#each surveys as survey, i}
-			
-			{#if i < loadedSurveys}
+		<div class="posts-container">
+			{#each surveys as survey, i}
 				
-				{#if survey.canView}
+				{#if i < loadedSurveys}
 					{#if survey.is_open == true}
 						<div class='post-box'>
-							<h3>{survey.text}</h3>
-
-							<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
-							
-							{#if survey.hasVoted == false}
-
-								{#each survey.options as option, i}
-									<p>{option}</p>
-									<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
+						{#if survey.canView}
+							{#if survey.is_open == true}
 								
-								{/each}
-							{:else}
-								{#each survey.options as option, i}
-									<p>{option}</p>
-									{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
-										<p>{vote_count || 0}</p>
-									{/await}
-								
-								{/each}
+									
+									<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
+									<div class="text-container">
+										<h3>{survey.text}</h3>
+									</div>
+									{#if survey.hasVoted == false}
+
+										{#each survey.options as option, i}
+											<p>{option}</p>
+											<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
+										
+										{/each}
+									{:else}
+										{#each survey.options as option, i}
+											<p>{option}</p>
+											{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+												<p>{vote_count || 0}</p>
+											{/await}
+										
+										{/each}
+										
+									{/if}
 								
 							{/if}
+
+						{:else if survey.is_open == true}
+
+							<div class="view-post-container">
+									<img class="post-image-cant-view" src={"/images/" + user.username + "/" + survey.image_path}>
+									<p class="centered-text-over-image">You can't view this survey!</p>
+								</div>
+								<div class="text-container">
+										<h3>{survey.text}</h3>
+										<i class="fa fa-lock" aria-hidden="true"><span style="margin-left: 5px">Locked</span></i> 
+								</div>
+
+						{/if}
 						</div>
 					{/if}
-
-				{:else if survey.is_open == true}
-
-					<h3>You can't view this survey</h3>
-
 				{/if}
-					
-			{/if}
 
-		{/each}
+			{/each}
+
+		</div>
 
 		{#if !allSurveysLoaded}
 			<button on:click={async () => await loadMoreSurveys()}>Load More</button>
 		{/if}
 
-		{#each giveaways as giveaway, i}	
-				
-			{#if i < loadedGiveaways}	
-				<div class='post-box'>	
-					{#if giveaway.canView}	
-						<h3>{giveaway.text}</h3>	
-						<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
-						{#if giveaway.hasJoined == false}	
-							<button on:click={async () => await joinGiveaway(giveaway._id.$oid)}>Join</button>	
-						{:else}	
-							<p>You have already joined this giveaway!</p>	
-						{/if}	
-					{:else}	
-						<h3>You can't view this giveaway</h3>	
-					{/if}	
-							
-				</div>	
-			{/if}	
-		{/each}	
+		<div class="posts-container">
+			{#each giveaways as giveaway, i}	
+					
+				{#if i < loadedGiveaways}	
+					{#if giveaway.is_open == true}
+						<div class='post-box'>	
+							{#if giveaway.canView}	
+								<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
+								<div class="text-container">
+									<h3>{giveaway.text}</h3>	
+								</div>
+								{#if giveaway.hasJoined == false}	
+									<button on:click={async () => await joinGiveaway(giveaway._id.$oid)}>Join</button>	
+								{:else}	
+									<p>You have already joined this giveaway!</p>	
+								{/if}	
+							{:else if giveaway.is_open == true}	
+														<div class="view-post-container">
+									<img class="post-image-cant-view" src={"/images/" + user.username + "/" + giveaway.image_path}>
+									<p class="centered-text-over-image">You can't view this giveaway!</p>
+								</div>
+								<div class="text-container">
+										<h3>{giveaway.text}</h3>
+										<i class="fa fa-lock" aria-hidden="true"><span style="margin-left: 5px">Locked</span></i> 
+							</div>	
+							{/if}	
+									
+						</div>	
+					{/if}
+				{/if}	
+			{/each}
+		</div>	
 		{#if !allGiveawaysLoaded}	
 			<button on:click={async () => await loadMoreGiveaways()}>Load More Giveaways</button>	
 		{/if}
@@ -480,7 +505,7 @@
 	.post-box {
 		border: 2px solid #0f1930;
 		min-width: 40em;
-		max-width: 30em;	
+		max-width: 40em;	
 		min-height: 23em;
 		margin: 10px;
 	}
@@ -528,6 +553,7 @@
 
 	.tiers-container{
 		display: flex;
+		flex-wrap: wrap;
 		flex-shrink: 0;
 		justify-content: center;
 		
@@ -536,6 +562,7 @@
 		display: flex;
 		margin: 4em;
 		flex-shrink: 0;
+		flex-wrap: wrap;
 		justify-content: center;
 	}
 	.text-container{
