@@ -39,7 +39,7 @@ Example:
 ```
 $ coverage run ./tests/test_authentication.py
 $ coverage report ./flask_authentication/*.py 
-|		   Name   		| Stmts | Miss | Cover |
+|                   Name                    | Stmts | Miss | Cover |
 |-------------------------------------------|-------|------|-------|
 |  ./flask_authentication/authentication.py |   44  |   0  |  100% |
 ```
