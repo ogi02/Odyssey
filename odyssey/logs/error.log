@@ -3,3 +3,7 @@
 2020-05-02 22:32:27,209 - error_log - ERROR - Login failed!
 2020-05-02 22:32:30,317 - error_log - ERROR - Login failed!
 2020-05-02 23:41:48,123 - error_log - ERROR - Login failed!
+2020-05-04 15:07:09,599 - error_log - ERROR - Duplicate username: _FpCerpd9Z7SIbjmN81Jy_test_profile
+2020-05-04 15:07:11,001 - error_log - ERROR - Duplicate email: _FpCerpd9Z7SIbjmN81Jy_test_profile@baruh.net
+2020-05-04 15:07:12,690 - error_log - ERROR - Login failed!
+2020-05-04 15:07:13,955 - error_log - ERROR - Login failed!
