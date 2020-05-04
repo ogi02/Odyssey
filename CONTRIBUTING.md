@@ -19,7 +19,8 @@ project in Ora and the repository in Github.
 
 ## Rules
 
-1. We are following GitHub Flow as a braching strategy. More information about the strategy can be found in the README.md
+1. We are following GitHub Flow as a braching strategy. More information about the strategy can be found in the [README.md]
+(https://github.com/ogi02/Odyssey/blob/master/README.md)
 2. One task in Ora = one pull request in Github. The pull requests must be with the same name as the tasks in Ora.
 3. Branches can be merged only by the project owners ([Gabriela Yoncheva](https://github.com/GabrielaY) or 
 [Ognian Baruh](https://github.com/ogi02)).
@@ -27,6 +28,12 @@ project in Ora and the repository in Github.
 more information about tests.
 5. Project is tested on every push. If the tests don't pass, you must go back and fix the code. If you think that the tests should
 be modified contact the project owners and other contributors for their opinion.
+
+## Code requirements
+
+- [Flask Requirements](https://github.com/ogi02/Odyssey/blob/master/odyssey/README.md)
+- [Svelte JS Requirements](https://github.com/ogi02/Odyssey/blob/master/odyssey/client/src/README.md)
+- [Test Requirements](https://github.com/ogi02/Odyssey/blob/master/odyssey/tests/README.md)
 
 ## Pull requests formatting
 
