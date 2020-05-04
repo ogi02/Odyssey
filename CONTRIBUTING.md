@@ -30,12 +30,18 @@ be modified contact the project owners and other contributors for their opinion.
 
 ## Pull requests formatting
 
-- The name of the task in Ora and the name of the pull request should be the same.
-- In the message explain what has been changed in the code.
-- Add reviewers. The project owners are mandatory reviewers and you can add other contributors.
-- Add assigness. In the most cases it will only be you.
-- Add labels.
-- Pull requests that are not following the rules won't be accepted.
+- The name of the task in Ora and the name of the pull request should be the same
+- In the message explain what has been changed in the code
+- Add reviewers. The project owners are mandatory reviewers and you can add other contributors
+- Add assigness. In the most cases it will only be you
+- Add labels
+- Pull requests that are not following the rules won't be accepted
+
+## Ora Abbreviations
+- "BE" - Back-end
+- "FE" - Front-end
+- "TS" - Tests
+- "T" - Team (Usually tasks that require team effort and team discussion)
 
 ## Commit Messages Formatting
 
