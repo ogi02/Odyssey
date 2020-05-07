@@ -18,9 +18,7 @@
 
 </script>
 
-<div id='card'>
-
-	<p>Welcome to Odyssey! Log in or register to view content.</p>
+<div class='main'>
 
 	<div class='header'>
 		{#if login}
@@ -40,9 +38,9 @@
 
 				<Field type='password' id='l_password' placeholder='Password' has_icon={false} />
 
-				<button id='info_submit' type='submit' on:click|preventDefault={async () => {
+				<button id='info_submit' type='submit' class='submit' on:click|preventDefault={async () => {
 					await loginUser(true);
-				}}>Login</button>
+				}}>Continue</button>
 
 				<div class='switch' on:click={toggleLogin}>Don't have an account? Register now!</div>
 
@@ -58,9 +56,9 @@
 
 				<Field type='password' id='r_confirm' placeholder='Confirm Password' has_icon={false} />
 
-				<button id='info_submit' type='submit' on:click|preventDefault={async () => {
+				<button id='info_submit' type='submit' class='submit' on:click|preventDefault={async () => {
 					await registerUser(false);
-				}}>Register</button>
+				}}>Continue</button>
 
 				<div class='switch' on:click={toggleLogin}>Already have an account? Log in!</div>
 
@@ -72,15 +70,37 @@
 
 </div>
 
+<link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
 <style>
+
+	.main {
+		font-family: "Jost";
+		display: block;
+		max-width: 400px;
+		margin: 100px auto;
+		text-align: center;
+		font-size: 1.1em;
+	}
 
 	.switch:hover {
 		text-decoration: underline;
 		cursor: pointer;
 	}
 
-	#card {
-		margin-top: 100px;
+	.submit {
+		margin: 15px 0;
+		background-color: #9fcdf5;
+		padding: 10px;
+		width: 300px;
+		border-radius: 5px;
+		font-weight: bold;
+		color: #0f1931;
+	}
+
+	.submit:hover {
+		background-color: #8cc2f2;
+		cursor: pointer;
 	}
 
 </style>

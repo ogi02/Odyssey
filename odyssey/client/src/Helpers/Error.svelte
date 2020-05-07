@@ -15,12 +15,14 @@
 	.error {
 		margin: 0;
 		padding: 0;
-		display: none;
+		display: block;
+		float: right;
+		font-size: 16px;
 	}
 	
 	h4 {
 		display: inline;
-		color: tomato;
+		color: #9a0e61;
 	}
 
 </style>
