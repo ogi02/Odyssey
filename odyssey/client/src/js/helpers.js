@@ -1,6 +1,6 @@
 // Display certain error
 export function displayError(element, message) {
-	document.getElementById(element).style.display = 'inline';
+	document.getElementById(element).style.display = 'block';
 	document.getElementById(element).getElementsByTagName('h4')[0].innerHTML = message;
 }
 
