@@ -124,6 +124,17 @@
 		return temp;
 	}
 
+	// Get all votes
+	async function getVotesOnSurvey(survey_id) {
+		const response = await fetchPost('http://localhost:3000/getTotalVoteCount', {
+			survey_id: survey_id
+		});
+
+		let temp = response.votes;
+
+		return temp;
+	}
+
 	// Get likes on post
 	async function getLikesOnPost(post_id) {
 		const response = await fetchPost('http://localhost:3000/getLikeCount', {
@@ -311,17 +322,38 @@
 						<h3>{survey.text}</h3>
 					</div>
 					{#if survey.is_open == true}
-						{#each survey.options as option, i}
-							<p>{option}</p>
-							{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
-								<p>{vote_count || 0}</p>
-							{/await}
+						{#await getVotesOnSurvey(survey._id.$oid) then votes}
+
+										{#each survey.options as option, i}
+										<div class="survey-options-container">
+											<p style="padding-left: 1.5em">{option}</p>
+											{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+												{#if vote_count != 0}
+													<p style="background: rgb(160, 207, 245);
+													border-radius: 16px;
+													padding-left: calc((({votes}/{vote_count})*100)*0.3em);
+													margin-left: 5em;
+													position: absolute;
+													">{votes/vote_count*100}%</p>
+												{:else}
+													<p style="
+													margin-left: 6em;
+													position: absolute;
+													">0%</p>
+												{/if}
+											{/await}
+										</div>
+										{/each}
 									
-						{/each}
+									
+						
+						{#if votes != 0}
 						<button on:click={async () => {
 							await closeSurvey(survey._id.$oid);
 							await electWinner(survey._id.$oid);
 						}}>Close</button>
+						{/if}
+						{/await}
 
 					{:else}
 						<p>Winning option: {survey.winner}</p>
@@ -471,8 +503,8 @@ button:hover, a:hover {
 
 .post-image {
 	width: 40.2em;
-	padding: 2px;
 	margin: -3px;
+	margin-left: -2px;
 	height: 25em;
 	margin-top: -4px;
 }
@@ -549,5 +581,11 @@ li{
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
+.survey-options-container{
+	display: flex;
+	align-items: flex-start;
+}
+
 
 </style>

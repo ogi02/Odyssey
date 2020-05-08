@@ -78,10 +78,10 @@ def create_survey():
 @survey_actions_bp.route('/getTotalVoteCount', methods=['POST'])
 def get_total_vote_count():
 	# Get information about the survey
-	result = request.get_json().get('result')
-	count = Survey.get_all_votes_count(result.get('survey_id'))
+	survey_id = request.get_json().get("survey_id")
+	count = Survey.get_all_votes_count(survey_id)
 		
-	return jsonify(success=True, count = count)
+	return jsonify(success=True, votes = count)
 
 @survey_actions_bp.route('/voteOnSurvey', methods=['POST'])
 def vote_on_survey():
