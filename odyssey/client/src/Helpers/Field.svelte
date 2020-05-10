@@ -46,17 +46,32 @@
 <style>
 
 	.field {
-		display: block;
+		width: 300px;
+		margin: 0 auto;
+		position: relative;
 	}
 
-	.input, .icons, .error {
+	.input {
+		display: block;
+		padding: 10px;
+		border-radius: 5px;
+		font-weight: 100px;
+		min-width: 300px;
+		margin: 10px 0 2px;
+		outline-color: #bcdcfa;
+	}
+
+	.input, .icons {
 		display: inline;
 	}
 
 	.icons {
+		position: absolute;
 		color: rgba(0, 0, 0, 0,7);
 		font-size: 16px;
 		display: none;
+		top: 25px;
+		right: 10px;
 	}
-	
+
 </style>

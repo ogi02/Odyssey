@@ -79,7 +79,7 @@ class AuthenticationTest(unittest.TestCase):
 	def test_02_validate_username_success_taken(self):
 		response = self.check_username("_FpCerpd9Z7SIbjmN81Jy_test_profile")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'An account with such username already exists', response.data)
+		self.assertIn(b'Username already taken!', response.data)
 
 	def test_03_validate_email_success_free(self):
 		response = self.check_email("_FpCerpd9Z7SIbjmN81Jy_free_gmail@email.com")
@@ -89,7 +89,7 @@ class AuthenticationTest(unittest.TestCase):
 	def test_04_validate_email_success_taken(self):
 		response = self.check_email("_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com")
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'An account with such email already exists', response.data)
+		self.assertIn(b'Email already used!', response.data)
 
 if __name__ == '__main__':
 	unittest.main()

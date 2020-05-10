@@ -17,6 +17,6 @@ def check_email():
 	# If user with that email exists, return duplication error
 	user = User.find_by_email(email)
 	if user:
-		return jsonify(success=False, message='An account with such email already exists')
+		return jsonify(success=False, message='Email already used!')
 
 	return jsonify(success=True, message='Email %s is not taken' % email)

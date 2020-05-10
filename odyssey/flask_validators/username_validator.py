@@ -17,6 +17,6 @@ def check_username():
 	# If user with that username exists, return duplication error
 	user = User.find_by_username(username)
 	if user:
-		return jsonify(success=False, message='An account with such username already exists')
+		return jsonify(success=False, message='Username already taken!')
 		
 	return jsonify(success=True, message='Username %s is not taken' % username)
