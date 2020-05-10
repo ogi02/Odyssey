@@ -191,6 +191,16 @@
 		return temp;
 	}
 
+	async function getVotesOnSurvey(survey_id) {
+		const response = await fetchPost('http://localhost:3000/getTotalVoteCount', {
+			survey_id: survey_id
+		});
+
+		let temp = response.votes;
+
+		return temp;
+	}
+
 	async function loadMoreSurveys() {
 		for(let i = loadedSurveys; i < loadedSurveys + 10; i++) {
 			if(surveys.length == (loadedSurveys + i)) {
@@ -342,7 +352,7 @@
 						{#if survey.canView}
 							{#if survey.is_open == true}
 								
-									
+									{#await getVotesOnSurvey(survey._id.$oid) then votes}
 									<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
 									<div class="text-container">
 										<h3>{survey.text}</h3>
@@ -356,15 +366,32 @@
 										{/each}
 									{:else}
 										{#each survey.options as option, i}
-											<p>{option}</p>
+										<div class="survey-options-container">
+											<p style="padding-left: 1.5em">{option}</p>
 											{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
-												<p>{vote_count || 0}</p>
+												{#if vote_count != 0}
+													<p style="background: rgb(160, 207, 245);
+													border-radius: 16px;
+													padding-left: calc((({votes}/{vote_count})*100)*0.3em);
+													margin-left: 6em;
+													font-size: 10pt;
+													padding-bottom: 2px;
+													padding-top: 2px;
+													padding-right: 10px;
+													position: absolute;
+													">{votes/vote_count*100}%</p>
+												{:else}
+													<p style="
+													margin-left: 5em;
+													position: absolute;
+													">0%</p>
+												{/if}
 											{/await}
-										
+										</div>
 										{/each}
-										
+									
 									{/if}
-								
+								{/await}
 							{/if}
 
 						{:else if survey.is_open == true}
@@ -537,8 +564,8 @@
 
 	.post-image {
 		width: 40.2em;
-		padding: 2px;
 		margin: -3px;
+		margin-left: -2px;
 		height: 25em;
 		margin-top: -4px;
 	}
@@ -615,6 +642,11 @@
 		top: 45%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+	}
+
+	.survey-options-container{
+		display: flex;
+		align-items: flex-start;
 	}
 
 

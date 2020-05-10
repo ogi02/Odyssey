@@ -54,9 +54,13 @@ class Survey:
 
 	def get_votes_count_by_option(survey_id, option_number):
 		survey_id = ObjectId(survey_id)
-		found = db.surveys_collection.count_documents({'_id': survey_id, 'votes':{"$elemMatch": {'vote': option_number}}})
+		found = db.surveys_collection.find_one({'_id': survey_id})
 		if found:
-			return found
+			count = 0
+			for f in found['votes']:
+				if f['vote'] == option_number:
+					count = count + 1
+			return count
 
 	def get_all_votes_count(survey_id):
 		survey_id = ObjectId(survey_id)
