@@ -78,7 +78,7 @@ def get_like_count():
 	post_id = request.get_json().get('post_id')
 
 	count = Post.get_likes_count(post_id)
-		
+
 	return jsonify(success=True, like_count = count)
 
 @post_actions_bp.route('/likePost', methods=['POST'])
