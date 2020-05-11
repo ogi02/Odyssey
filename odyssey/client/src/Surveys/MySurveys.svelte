@@ -77,10 +77,10 @@
 								{#if vote_count != 0}
 									<p style="background: rgb(160, 207, 245);
 									border-radius: 16px;
-									padding-left: calc((({votes}/{vote_count})*100)*0.3em);
+									padding-left: calc((({vote_count}/{votes})*100)*0.3em);
 									margin-left: 5em;
 									position: absolute;
-									">{votes/vote_count*100}%</p>
+									">{vote_count/votes*100}%</p>
 								
 								{:else}
 									<p style="
