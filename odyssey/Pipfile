@@ -14,6 +14,7 @@ flask-pymongo = "*"
 flask-cors = "*"
 flask-session = "*"
 werkzeug = "==0.16.0"
+nose2 = "*"
 
 [requires]
 python_version = "3.7"
