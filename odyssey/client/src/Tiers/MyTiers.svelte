@@ -18,7 +18,7 @@
 
 			<ul>
 				{#each tier.benefits as benefit}
-					<li style="text-align: left;">{benefit}</li>
+					<li style="text-align: left; margin-bottom: 10px;">{benefit}</li>
 				{/each}	
 			</ul>
 
@@ -49,7 +49,9 @@
 
 	.tier-name{
 		font-size: 1.3em;
+		letter-spacing: 0.5px;
 		background-color: #9dcff2;
+		color: black;
 		margin: 0;
 		padding: 0.7em;
 		margin-bottom: 1em;
