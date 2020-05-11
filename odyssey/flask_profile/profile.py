@@ -34,15 +34,19 @@ def my_profile():
 
 			tiers = Tier.find_all_by_user_id(user.get("_id").get("$oid"))
 			tiers = json.loads(json_util.dumps(tiers))
+			tiers = sorted(tiers, key=lambda tier: int(tier['price']))
 
 			posts = Post.find_posts_by_user_id(user.get("_id").get("$oid"))
 			posts = json.loads(json_util.dumps(posts))
+			posts = sorted(posts, key=lambda post: post['date']['$date'], reverse=True)
 
 			surveys = Survey.find_surveys_by_creator_id(user.get("_id").get("$oid"))
 			surveys = json.loads(json_util.dumps(surveys))
+			surveys = sorted(surveys, key=lambda survey: survey['date']['$date'], reverse=True)
 
 			giveaways = Giveaway.find_giveaways_by_creator_id(user.get('_id').get('$oid'))
 			giveaways = json.loads(json_util.dumps(giveaways))
+			giveaways = sorted(giveaways, key=lambda giveaway: giveaway['date']['$date'], reverse=True)
 
 			return jsonify(
 				success = True, 
@@ -75,6 +79,7 @@ def user_profile(username):
 
 		tiers = Tier.find_all_by_user_id(searchedUser_id)
 		tiers = json.loads(json_util.dumps(tiers))
+		tiers = sorted(tiers, key=lambda tier: int(tier['price']))
 
 		posts = Post.find_posts_by_user_id(searchedUser_id)
 		posts = json.loads(json_util.dumps(posts))
