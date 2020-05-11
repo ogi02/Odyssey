@@ -163,9 +163,9 @@
 
 		<h1>{user.username}</h1>
 
-		<p class="title">{(info == null) ? "" : info.bio}</p>
+		<p class="title">{(info.bio == null) ? "" : info.bio}</p>
 
-		<p>{(info == null) ? "" : info.country_of_residence}</p>
+		<p>{(info.bio == null) ? "" : info.country_of_residence}</p>
 
 		<div style="margin: 24px 0;">
 			<a href="#"><i class="fa fa-twitch"></i></a> 
