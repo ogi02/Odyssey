@@ -5,10 +5,11 @@ from flask_classes.info import Info
 from flask_classes.tier import Tier
 import datetime
 
-client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
-db = client.post
-
 class Post:
+
+	client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
+	db = client.post
+
 	def __init__(self, _id, user_id, likes, date, image_path, text, restriction_type_id):
 		self._id = _id;
 		self.user_id = user_id
@@ -27,30 +28,31 @@ class Post:
 			'text': self.text,
 			'restriction_type_id': self.restriction_type_id
 		}
-		result = db.posts_collection.insert_one(post)
+		result = Post.db.posts_collection.insert_one(post)
 		return self
 		
 	def find_posts_by_user_id(user_id):
 		user_id = ObjectId(user_id)
-		found = db.posts_collection.find({'user_id': user_id})
+		found = Post.db.posts_collection.find({'user_id': user_id})
 		if found:
 			return found
 
 	def find_by_id(post_id):
 		post_id = ObjectId(post_id)
-		found = db.posts_collection.find_one({'_id': post_id})
+		found = Post.db.posts_collection.find_one({'_id': post_id})
 		if found:
 			return found
 
 	def get_likes_count(post_id):
 		post_id = ObjectId(post_id)
-		found = db.posts_collection.find_one({'_id': post_id})
+		found = Post.db.posts_collection.find_one({'_id': post_id})
 		if found:
 			return len(found['likes'])
+			
 	def add_like(user_id, post_id):
 		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
-		db.posts_collection.update_one(
+		Post.db.posts_collection.update_one(
 			{'_id': post_id},
 			{"$addToSet": {'likes': user_id}}
 		)
@@ -58,7 +60,7 @@ class Post:
 	def remove_like(user_id, post_id):
 		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
-		db.posts_collection.update_one(
+		Post.db.posts_collection.update_one(
 			{'_id': post_id},
 			{"$pull": {'likes': user_id}}
 		)
@@ -66,7 +68,7 @@ class Post:
 	def has_liked_post(user_id, post_id):
 		user_id = ObjectId(user_id)
 		post_id = ObjectId(post_id)
-		found = db.posts_collection.find_one({'_id': post_id, 'likes': {"$in": [user_id]}})
+		found = Post.db.posts_collection.find_one({'_id': post_id, 'likes': {"$in": [user_id]}})
 		if found:
 			return True
 		return False

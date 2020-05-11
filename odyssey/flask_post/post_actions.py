@@ -64,7 +64,7 @@ def create_post():
 		image.save(os.path.join(path, now.strftime("%m-%d-%Y-%H-%M-%S")))
 		info_log.info("%s added a new post" % username)
 	
-		return jsonify(success=True, message='Successfully created a new post!')
+		return jsonify(success=True, message="%s added a new post" % username)
 		
 	else:
 		error_log.error("Image extension is not allowed or doesn't exist!")
@@ -94,7 +94,7 @@ def like_post():
 
 	info_log.info("%s liked post with id: %s." % (ActiveUser.username, post_id))
 	
-	return jsonify(success=True, message='Successfully liked post!')
+	return jsonify(success=True, message='%s liked post with id: %s.' % (ActiveUser.username, post_id))
 
 @post_actions_bp.route('/unlikePost', methods=['POST'])
 def unlike_post():
@@ -109,7 +109,7 @@ def unlike_post():
 
 	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, post_id))
 	
-	return jsonify(success=True, message='Successfully unliked post!')
+	return jsonify(success=True, message="%s unliked post with id: %s." % (ActiveUser.username, post_id))
 
 @post_actions_bp.route('/hasLikedPost', methods=['POST'])
 def has_liked_post():
