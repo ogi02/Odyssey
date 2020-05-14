@@ -58,7 +58,7 @@ class Survey:
 		if found:
 			count = 0
 			for f in found['votes']:
-				if f['vote'] == option_number:
+				if int(f['vote']) == option_number:
 					count = count + 1
 			return count
 
