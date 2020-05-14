@@ -8,6 +8,12 @@
 	import { username } from '../js/stores.js';
 	import { followUser, unfollowUser, isFollowing } from './profile_management.js';
 
+	// Component imports
+	import UserTiers from '../Tiers/UserTiers.svelte';
+	import UserPosts from '../Posts/UserPosts.svelte';
+	import UserSurveys from '../Surveys/UserSurveys.svelte';
+	import UserGiveaways from '../Giveaways/UserGiveaways.svelte';
+
 	// Local variables
 	let cover_picture_src = '';
 	let profile_picture_src = '';
@@ -21,24 +27,15 @@
 	let surveys = {};
 	let giveaways = {};
 	let subscribedTierId;
-	
-	let result = {};
-	let follow_result = {};
 
-	let loadedPosts = 0;
-	let allPostsLoaded = false;
-
-	let loadedSurveys = 0;
-	let allSurveysLoaded = false;
-
-	let loadedGiveaways = 0;	
-	let allGiveawaysLoaded = false;
+	let type_of_display = 'posts';
 
 	username.subscribe(async (newValue) => {
 		if(newValue == '') {
 			username.set(window.location.href.substr(window.location.href.lastIndexOf('/') + 1));
 			return false;
 		}
+
 		const response = await fetchPost("http://localhost:3000/profile/" + newValue, {
 			username: newValue
 		});
@@ -54,200 +51,10 @@
 			surveys = response.surveys;
 			giveaways = response.giveaways;
 			subscribedTierId = response.tier_id;
-			posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
 		}
 
-		follow_result = {
-			profile_name: user.username
-		};
-
-		is_following = await isFollowing(follow_result);
-
-		if (user.role == "creator") {
-			await loadMorePosts();
-			await loadMoreSurveys();
-			await loadMoreGiveaways();
-
-		}
-
+		is_following = await isFollowing(user.username);
 	});
-
-	async function chooseTier(self_id) {
-		result = {
-			tier_id: self_id,
-			creator_id: user._id.$oid
-		};
-
-		subscribedTierId = self_id;
-
-		const response = await fetchPost('http://localhost:3000/chooseTier', {
-			result: result
-		});
-	}
-
-	async function removeTier(self_id) {
-		result = {
-			tier_id: self_id,
-			creator_id: user._id.$oid
-		}
-
-		subscribedTierId = null;
-
-		const response = await fetchPost('http://localhost:3000/removeTier', {
-			result: result
-		});
-
-	}
-
-	async function isLiked(post_id) {
-		const response = await fetchPost('http://localhost:3000/hasLikedPost', {
-			post_id: post_id
-		});
-
-		let temp = response.liked;
-
-		return temp;
-	}
-
-	async function canViewPost(post_id) {
-		const response = await fetchPost('http://localhost:3000/canViewPost', {
-			post_id: post_id
-		});
-
-		let temp = response.view;
-
-		return temp;
-	}
-
-	async function likePost(post_id) {
-		const response = await fetchPost('http://localhost:3000/likePost', {
-			post_id: post_id
-		});
-
-		posts.find(post => post._id.$oid === post_id).isLiked = true;
-		posts = posts;
-	}
-
-	async function unlikePost(post_id) {
-		const response = await fetchPost('http://localhost:3000/unlikePost', {
-			post_id: post_id
-		});
-
-		posts.find(post => post._id.$oid === post_id).isLiked = false;
-		posts = posts;
-	}
-
-	async function loadMorePosts() {
-		for(let i = loadedPosts; i < loadedPosts + 10; i++) {
-			if(posts.length == (loadedPosts + i)) {
-				allPostsLoaded = true;
-				loadedPosts += i;
-				return;
-			}
-			posts[i].isLiked = await isLiked(posts[i]._id.$oid);
-			posts[i].canView = await canViewPost(posts[i]._id.$oid);
-		}
-		loadedPosts += 10;
-	}
-
-	async function hasVoted(survey_id) {
-		const response = await fetchPost('http://localhost:3000/hasVotedOnSurvey', {
-			survey_id: survey_id
-		});
-
-		let temp = response.voted;
-
-		return temp;
-	}
-
-	async function canViewSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/canViewSurvey', {
-			survey_id: survey_id
-		});
-
-		let temp = response.view;
-
-		return temp;
-	}
-
-	async function voteOnSurvey(survey_id, option_id) {
-		const response = await fetchPost('http://localhost:3000/voteOnSurvey', {
-			survey_id: survey_id,
-			option_id: option_id
-		});
-
-		surveys.find(survey => survey._id.$oid === survey_id).hasVoted = true;
-		surveys = surveys;
-	}
-
-	async function getVotesPerOption(survey_id, option_id) {
-		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
-			survey_id: survey_id,
-			option_id: option_id
-		});
-
-		let temp = response.vote_count;
-
-		return temp;
-	}
-
-	async function getVotesOnSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/getTotalVoteCount', {
-			survey_id: survey_id
-		});
-
-		let temp = response.votes;
-
-		return temp;
-	}
-
-	async function loadMoreSurveys() {
-		for(let i = loadedSurveys; i < loadedSurveys + 10; i++) {
-			if(surveys.length == (loadedSurveys + i)) {
-				allSurveysLoaded = true;
-				loadedSurveys += i;
-				return;
-			}
-			surveys[i].hasVoted = await hasVoted(surveys[i]._id.$oid);
-			surveys[i].canView = await canViewSurvey(surveys[i]._id.$oid);
-
-		}
-		loadedSurveys += 10;
-	}
-
-	async function canViewGiveaway(giveaway_id) {	
-		const response = await fetchPost('http://localhost:3000/canViewGiveaway', {	
-			giveaway_id: giveaway_id	
-		});	
-		let temp = response.view;	
-		return temp;	
-	}	
-	async function hasJoined(giveaway_id) {	
-		const response = await fetchPost('http://localhost:3000/hasJoinedGiveaway', {	
-			giveaway_id: giveaway_id	
-		});	
-		let temp = response.joined;	
-		return temp;	
-	}	
-	async function loadMoreGiveaways() {	
-		for(let i = loadedGiveaways; i < loadedGiveaways + 10; i++) {	
-			if(giveaways.length == (loadedGiveaways + i)) {	
-				allGiveawaysLoaded = true;	
-				loadedGiveaways += i;	
-				return;	
-			}	
-			giveaways[i].hasJoined = await hasJoined(giveaways[i]._id.$oid);	
-			giveaways[i].canView = await canViewGiveaway(giveaways[i]._id.$oid);	
-		}	
-		loadedGiveaways += 10;	
-	}	
-	async function joinGiveaway(giveaway_id) {	
-		const response = await fetchPost('http://localhost:3000/joinGiveaway', {	
-			giveaway_id: giveaway_id,	
-		});	
-		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).hasJoined = true;	
-		giveaways = giveaways;	
-	}
 
 </script>
 
@@ -272,193 +79,54 @@
 	</div>
 
 	{#if is_following}
-		<button class="follow-button" on:click={async () => is_following = await unfollowUser(follow_result)}>Unfollow</button>
+		<button class="follow-button" on:click={async () => is_following = await unfollowUser(user.username)}>Unfollow</button>
 	{:else}
-		<button  class="follow-button" on:click={async () => is_following = await followUser(follow_result)}>Follow</button>
+		<button class="follow-button" on:click={async () => is_following = await followUser(user.username)}>Follow</button>
 	{/if}
 
 	{#if user.role == "creator"}
-		<div class="tiers-container">
-			{#each tiers as tier}
-				<div class='tier-box'>
-					
-					<h3 class="tier-name">{tier.name}</h3>
-					<p class="tier-price">${tier.price}</p>
-					<p class="tier-price-per-month">PER MONTH</p>
 
-					{#if tier._id.$oid == subscribedTierId}
-						<button class="join-button" id='{tier._id.$oid}' on:click={async () => await removeTier(tier._id.$oid)}>Unsubcribe</button>
-					{:else}
-						<button class="join-button" id='{tier._id.$oid}' on:click={async () => await chooseTier(tier._id.$oid)}>Join</button>
-					{/if}
-					<ul>
-						{#each tier.benefits as benefit}
-							<li style="text-align: left;">{benefit}</li>
-						{/each}	
-					</ul>
-				</div>
-			{/each}
-		</div>
-		<div class="posts-container">
-			{#each posts as post, i}
-				
-				{#if i < loadedPosts}
-					<div class='post-box'>
+		<UserTiers user={user} tiers={tiers} subscribedTierId={subscribedTierId} />
 
-						{#if post.canView}
+		<div id="menu">
 
-							<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
-							<div class="text-container">
-								<h3>{post.text}</h3>
-								<div style="margin: 5px;">
-									{#if post.isLiked}
-										<i class="fa fa-heart fa-2x" aria-hidden="true" 
-										on:click={async () => await unlikePost(post._id.$oid)}></i>
-									{:else}
-										<i class="fa fa-heart-o fa-2x" aria-hidden="true" 
-										on:click={async () => await likePost(post._id.$oid)}></i>
-									{/if}
-								</div>
-							</div>
-						{:else}
+			<div class="my-feed-div">
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'posts')}>Posts</div>
+			</div>
 
-							<div class="view-post-container">
-								<img class="post-image-cant-view" src={"/images/" + user.username + "/" + post.image_path}>
-								<p class="centered-text-over-image">You can't view this post!</p>
-							</div>
-							<div class="text-container">
-									<h3>{post.text}</h3>
-									<i class="fa fa-lock" aria-hidden="true"><span style="margin-left: 5px">Locked</span></i> 
-							</div>
-						{/if}
-							
-					</div>
+			<div class="my-feed-div">
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'commissions')}>Commissions</div>
+			</div>
 
-				{/if}
+			<div class="my-feed-div">
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
+			</div>
 
-			{/each}
-		</div>
-
-		{#if !allPostsLoaded}
-			<button on:click={async () => await loadMorePosts()}>Load More</button>
-		{/if}
-
-		<div class="posts-container">
-			{#each surveys as survey, i}
-				
-				{#if i < loadedSurveys}
-					{#if survey.is_open == true}
-						<div class='post-box'>
-						{#if survey.canView}
-							{#if survey.is_open == true}
-								
-									{#await getVotesOnSurvey(survey._id.$oid) then votes}
-									<img class="post-image" src={"/images/" + user.username + "/" + survey.image_path}>
-									<div class="text-container">
-										<h3>{survey.text}</h3>
-									</div>
-									{#if survey.hasVoted == false}
-
-										{#each survey.options as option, i}
-											<p>{option}</p>
-											<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
-										
-										{/each}
-									{:else}
-										{#each survey.options as option, i}
-										<div class="survey-options-container">
-											<p style="padding-left: 1.5em">{option}</p>
-											{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
-												{#if vote_count != 0}
-													<p style="background: rgb(160, 207, 245);
-													border-radius: 16px;
-													padding-left: calc((({vote_count}/{votes})*100)*0.3em);
-													margin-left: 6em;
-													font-size: 10pt;
-													padding-bottom: 2px;
-													padding-top: 2px;
-													padding-right: 10px;
-													position: absolute;
-													">{vote_count/votes*100}%</p>
-												{:else}
-													<p style="
-													margin-left: 5em;
-													position: absolute;
-													">0%</p>
-												{/if}
-											{/await}
-										</div>
-										{/each}
-									
-									{/if}
-								{/await}
-							{/if}
-
-						{:else if survey.is_open == true}
-
-							<div class="view-post-container">
-									<img class="post-image-cant-view" src={"/images/" + user.username + "/" + survey.image_path}>
-									<p class="centered-text-over-image">You can't view this survey!</p>
-								</div>
-								<div class="text-container">
-										<h3>{survey.text}</h3>
-										<i class="fa fa-lock" aria-hidden="true"><span style="margin-left: 5px">Locked</span></i> 
-								</div>
-
-						{/if}
-						</div>
-					{/if}
-				{/if}
-
-			{/each}
+			<div class="my-feed-div">
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Giveaways</div>
+			</div>
 
 		</div>
 
-		{#if !allSurveysLoaded}
-			<button on:click={async () => await loadMoreSurveys()}>Load More</button>
-		{/if}
+		{#if type_of_display == 'posts'}
 
-		<div class="posts-container">
-			{#each giveaways as giveaway, i}	
-					
-				{#if i < loadedGiveaways}	
-					{#if giveaway.is_open == true}
-						<div class='post-box'>	
-							{#if giveaway.canView}	
-								<img class="post-image" src={"/images/" + user.username + "/" + giveaway.image_path}>	
-								<div class="text-container">
-									<h3>{giveaway.text}</h3>	
-								</div>
-								{#if giveaway.hasJoined == false}	
-									<button on:click={async () => await joinGiveaway(giveaway._id.$oid)}>Join</button>	
-								{:else}	
-									<p>You have already joined this giveaway!</p>	
-								{/if}	
-							{:else if giveaway.is_open == true}	
-														<div class="view-post-container">
-									<img class="post-image-cant-view" src={"/images/" + user.username + "/" + giveaway.image_path}>
-									<p class="centered-text-over-image">You can't view this giveaway!</p>
-								</div>
-								<div class="text-container">
-										<h3>{giveaway.text}</h3>
-										<i class="fa fa-lock" aria-hidden="true"><span style="margin-left: 5px">Locked</span></i> 
-							</div>	
-							{/if}	
-									
-						</div>	
-					{/if}
-				{/if}	
-			{/each}
-		</div>	
-		{#if !allGiveawaysLoaded}	
-			<button on:click={async () => await loadMoreGiveaways()}>Load More Giveaways</button>	
+			<UserPosts user={user} posts={posts} />
+
+		{:else if type_of_display == 'surveys'}
+
+			<UserSurveys user={user} surveys={surveys} />
+
+		<!-- {:else if type_of_display == 'giveaways'} -->
+		{:else}
+
+			<UserGiveaways user={user} giveaways={giveaways} />
+
 		{/if}
 
 	{/if}
 
 </div>
 
-<link href='https://fonts.googleapis.com/css?family=Calistoga' rel='stylesheet'>
 <style>
 
 	.card {
@@ -471,17 +139,14 @@
 	}
 
 	button {
-		border: none;
-		border-radius: 50px;
-		outline: 0;
-		display: inline-block;
-		padding: 8px;
+		width: 8em;
 		color: white;
-		background-color: #0f1930;
-		text-align: center;
+		border: none;
 		cursor: pointer;
-		width: 50%;
 		font-size: 18px;
+		margin-top: 1em;
+		border-radius: 50px;
+		background-color: #0f1930;
 	}
 
 	a {
@@ -518,136 +183,37 @@
 		object-fit: cover;
 	}
 
-	.tier-box{
-		border: 6px solid;
-  		border-image-source: linear-gradient(#9dcff2, 	#efacca);
-  		border-image-slice: 1;
-  		outline: solid  2px #0f1930;
-		min-width: 18em;
-		max-width: 18em;	
-		min-height: 23em;
-		margin: 10px;
-
-	}
-	.post-box {
-		border: 2px solid #0f1930;
-		min-width: 40em;
-		max-width: 40em;	
-		min-height: 23em;
-		margin: 10px;
-	}
-
-	.tier-name{
-		font-size: 1.3em;
-		background-color: #9dcff2;
-		margin: 0;
-		padding: 0.7em;
-		margin-bottom: 1em;
-	}
-
-	.tier-price{
-		font-size: 1.7em;
-		color: black;
-		padding: 0;
-		margin: 0;
-		font-family: "Calistoga";
-		text-align: center;
-	}
-
-	.tier-price-per-month{
-		font-size: 0.8em;
-		color: grey;
-		padding: 0.5em;
-		margin: 0;
-		font-weight: bold;
-	}
-
-	.post-image {
-		width: 40.2em;
-		margin: -3px;
-		margin-left: -2px;
-		height: 25em;
-		margin-top: -4px;
-	}
-	.post-image-cant-view{
-		filter: blur(18px) brightness(0.5);
-		width: 40.2em;
-		padding: 2px;
-		margin: -5px -10px -10px -5px;
-		height: 25em;
-		margin-top: -4px;
-	}
-
-	.tiers-container{
-		display: flex;
-		flex-wrap: wrap;
-		flex-shrink: 0;
-		justify-content: center;
-		
-	}
-	.posts-container{
-		display: flex;
-		margin: 4em;
-		flex-shrink: 0;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-	.text-container{
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		margin: 1em;
-		align-items: center;
-		justify-content: space-between;
-
-	}
-
-	.follow-button{
+	.follow-button {
 		max-width: 8em;
 		margin-bottom: 3em;
 	}
 
-	.join-button{
-		max-width: 8em;
-		margin-top: 1em;
-	}
-
-	li{
+	li {
 		margin: 0.4em;
 	}
-	.fa-heart-o:hover{
-		color: red;
-	}
-	.fa-heart{
-		color: red;
-		transition: 0.3s ease-out;
-	}
-	.fa-heart:hover{
-		color: black;
-		transition: 0.3s;
-	}
 
-	.view-post-container {
-		position: relative;
-		text-align: center;
-		overflow: hidden;
-		min-width: 10em;
-		color: white;
-	}
-
-	.centered-text-over-image{
-		position: absolute;
-		font-weight: bold;
-		font-size: 1.5em;
-		top: 45%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	.survey-options-container{
+	#menu {
 		display: flex;
-		align-items: flex-start;
+		color: #080d52;
+		max-width: 800px;
+		font-size: 1.5em;
+		margin: 1em auto 0;
+		background: linear-gradient(90deg, 
+			rgba(252,252,252,1) 2%, 
+			rgba(148,187,233,1) 18%, 
+			rgba(238,174,202,1) 76%, 
+			rgba(255,255,255,1) 96%
+		);
 	}
 
+	.my-feed-div {
+		flex: 1 1 auto;
+		padding: 0.5em 0;
+	}
+
+	.my-feed-button:hover {
+		opacity: 0.7;
+		cursor: pointer;
+	}
 
 </style>
