@@ -16,7 +16,7 @@
 	onMount(async () => {
 		if(user.role == "creator") {
 			// sort posts by date
-			posts.sort((a, b) => (a.date > b.date) ? 1 : -1);
+			posts.sort((a, b) => (a.date > b.date) ? -1 : 1);
 
 			// load posts
 			await loadMorePosts();
@@ -65,16 +65,24 @@
 
 	// Load more posts (chunk of 10 posts)
 	async function loadMorePosts() {
+		// Check if there are any posts to load
+		if(posts.length == 0) {
+			allPostsLoaded = true;
+			return;
+		}
+
 		for(let i = loadedPosts; i < loadedPosts + 10; i++) {
 			
-			if(posts.length == (loadedPosts + i)) {
-				allPostsLoaded = true;
-				loadedPosts += i;
-				return;
-			}
-
+			// Check if current user can view and has liked the post
 			posts[i].isLiked = await isLiked(posts[i]._id.$oid);
 			posts[i].canView = await canViewPost(posts[i]._id.$oid);
+
+			// Check if there are ay more posts to load
+			if(posts.length == i + 1) {
+				allPostsLoaded = true;
+				loadedPosts += i + 1;
+				return;
+			}
 		}
 
 		loadedPosts += 10;

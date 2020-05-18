@@ -16,7 +16,10 @@
 	onMount(async () => {
 		if(user.role == "creator") {
 			// sort giveaways by date
-			giveaways.sort((a, b) => (a.date > b.date) ? 1 : -1);
+			giveaways.sort((a, b) => (a.date > b.date) ? -1 : 1);
+
+			// filter open giveaways
+			giveaways = giveaways.filter(giveaway => giveaway.is_open == true);
 
 			// load more giveaways
 			await loadMoreGiveaways();
@@ -43,23 +46,6 @@
 		return temp;
 	}
 
-	// Load more giveaways
-	async function loadMoreGiveaways() {
-		for(let i = loadedGiveaways; i < loadedGiveaways + 10; i++) {
-
-			if(giveaways.length == (loadedGiveaways + i)) {
-				allGiveawaysLoaded = true;
-				loadedGiveaways += i;
-				return;
-			}
-
-			giveaways[i].hasJoined = await hasJoined(giveaways[i]._id.$oid);
-			giveaways[i].canView = await canViewGiveaway(giveaways[i]._id.$oid);
-		}
-
-		loadedGiveaways += 10;
-	}
-
 	// Join certain giveaway
 	async function joinGiveaway(giveaway_id) {
 		const response = await fetchPost('http://localhost:3000/joinGiveaway', {
@@ -68,6 +54,31 @@
 
 		giveaways.find(giveaway => giveaway._id.$oid === giveaway_id).hasJoined = true;
 		giveaways = giveaways;
+	}
+
+	// Load more giveaways
+	async function loadMoreGiveaways() {
+		// Check if there are any giveaways to load
+		if(giveaways.length == 0) {
+			allGiveawaysLoaded = true;
+			return;
+		}
+
+		for(let i = loadedGiveaways; i < loadedGiveaways + 10; i++) {
+
+			// Check if current user can view and has joined giveaway
+			giveaways[i].hasJoined = await hasJoined(giveaways[i]._id.$oid);
+			giveaways[i].canView = await canViewGiveaway(giveaways[i]._id.$oid);
+
+			// Check if there are any more giveaways to load
+			if(giveaways.length == i + 1) {
+				allGiveawaysLoaded = true;
+				loadedGiveaways += i + 1;
+				return;
+			}
+		}
+
+		loadedGiveaways += 10;
 	}
 
 </script>
@@ -94,7 +105,7 @@
 							<p>You have already joined this giveaway!</p>
 						{/if}
 
-					{:else if giveaway.is_open == true}
+					{:else}
 						
 						<div class="cant-view-giveaway-container">
 							<img class="giveaway-image-cant-view" src={"/images/" + user.username + "/" + giveaway.image_path}>
