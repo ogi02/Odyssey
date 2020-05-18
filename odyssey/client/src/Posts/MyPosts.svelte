@@ -36,7 +36,7 @@
 
 	// Load more posts
 	async function loadMorePosts() {
-		for(let i = loadedPosts; i < loadedPosts + 1; i++) {
+		for(let i = loadedPosts; i < loadedPosts + 10; i++) {
 			// Check if there are any more posts to load
 			if(posts.length == i) {
 				allPostsLoaded = true;
@@ -45,7 +45,7 @@
 			}
 		}
 
-		loadedPosts += 1;
+		loadedPosts += 10;
 
 		// Removes button after last post is loaded
 		if(posts.length == loadedPosts) {
