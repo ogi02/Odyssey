@@ -16,7 +16,10 @@
 	onMount(async () => {
 		if(user.role == "creator") {
 			// sort surveys by date
-			surveys.sort((a, b) => (a.date > b.date) ? 1 : -1);
+			surveys.sort((a, b) => (a.date > b.date) ? -1 : 1);
+
+			// filter open surveys
+			surveys = surveys.filter(survey => survey.is_open == true);
 
 			// load more surveys
 			await loadMoreSurveys();
@@ -77,16 +80,24 @@
 
 	// Load more surveys
 	async function loadMoreSurveys() {
+		// Check if there are any surveys to load
+		if(surveys.length == 0) {
+			allSurveysLoaded = true;
+			return;
+		}
+
 		for(let i = loadedSurveys; i < loadedSurveys + 10; i++) {
 
-			if(surveys.length == (loadedSurveys + i)) {
-				allSurveysLoaded = true;
-				loadedSurveys += i;
-				return;
-			}
-
+			// Check if current user can view and has voted on survey
 			surveys[i].hasVoted = await hasVoted(surveys[i]._id.$oid);
 			surveys[i].canView = await canViewSurvey(surveys[i]._id.$oid);
+
+			// Check if there are any more surveys to load
+			if(surveys.length == i + 1) {
+				allSurveysLoaded = true;
+				loadedSurveys += i + 1;
+				return;
+			}
 
 		}
 
@@ -105,58 +116,54 @@
 				<div class='survey-box'>
 					{#if survey.canView}
 
-						{#if survey.is_open == true}
+						{#await getVotesOnSurvey(survey._id.$oid) then votes}
+
+							<img class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
 							
-								{#await getVotesOnSurvey(survey._id.$oid) then votes}
+							<div class="text-container">
+								<h3>{survey.text}</h3>
+							</div>
+							
+							{#if survey.hasVoted == false}
 
-								<img class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
-								
-								<div class="text-container">
-									<h3>{survey.text}</h3>
-								</div>
-								
-								{#if survey.hasVoted == false}
+								{#each survey.options as option, i}
+									<p>{option}</p>
+									<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
+								{/each}
 
-									{#each survey.options as option, i}
-										<p>{option}</p>
-										<button on:click={async () => await voteOnSurvey(survey._id.$oid, i)}>Vote</button>
-									{/each}
+							{:else}
 
-								{:else}
+								{#each survey.options as option, i}
 
-									{#each survey.options as option, i}
+									<div class="survey-options-container">
 
-										<div class="survey-options-container">
+										<p class="option">{option}</p>
 
-											<p class="option">{option}</p>
+										{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
 
-											{#await getVotesPerOption(survey._id.$oid, i) then vote_count}
+											{#if vote_count != 0}
 
-												{#if vote_count != 0}
+												<p 
+													class="any-percent" 
+													style="padding-left: calc((({vote_count}/{votes})*100)*0.3em);"
+												>{vote_count/votes*100}%</p>
 
-													<p 
-														class="any-percent" 
-														style="padding-left: calc((({vote_count}/{votes})*100)*0.3em);"
-													>{vote_count/votes*100}%</p>
+											{:else}
 
-												{:else}
+												<p class="zero-percent">0%</p>
 
-													<p class="zero-percent">0%</p>
+											{/if}
 
-												{/if}
+										{/await}
 
-											{/await}
+									</div>
 
-										</div>
+								{/each}
 
-									{/each}
+							
+							{/if}
 
-								
-								{/if}
-
-							{/await}
-
-						{/if}
+						{/await}
 
 					{:else if survey.is_open == true}
 
