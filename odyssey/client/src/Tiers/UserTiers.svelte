@@ -113,6 +113,7 @@
 
 	.benefit {
 		text-align: left;
+		margin-bottom: 10px;
 	}
 
 	button {

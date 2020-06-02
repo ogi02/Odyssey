@@ -18,7 +18,7 @@
 
 			<ul>
 				{#each tier.benefits as benefit}
-					<li style="text-align: left; margin-bottom: 10px;">{benefit}</li>
+					<li class="benefit">{benefit}</li>
 				{/each}	
 			</ul>
 
@@ -30,48 +30,49 @@
 
 <style>
 
-	.tiers-container{
+	.tiers-container {
 		display: flex;
 		flex-shrink: 0;
+		flex-wrap: wrap;
 		justify-content: center;
 	}
 
-	.tier-box{
-		border: 6px solid;
-		border-image-source: linear-gradient(#9dcff2, #efacca);
-		border-image-slice: 1;
-		outline: solid 2px #0f1930;
-		min-width: 18em;
-		max-width: 18em;
-		min-height: 23em;
+	.tier-box {
+		width: 18em;
 		margin: 10px;
+		min-height: 23em;
+		border: 6px solid;
+		border-image-slice: 1;
+		border-image-source: linear-gradient(#9dcff2, #efacca);
+		outline: solid 2px #0f1930;
 	}
 
-	.tier-name{
-		font-size: 1.3em;
-		letter-spacing: 0.5px;
-		background-color: #9dcff2;
-		color: black;
+	.tier-name {
 		margin: 0;
 		padding: 0.7em;
+		font-size: 1.3em;
 		margin-bottom: 1em;
+		background-color: #9dcff2;
 	}
 
-	.tier-price{
-		font-size: 1.7em;
-		color: black;
-		padding: 0;
+	.tier-price {
 		margin: 0;
+		color: black;
+		font-size: 1.7em;
 		font-family: "Calistoga";
-		text-align: center;
 	}
 
-	.tier-price-per-month{
-		font-size: 0.8em;
+	.tier-price-per-month {
+		margin: 0;
 		color: grey;
 		padding: 0.5em;
-		margin: 0;
+		font-size: 0.8em;
 		font-weight: bold;
+	}
+
+	.benefit {
+		text-align: left;
+		margin-bottom: 10px;
 	}
 
 </style>
