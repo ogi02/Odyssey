@@ -12,10 +12,12 @@ from flask_tier.tier_actions import tier_actions_bp
 from flask_post.post_actions import post_actions_bp
 from flask_survey.survey_actions import survey_actions_bp
 from flask_creator.become_creator import become_creator_bp
-from flask_validators.email_validator import email_validator_bp
 from flask_giveaway.giveaway_actions import giveaway_actions_bp
+from flask_validators.email_validator import email_validator_bp
 from flask_authentication.authentication import authentication_bp
 from flask_validators.username_validator import username_validator_bp
+from flask_validators.tier_name_validator import tier_name_validator_bp
+from flask_validators.tier_price_validator import tier_price_validator_bp
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
@@ -35,6 +37,8 @@ app.register_blueprint(authentication_bp)
 app.register_blueprint(email_validator_bp)
 app.register_blueprint(giveaway_actions_bp)
 app.register_blueprint(username_validator_bp)
+app.register_blueprint(tier_name_validator_bp)
+app.register_blueprint(tier_price_validator_bp)
 
 @app.route("/")
 def base():
