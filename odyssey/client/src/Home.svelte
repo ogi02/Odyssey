@@ -18,8 +18,8 @@
 
 	</style>
 </head>
-<body>
-<div>
+<body style="overflow-y: scroll; position: fixed; margin-left: -1em; overflow-x: hidden; min-width: 103%">
+<div style="max-width: 110vw">
 	<div class="full-width-first dark-field">
 		<div class="wrap">
 			<div>
@@ -184,11 +184,10 @@
 }
 .full-width-first {
 	top: 2.5em;
-	width: 100vw;
+	width: 100%;
+	margin: 0;
+	padding: 0;
 	position: relative;
-	left: 56.2em;
-	right: 50%;
-	margin-left: -50vw;
-	margin-right: -50vw;
+
 }
 </style>
