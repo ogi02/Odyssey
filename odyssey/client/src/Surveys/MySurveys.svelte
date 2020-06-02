@@ -101,7 +101,7 @@
 					<h3>{survey.text}</h3>
 				</div>
 
-				{#if survey.is_open == true}
+				{#if survey.is_open}
 					
 					{#await getVotesOnSurvey(survey._id.$oid) then votes}
 
@@ -139,7 +139,7 @@
 
 				{:else}
 
-						<p>Winning option: {survey.winner}</p>
+					<p>Winning option: {survey.winner}</p>
 
 				{/if}
 

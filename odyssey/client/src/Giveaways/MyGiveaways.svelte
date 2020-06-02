@@ -101,7 +101,7 @@
 					<h3>{giveaway.text}</h3>
 				</div>
 				
-				{#if giveaway.is_open == true}
+				{#if giveaway.is_open}
 
 					<p>Number of contestants: </p>
 

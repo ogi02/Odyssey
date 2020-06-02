@@ -111,7 +111,7 @@
 		
 		{#if i < loadedSurveys}
 
-			{#if survey.is_open == true}
+			{#if survey.is_open}
 
 				<div class='survey-box'>
 					{#if survey.canView}
@@ -124,7 +124,7 @@
 								<h3>{survey.text}</h3>
 							</div>
 							
-							{#if survey.hasVoted == false}
+							{#if !survey.hasVoted}
 
 								{#each survey.options as option, i}
 									<p>{option}</p>
@@ -165,7 +165,7 @@
 
 						{/await}
 
-					{:else if survey.is_open == true}
+					{:else if survey.is_open}
 
 						<div class="cant-view-survey-container">
 							<img class="survey-image-cant-view" src={"/images/" + user.username + "/" + survey.image_path}>
