@@ -51,6 +51,14 @@
 		location.reload();
 	}
 
+	function removeFile() {
+		files = null;
+	}
+
+	function cancelCreateGiveaway() {
+		createGiveawayFlag = false;
+	}
+
 </script>
 
 <div class='form'>
@@ -59,10 +67,23 @@
 
 		<h3>Create a new giveaway!</h3>
 
-		<textarea id='description' placeholder='Description' bind:value={description}></textarea>
+		<textarea id='description' placeholder='Description' bind:value={description} rows='5' cols='40'></textarea>
 
-		<p>Choose a photo for the giveaway</p>
-		<input type='file' id='img' bind:files>
+		<div class='field'>
+
+			<label for='img' class='custom-file-upload'>
+				<i class='fa fa-cloud-upload'></i> Upload Giveaway image
+			</label>
+
+			{#if files}
+				<div class='filename'>
+					<p>{files[0].name}</p>
+					<i class='fa fa-trash-o icons' on:click={() => removeFile()}></i>
+				</div>
+			{/if}
+			<input type='file' id='img' bind:files>
+
+		</div>
 
 		<Error id='picture_error' message='' />
 
@@ -80,21 +101,119 @@
 			</div>
 		{/each}
 
-		<button type='submit' on:click|preventDefault={async () => createGiveaway()}>Create Giveaway</button>
+		<div class='buttons'>
+
+			<button type='submit' id='cancel' on:click|preventDefault={() => cancelCreateGiveaway()}>Cancel</button>
+
+			<button type='submit' id='create' on:click|preventDefault={async () => createGiveaway()}>Create Giveaway</button>
+
+		</div>
 
 	</form>
 
 </div>
 
+<link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
 <style>
 
 	.form {
-		margin-top: 80px;
+		max-width: 400px;
+		font-size: 1.1em;
+		margin: 100px auto;
+		text-align: center;
+		font-family: "Jost";
+	}
+
+	.field {
+		width: 300px;
+		margin: 0 auto;
+		position: relative;
+	}
+
+	input[type=file] {
+		display: none;
+	}
+
+	.custom-file-upload {
+		padding: 10px;
+		display: block;
+		margin: 0 auto;
+		border: 1px solid #333;
+	}
+
+	.custom-file-upload:hover {
+		cursor: pointer;
+		background-color: #f6f6f6;
+	}
+
+	.filename {
+		display: flex;
+		margin-top: 5px;
+		margin-bottom: 0;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.filename p {
+		margin: 0;
+		width: 250px;
+		overflow: hidden;
+		white-space: nowrap;
+		display: inline-block;
+		text-overflow: ellipsis;
+	}
+
+	.icons {
+		display: inline;
+	}
+
+	.icons:hover {
+		cursor: pointer;
+	}
+
+	.tier-paragraph {
+		margin-top: 30px;
 	}
 
 	input[type=radio],
 	label {
 		display: inline-block;
+	}
+
+	button {
+		width: 300px;
+		border-radius: 5px;
+	}
+
+	.buttons {
+		width: 300px;
+		display: flex;
+		margin: 20px auto;
+	}
+
+	#cancel {
+		color: #0f1931;
+		font-weight: bold;
+		margin-right: 5px;
+		background-color: #e6afcc;
+	}
+
+	#cancel:hover {
+		cursor: pointer;
+		background-color: #eca1c9;
+	}
+
+	#create {
+		color: #0f1931;
+		font-weight: bold;
+		margin-left: 5px;
+		background-color: #9fcdf5;
+	}
+
+	#create:hover {
+		cursor: pointer;
+		background-color: #8cc2f2;
 	}
 
 </style>
