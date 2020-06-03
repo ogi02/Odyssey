@@ -143,61 +143,112 @@
 
 {:else}
 
-	<img src={cover_picture_src} id="cover_picture" on:error={
-		() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()
-	}>
+	<div class='cover-picture'>
+		<img 
+			alt=''
+			id='cover-picture'
+			src={cover_picture_src}
+			on:click={toggleChangeCoverPic}
+			on:error={() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()}
+		>
+		<img 
+			alt=''
+			id='change-cover-picture'
+			src={'/images/_FpCerpd9Z7SIbjmN81Jy/camera_icon.png'}
+		>
+	</div>
+
+	<div class='profile-picture'>
+		<img 
+			alt=''
+			id='profile-picture'
+			src={profile_picture_src}
+			on:click={toggleChangeProfilePic}
+			on:error={() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()}
+		>
+		<img 
+			alt=''
+			id='change-profile-picture'
+			src={'/images/_FpCerpd9Z7SIbjmN81Jy/camera_icon.png'}
+		>
+	</div>
 
 	<div class="card">
-		
-		<div class='profile_pic'>
 
-			<img src={profile_picture_src} id="profile_picture" on:error={
-				() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()
-			}>
+		<button class='edit-profile-button' on:click={toggleEditProfile}>
+			Edit Profile <i class='fa fa-cog edit-profile-icon' aria-hidden='true'></i>
+		</button>
 
-			<div class='toggle' on:click={toggleChangeProfilePic}>Change Profile Pic</div>
-			<div class='toggle' on:click={toggleChangeCoverPic}>Change Cover Pic</div>
-			<div class='toggle' on:click={toggleEditProfile}>Edit Profile</div>
-			
-		</div>
 
 		<h1>{user.username}</h1>
 
-		<p class="title">{(info.bio == null) ? "" : info.bio}</p>
+		{#if user.role == 'creator'}
 
-		<p>{(info.bio == null) ? "" : info.country_of_residence}</p>
+			<p class='title'>{info.bio}</p>
 
-		<div style="margin: 24px 0;">
-			<a href="#"><i class="fa fa-twitch"></i></a> 
-			<a href="#"><i class="fa fa-twitter"></i></a>  
-			<a href="#"><img src="https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png" style="width: 20px"></a> 
-			<a href="#"><i class="fa fa-facebook"></i></a> 
-			<a href="#"><i class="fa fa-youtube"></i></a> 
-		</div>
+			<p>{info.country_of_residence}</p>
 
-		{#if user.role == "creator"}
+			<div class='social-media-links'>
 
-			<button class ='add-tier-button' on:click={toggleAddTier}>Add Tier <i class='bx bx-plus' style="vertical-align: text-bottom;" on:click={toggleCreatePost}></i></button>
+				{#if info.social_media_links.facebook}
+					<a class='social-link' href={info.social_media_links.facebook}>
+						<i class="fa fa-facebook"></i>
+					</a>
+				{/if}
 
+				{#if info.social_media_links.instagram}
+					<a class='social-link' href={info.social_media_links.instagram}>
+						<i class="fa fa-instagram"></i>
+					</a>
+				{/if}
+
+				{#if info.social_media_links.webtoon}
+					<a class='social-link' href={info.social_media_links.webtoon}>
+						<img id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
+					</a>
+				{/if}
+
+				{#if info.social_media_links.twitter}
+					<a class='social-link' href={info.social_media_links.twitter}>
+						<i class="fa fa-twitter"></i>
+					</a>
+				{/if}
+
+				{#if info.social_media_links.youtube}
+					<a class='social-link' href={info.social_media_links.youtube}>
+						<i class="fa fa-youtube"></i>
+					</a>
+				{/if}
+
+				{#if info.social_media_links.twitch}
+					<a class='social-link' href={info.social_media_links.twitch}>
+						<i class="fa fa-twitch"></i>
+					</a>
+				{/if}
+ 
+			</div>
+
+			<button class='add-tier-button' on:click={toggleAddTier}>
+				Add Tier <i class='fa fa-plus add-tier-icon' aria-hidden='true'></i>
+			</button>
 
 			<MyTiers bind:tiers={tiers}/>
-
 			
-			<div id="menu">
+			<div id='menu'>
 
-				<div class="my-feed-div">
+				<div class='my-feed-div'>
 					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'posts')}>Posts</div>
-					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreatePost}></i>
+					<i class='fa fa-plus-square create-event-icon' on:click={toggleCreatePost}></i>
 				</div>
 
-				<div class="my-feed-div">
-					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
-					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreateSurvey}></i>
-				</div>
-
-				<div class="my-feed-div">
+				<div class='my-feed-div'>
 					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Giveaways</div>
-					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreateGiveaway}></i>
+					<i class='fa fa-plus-square create-event-icon' on:click={toggleCreateGiveaway}></i>
+				</div>
+
+				<div class='my-feed-div'>
+					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
+					<i class='fa fa-plus-square create-event-icon' on:click={toggleCreateSurvey}></i>
 				</div>
 
 			</div>
@@ -223,12 +274,67 @@
 {/if}
 
 <style>
+
+	.cover-picture {
+		left: 0;
+		top: 4.2em;
+		width: 100%;
+		height: 45%;
+		position: relative;
+	}
+
+	#cover-picture {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	#cover-picture:hover {
+		opacity: 0.5;
+	}
+
+	#change-cover-picture {
+		top: 10em;
+		left: 50%;
+		height: 25%;
+		z-index: -1;
+		position: absolute;
+		transform: translate(-50%, -50%);
+	}
+
+	.profile-picture {
+		top: -1em;
+		margin: 0 auto;
+		max-width: 180px;
+		max-height: 180px;
+		position: relative;
+	}
+
+	#profile-picture {
+		width: 175px;
+		height: 175px;
+		object-fit: cover;
+		border-radius: 50%;
+		border: 4px solid #fff;
+	}
+
+	#profile-picture:hover {
+		opacity: 0.5;
+	}
+
+	#change-profile-picture {
+		top: 7em;
+		left: 50%;
+		height: 25%;
+		z-index: -1;
+		position: absolute;
+		transform: translate(-50%, -50%);
+	}
 	
 	.card {
-		position: relative;
-		max-width: 60em;
 		margin: auto;
-		margin-top: 33vh;
+		max-width: 60em;
+		position: relative;
 		text-align: center;
 		font-family: arial;
 	}
@@ -238,78 +344,67 @@
 		font-size: 18px;
 	}
 
-	button {
-		border: none;
-		border-radius: 50px;
-		outline: 0;
-		display: inline-block;
-		padding: 8px;
-		color: white;
-		background-color: #000;
-		text-align: center;
-		cursor: pointer;
-		width: 50%;
-		font-size: 18px;
+	.social-media-links {
+		margin: 2em 0;
 	}
 
-	a {
-		text-decoration: none;
-		font-size: 22px;
+	#webtoon {
+		width: 20px;
+	}
+
+	.social-link {
 		color: black;
+		margin: 0 5px;
+		font-size: 22px;
+		text-decoration: none;
 	}
 
-	button:hover, a:hover {
-		opacity: 0.7;
+	.social-link:hover {
+		opacity: 0.8;
+		cursor: pointer;
 	}
 
-	.toggle:hover {
-		background-color: #eee;
+	.add-tier-button, .edit-profile-button {
+		width: 8em;
+		border: none;
+		color: white;
+		padding: 0.4em;
+		font-size: 18px;
+		border-radius: 30px;
+		background-color: #080d52;
 	}
 
-	#profile_picture {
-		margin-top: 4em;
-		border: 4px solid #fff;
-		object-fit: cover;
-		border-radius: 50%;
-		height: 175px;
-		width: 175px;
+	.add-tier-button:hover, .edit-profile-button:hover {
+		opacity: 0.8;
+		cursor: pointer;
 	}
 
-	#cover_picture {
-		position: absolute; 
-		top: 3.6em; 
-		left: 0; 
-		min-width: 100%; 
-		width: 100%; 
-		height: 45%; 
-		min-height: 300px; 
-		object-fit: cover;
-	}
-
-	li {
-		margin: 0.4em;
+	.add-tier-icon, .edit-profile-icon {
+		margin-left: 3px;
+		vertical-align: text-bottom;
 	}
 
 	#menu {
-
-		font-size: 1.5em;
+		display: flex;
 		color: #080d52;
 		margin: 0 auto;
 		margin-top: 1em;
 		max-width: 800px;
-		background: linear-gradient(90deg, rgba(252,252,252,1) 2%, rgba(148,187,233,1) 18%, rgba(238,174,202,1) 76%, rgba(255,255,255,1) 96%);
-		display: flex;
-		flex-direction: row;
-	}
-
-	.my-feed-button {
-
-		display: inline;
+		font-size: 1.5em;
+		background: linear-gradient(90deg,
+			rgba(252,252,252,1) 2%,
+			rgba(148,187,233,1) 18%,
+			rgba(238,174,202,1) 76%,
+			rgba(255,255,255,1) 96%);
 	}
 
 	.my-feed-div {
 		flex: 1 1 auto;
+		display: inline;
 		padding: 0.5em 0;
+	}
+
+	.my-feed-button {
 		display: inline;
 	}
 
@@ -318,18 +413,10 @@
 		cursor: pointer;
 	}
 
-	.bxs-plus-square:hover {
-		color: #2d0a65;
+	.create-event-icon:hover {
 		opacity: 0.7;
+		color: #2d0a65;
 		cursor: pointer;
 	}
-
-	.add-tier-button {
-		background-color: #080d52;
-		max-width: 6em;
-		margin-bottom: 1em;
-	}
-
-
 
 </style>
