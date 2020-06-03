@@ -88,7 +88,7 @@
 
 		{#if i < loadedGiveaways}
 
-			{#if giveaway.is_open == true}
+			{#if giveaway.is_open}
 
 				<div class='giveaway-box'>
 					{#if giveaway.canView}
@@ -99,7 +99,7 @@
 							<h3>{giveaway.text}</h3>
 						</div>
 						
-						{#if giveaway.hasJoined == false}
+						{#if !giveaway.hasJoined}
 							<button on:click={async () => await joinGiveaway(giveaway._id.$oid)}>Join</button>
 						{:else}
 							<p>You have already joined this giveaway!</p>
