@@ -151,7 +151,7 @@
 
 	.giveaway-image {
 		height: 25em;
-		width: 40.2em;
+		width: 40.3em;
 		margin: -4px -2px;
 	}
 
