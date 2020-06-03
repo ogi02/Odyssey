@@ -80,7 +80,7 @@
 		top: 0;
 		margin: 0;
 		left: 0;
-		padding: 1.3em 0 1em;
+		padding: 1.6em;
 		width: 100%;
 		z-index: 1;
 		overflow: hidden;

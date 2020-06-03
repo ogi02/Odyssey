@@ -34,6 +34,7 @@
 
 <div class='main'>
 	<form autocomplete='off'>
+		<i class="fa fa-search" aria-hidden="true"></i>
 		<input bind:value={value} id='search' type='text' placeholder='Search..' 
 			on:input={async () => await getUsernames()}>
 	</form>
@@ -47,12 +48,26 @@
 <style>
 	.main {
 		display: inline-block;
-		margin: 0;
-		padding: 0;
+		margin: -1em 0.9em;
+	}
+
+	::placeholder { 
+		color: #080d52;
+		opacity: 0.8;
+	}
+
+	input[type=text] {
+		padding-left: 18px;
+		box-sizing: border-box;
 	}
 
 	input {
+		border-radius: 25px;
+		background-color: #f6f8fa;
 		width: 10em;
+		outline: none;
+		font-weight: 5em;
+		color: #080d52;
 		padding: 5px;
 	}
 
