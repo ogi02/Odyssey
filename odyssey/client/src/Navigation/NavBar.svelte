@@ -67,7 +67,6 @@
 	<nav>
 		<a href='/' class='home-icon'><img src={home_picture_src}></a>
 		<a href='/login' class='navlink'>Log in</a>
-		<!-- <Search /> -->
 	</nav>
 {/if}
 
@@ -76,13 +75,12 @@
 <style>
 
 	nav {
-		position: fixed;
 		top: 0;
-		margin: 0;
 		left: 0;
-		padding: 1.6em;
-		width: 100%;
 		z-index: 1;
+		width: 100%;
+		padding: 1.6em;
+		position: fixed;
 		overflow: hidden;
 		border-bottom: solid 1.5px #080d52;
 		background: linear-gradient(90deg, 
@@ -92,41 +90,32 @@
 		);
 	}
 
+	.home-icon {
+		padding: 0.5em 2em;
+	}
+
+	.home-icon img {
+		top: 0.5em;
+		left: 1.5em;
+		width: 3.3em;
+		position: fixed;
+	}
+
+	.home-icon img:hover {
+		opacity: 0.7;
+	}
+
 	nav .navlink {
-		text-decoration: none;
 		color: #010212;
 		font-weight: 450;
-		margin: 0;
-		left: 0;
-		padding: 1.2em 1.2em;
+		padding: 1em 1em;
+		text-decoration: none;
 	}
 
 	nav .navlink:hover{
 		text-decoration: underline;
 		background-color:rgba(41, 94, 179, 0.14);
 		box-shadow: 0 0 9em 0 rgba(41, 94, 179, 1);
-	}
-
-	nav img {
-		position: fixed;
-		margin: 0;
-		top: 0;
-		padding: 0.5em;
-		left: 0;
-		width: 3.3em;
-		height: 3.3em;
-	}
-
-	nav img:hover {
-		opacity: 0.7;
-	}
-
-	nav .home-icon {
-		text-decoration: none;
-		color: white;
-		margin: 0;
-		left: 0;
-		padding: 0 2.3em;
 	}
 
 </style>
