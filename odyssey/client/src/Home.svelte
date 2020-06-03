@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	<div style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQBW-dltysHueVKDuUcDfxUL1NtogxnoZfkLuwk8aCmUfF7pOos&usqp=CAU'); background-size: 974px 944px">
+	<div style="background-image: url('https://scontent.fsof8-1.fna.fbcdn.net/v/t1.15752-9/102563045_275731906911257_4286511703690051584_n.png?_nc_cat=102&_nc_sid=b96e70&_nc_ohc=1xRNFs4pxDwAX8dwCQN&_nc_ht=scontent.fsof8-1.fna&oh=e445d6d617cf691a91a2c6078fbcc3db&oe=5EFD4C81'); background-size: 974px 944px">
 		<div class="full-width-join white-field">
 			<div class="wrap-text">
 				<p style="font-size: 2em;">Join today as a...</p>
@@ -77,7 +77,7 @@
 		  	<div>
 		  		<i class="fa fa-book" aria-hidden="true"></i>
 		  		<span>Writer/Journalist</span>
-		  		<p class="explain-content-type">Don't turn to clickbait to hit pageview targets. Focus on quality over quantity for your biggest readers.Focus your time and energy writing for the people that value your content most.</p>
+		  		<p class="explain-content-type">Don't turn to clickbait to hit pageview targets. Focus on quality over quantity for your biggest readers. Focus your time and energy writing for the people that value your content most.</p>
 		  	</div>
 		  </div>
 		  <div class="wrap" style="padding-bottom: 4em">
@@ -114,9 +114,9 @@
 	  	<p>© Odyssey™</p>
 	  	<p>mail.odyssey.2020@gmail.com</p>
 	  	<div>
-		  	<i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
-		  	<i class="fa fa-facebook-official fa-2x" aria-hidden="true"></i>
-		  	<i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+		  	<i class="fa fa-instagram fa-2x ico" aria-hidden="true"></i>
+		  	<i class="fa fa-facebook-official fa-2x ico" aria-hidden="true"></i>
+		  	<i class="fa fa-twitter-square fa-2x ico" aria-hidden="true"></i>
 	  	</div>
 
 </div>
@@ -151,6 +151,7 @@
 }
 .image-in-container{
 	padding: 0.4em;
+	border-radius: 10px;
 	width: 9em;
     height: 12em;
 }
@@ -178,6 +179,9 @@
 }
 .white-field{
 	color: #080d52;
+}
+.ico{
+	padding: 8px;
 }
 .wrap-text{
 	justify-content: center;
@@ -210,7 +214,7 @@
 	margin: 0;
 	padding: 0;
 	position: relative;
-	padding-top: 1em;
+	padding-top: 0.5em;
 
 }
 .full-width-join{
