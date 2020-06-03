@@ -96,9 +96,9 @@
 		createSurveyFlag = true;
 	}
 
-	// Trigger create giveaway	
-	function toggleCreateGiveaway() {	
-		createGiveawayFlag = true;	
+	// Trigger create giveaway
+	function toggleCreateGiveaway() {
+		createGiveawayFlag = true;
 	}
 
 </script>
@@ -184,24 +184,22 @@
 
 			
 			<div id="menu">
+
 				<div class="my-feed-div">
 					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'posts')}>Posts</div>
 					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreatePost}></i>
-					
 				</div>
-				<div class="my-feed-div">
-					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Commissions</div>
-					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;"></i>
-				</div>
+
 				<div class="my-feed-div">
 					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
 					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreateSurvey}></i>
 				</div>
+
 				<div class="my-feed-div">
 					<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Giveaways</div>
 					<i class='bx bxs-plus-square' style="vertical-align: text-bottom;" on:click={toggleCreateGiveaway}></i>
 				</div>
-				
+
 			</div>
 
 			{#if type_of_display == 'posts'}
@@ -212,7 +210,6 @@
 
 				<MySurveys bind:surveys={surveys} user={user} />
 
-			<!-- {:else if type_of_display == 'giveaways'} -->
 			{:else}
 
 				<MyGiveaways bind:giveaways={giveaways} user={user} />
@@ -229,7 +226,7 @@
 	
 	.card {
 		position: relative;
-		max-width: 800px;
+		max-width: 60em;
 		margin: auto;
 		margin-top: 33vh;
 		text-align: center;

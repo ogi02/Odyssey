@@ -95,10 +95,6 @@
 			</div>
 
 			<div class="my-feed-div">
-				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'commissions')}>Commissions</div>
-			</div>
-
-			<div class="my-feed-div">
 				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
 			</div>
 
@@ -116,7 +112,6 @@
 
 			<UserSurveys user={user} surveys={surveys} />
 
-		<!-- {:else if type_of_display == 'giveaways'} -->
 		{:else}
 
 			<UserGiveaways user={user} giveaways={giveaways} />
