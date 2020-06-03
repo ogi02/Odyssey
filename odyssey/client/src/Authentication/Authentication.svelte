@@ -1,15 +1,28 @@
 <script>
 	// Library imports
 	import router from 'page';
+	import { onMount } from 'svelte';
 
 	// Component imports
 	import Field from '../Helpers/Field.svelte';
 
 	// Javascript imports
+	import { loggedIn } from '../js/stores.js'
 	import { loginUser, registerUser } from './authentication_management.js';
 
 	// Local variables
 	let login = true;
+	let userLoggedIn;
+
+	onMount(() => {
+		loggedIn.subscribe(value => {
+			userLoggedIn = value;
+		});
+
+		if(userLoggedIn) {
+			router.redirect('/profile');
+		}
+	});
 
 	// Change between login and registration
 	function toggleLogin() { 
