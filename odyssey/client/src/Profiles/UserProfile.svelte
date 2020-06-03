@@ -27,6 +27,8 @@
 	let surveys = {};
 	let giveaways = {};
 	let subscribedTierId;
+	let shipping_info = {};
+	let social_media_links = {};
 
 	let type_of_display = 'posts';
 
@@ -51,6 +53,8 @@
 			surveys = response.surveys;
 			giveaways = response.giveaways;
 			subscribedTierId = response.tier_id;
+			shipping_info = response.info.shipping_info;
+			social_media_links = response.info.social_media_links;
 		}
 
 		is_following = await isFollowing(user.username);
@@ -58,48 +62,98 @@
 
 </script>
 
-<img src={cover_picture_src} id="cover_picture" on:error={() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture'}>
+<div class='cover-picture'>
+	<img 
+		alt=''
+		id='cover-picture'
+		src={cover_picture_src}
+		on:error={() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture'}
+	>
+</div>
 
-<div class="card">
+<div class='profile-picture'>
+	<img 
+		alt=''
+		id='profile-picture'
+		src={profile_picture_src}
+		on:error={() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture'}
+	>
+</div>
 
-	<div class='profile_pic'>
-
-		<img src={profile_picture_src} id="profile_picture" on:error={() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture'}>
-
-	</div>
+<div class='card'>
 
 	<h1>{user.username}</h1>
 
-	<div style="margin: 24px 0;">
-		<a href="#"><i class="fa fa-twitch"></i></a> 
-		<a href="#"><i class="fa fa-twitter"></i></a>  
-		<a href="#"><i class="fa fa-instagram"></i></a> 
-		<a href="#"><i class="fa fa-youtube"></i></a> 
-		<a href="#"><i class="fa fa-facebook"></i></a> 
-	</div>
+	{#if user.role == 'creator'}
 
-	{#if is_following}
-		<button class="follow-button" on:click={async () => is_following = await unfollowUser(user.username)}>Unfollow</button>
-	{:else}
-		<button class="follow-button" on:click={async () => is_following = await followUser(user.username)}>Follow</button>
+		<p class='title'>{info.bio}</p>
+
+		<p>{info.country_of_residence}</p>
+
+		<div class='social-media-links'>
+
+			{#if info.social_media_links.facebook}
+				<a class='social-link' href={info.social_media_links.facebook}>
+					<i class="fa fa-facebook"></i>
+				</a>
+			{/if}
+
+			{#if info.social_media_links.instagram}
+				<a class='social-link' href={info.social_media_links.instagram}>
+					<i class="fa fa-instagram"></i>
+				</a>
+			{/if}
+
+			{#if info.social_media_links.webtoon}
+				<a class='social-link' href={info.social_media_links.webtoon}>
+					<img id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
+				</a>
+			{/if}
+
+			{#if info.social_media_links.twitter}
+				<a class='social-link' href={info.social_media_links.twitter}>
+					<i class="fa fa-twitter"></i>
+				</a>
+			{/if}
+
+			{#if info.social_media_links.youtube}
+				<a class='social-link' href={info.social_media_links.youtube}>
+					<i class="fa fa-youtube"></i>
+				</a>
+			{/if}
+
+			{#if info.social_media_links.twitch}
+				<a class='social-link' href={info.social_media_links.twitch}>
+					<i class="fa fa-twitch"></i>
+				</a>
+			{/if}
+
+		</div>
+
 	{/if}
 
-	{#if user.role == "creator"}
+	{#if is_following}
+		<button class='follow-button' on:click={async () => is_following = await unfollowUser(user.username)}>Unfollow</button>
+	{:else}
+		<button class='follow-button' on:click={async () => is_following = await followUser(user.username)}>Follow</button>
+	{/if}
+
+	{#if user.role == 'creator'}
 
 		<UserTiers user={user} tiers={tiers} subscribedTierId={subscribedTierId} />
 
 		<div id="menu">
 
-			<div class="my-feed-div">
+			<div class='my-feed-div'>
 				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'posts')}>Posts</div>
 			</div>
 
-			<div class="my-feed-div">
-				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
+			<div class='my-feed-div'>
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Giveaways</div>
 			</div>
 
-			<div class="my-feed-div">
-				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'giveaways')}>Giveaways</div>
+			<div class='my-feed-div'>
+				<div class='my-feed-button' on:click|preventDefault={() => (type_of_display = 'surveys')}>Surveys</div>
 			</div>
 
 		</div>
@@ -124,67 +178,84 @@
 
 <style>
 
-	.card {
+	.cover-picture {
+		left: 0;
+		top: 3.8em;
+		width: 100%;
+		height: 45%;
+		position: absolute;
+	}
+
+	#cover-picture {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.profile-picture {
+		top: -1.5em;
+		max-width: 180px;
+		max-height: 180px;
 		position: relative;
-		max-width: 60em;
+		margin: 25em auto 0;
+	}
+
+	#profile-picture {
+		width: 175px;
+		height: 175px;
+		object-fit: cover;
+		border-radius: 50%;
+		border: 4px solid #fff;
+	}
+
+	.card {
 		margin: auto;
-		margin-top: 33vh;
+		max-width: 60em;
+		position: relative;
 		text-align: center;
 		font-family: arial;
 	}
 
-	button {
+	.title {
+		color: grey;
+		margin: 0 auto;
+		font-size: 18px;
+		max-width: 400px;
+	}
+
+	.social-media-links {
+		margin: 2em 0;
+	}
+
+	#webtoon {
+		width: 20px;
+	}
+
+	.social-link {
+		color: black;
+		margin: 0 5px;
+		font-size: 22px;
+		text-decoration: none;
+	}
+
+	.social-link:hover {
+		opacity: 0.8;
+		cursor: pointer;
+	}
+
+	.follow-button {
 		width: 8em;
 		color: white;
 		border: none;
-		cursor: pointer;
 		font-size: 18px;
-		margin-top: 1em;
+		margin-bottom: 1em;
 		border-radius: 50px;
 		background-color: #0f1930;
 	}
 
-	a {
-		text-decoration: none;
-		font-size: 22px;
-		color: black;
-	}
-
-	button:hover, a:hover {
-		opacity: 0.7;
-	}
-
-	.toggle:hover {
-		background-color: #eee;
-	}
-
-	#profile_picture {
-		margin-top: 4em;
-		border: 4px solid #fff;
-		object-fit: cover;
-		border-radius: 50%;
-		height: 175px;
-		width: 175px;
-	}
-
-	#cover_picture {
-		position: absolute; 
-		top: 3.6em; 
-		left: 0; 
-		min-width: 100%; 
-		width: 100%; 
-		height: 45%; 
-		min-height: 300px; 
-		object-fit: cover;
-	}
-
-	.follow-button {
-		max-width: 8em;
-		margin-bottom: 3em;
-	}
-
-	li {
-		margin: 0.4em;
+	.follow-button:hover {
+		cursor: pointer;
+		background-color: #1f2940;
 	}
 
 	#menu {
