@@ -277,10 +277,10 @@
 
 	.cover-picture {
 		left: 0;
-		top: 4.2em;
+		top: 3.8em;
 		width: 100%;
 		height: 45%;
-		position: relative;
+		position: absolute;
 	}
 
 	#cover-picture {
@@ -303,11 +303,11 @@
 	}
 
 	.profile-picture {
-		top: -1em;
-		margin: 0 auto;
+		top: -1.5em;
 		max-width: 180px;
 		max-height: 180px;
 		position: relative;
+		margin: 25em auto 0;
 	}
 
 	#profile-picture {
@@ -330,7 +330,7 @@
 		position: absolute;
 		transform: translate(-50%, -50%);
 	}
-	
+
 	.card {
 		margin: auto;
 		max-width: 60em;
@@ -341,7 +341,9 @@
 
 	.title {
 		color: grey;
+		margin: 0 auto;
 		font-size: 18px;
+		max-width: 400px;
 	}
 
 	.social-media-links {
