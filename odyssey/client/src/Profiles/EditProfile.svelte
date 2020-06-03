@@ -26,6 +26,11 @@
 		const response = await fetchPost('http://localhost:3000/editProfile', {
 			email: email, password: password
 		});
+
+		change = false;
+	}
+
+	function cancelEditProfile() {
 		change = false;
 	}
 
@@ -35,7 +40,7 @@
 	
 	<form autocomplete="off">
 		
-		<h3>Edit your profile</h3>
+		<h3 class='title'>Edit your profile</h3>
 
 		<p>You can change your email, your password or both. If you leave it blank it will not be changed.</p>
 		
@@ -45,19 +50,67 @@
 
 		<Field type='password' id='e_confirm' placeholder='Confirm Password' has_icon={false} />
 
-		<button id='info_submit' type='submit' on:click|preventDefault={async () => await editProfile()}>
-			Save changes
-		</button>
+		<div class='buttons'>
+
+			<button type='submit' id='cancel' on:click|preventDefault={() => cancelEditProfile()}>Cancel</button>
+
+			<button type='submit' id='continue' on:click|preventDefault={async () => await editProfile()}>Save Changes</button>
+
+		</div>
 
 	</form>
 
 </div>
 
+<link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
 <style>
 
 	.card {
-		position: relative;
-		top: 50px;
+		max-width: 400px;
+		font-size: 1.1em;
+		margin: 100px auto;
+		text-align: center;
+		font-family: "Jost";
 	}
-	
+
+	.title {
+		font-size: 1.5em;
+	}
+
+	button {
+		width: 300px;
+		border-radius: 5px;
+	}
+
+	.buttons {
+		width: 300px;
+		display: flex;
+		margin: 20px auto;
+	}
+
+	#cancel {
+		color: #0f1931;
+		font-weight: bold;
+		margin-right: 5px;
+		background-color: #e6afcc;
+	}
+
+	#cancel:hover {
+		cursor: pointer;
+		background-color: #eca1c9;
+	}
+
+	#continue {
+		color: #0f1931;
+		font-weight: bold;
+		margin-left: 5px;
+		background-color: #9fcdf5;
+	}
+
+	#continue:hover {
+		cursor: pointer;
+		background-color: #8cc2f2;
+	}
+
 </style>
