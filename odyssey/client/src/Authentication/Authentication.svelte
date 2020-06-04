@@ -13,6 +13,7 @@
 	// Local variables
 	let login = true;
 	let userLoggedIn;
+	let registered = false;
 
 	onMount(() => {
 		loggedIn.subscribe(value => {
@@ -44,8 +45,9 @@
 	<div class='form'>
 		
 		<form autocomplete="off">
-
-			{#if login}
+			{#if registered}
+				<p>Grumni se ognqne! :)</p>
+			{:else if login}
 
 				<Field type='text' id='l_username' placeholder='Username' has_icon={false} />
 
@@ -70,7 +72,7 @@
 				<Field type='password' id='r_confirm' placeholder='Confirm Password' has_icon={false} />
 
 				<button id='info_submit' type='submit' class='submit' on:click|preventDefault={async () => {
-					await registerUser(false);
+					registered = await registerUser(false);
 				}}>Continue</button>
 
 				<div class='switch' on:click={toggleLogin}>Already have an account? Log in!</div>
