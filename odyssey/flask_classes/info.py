@@ -1,10 +1,11 @@
-from pymongo import MongoClient
 from bson import ObjectId
-from pymongo import ReturnDocument
+from pymongo import MongoClient, ReturnDocument
+
+import database_config
 
 class Info:
 
-	client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
+	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
 	db = client.info
 
 	def __init__(self, _id, user_id, country_of_residence, country_for_shipping, full_name, address, suite, city, state,

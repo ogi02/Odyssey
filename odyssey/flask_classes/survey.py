@@ -1,16 +1,19 @@
+import random
 import pymongo
-from pymongo import ReturnDocument
-from pymongo import MongoClient
+import datetime
 from bson import ObjectId
+from pymongo import MongoClient, ReturnDocument
+
 from flask_classes.info import Info
 from flask_classes.tier import Tier
-import datetime
-import random
 
-client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
-db = client.survey
+import database_config
 
 class Survey:
+
+	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
+	db = client.survey
+
 	def __init__(self, _id, creator_id, votes, date, image_path, text, restriction_type_id, options, is_open, deadline, winner):
 		self._id = _id;
 		self.creator_id = creator_id
@@ -37,24 +40,24 @@ class Survey:
 			'deadline': self.deadline,
 			'winner': None
 		}
-		result = db.surveys_collection.insert_one(survey)
+		result = Survey.db.surveys_collection.insert_one(survey)
 		return self
 		
 	def find_surveys_by_creator_id(user_id):
 		user_id = ObjectId(user_id)
-		found = db.surveys_collection.find({'creator_id': user_id})
+		found = Survey.db.surveys_collection.find({'creator_id': user_id})
 		if found:
 			return found
 
 	def find_by_id(survey_id):
 		survey_id = ObjectId(survey_id)
-		found = db.surveys_collection.find_one({'_id': survey_id})
+		found = Survey.db.surveys_collection.find_one({'_id': survey_id})
 		if found:
 			return found
 
 	def get_votes_count_by_option(survey_id, option_number):
 		survey_id = ObjectId(survey_id)
-		found = db.surveys_collection.find_one({'_id': survey_id})
+		found = Survey.db.surveys_collection.find_one({'_id': survey_id})
 		if found:
 			count = 0
 			for f in found['votes']:
@@ -64,14 +67,14 @@ class Survey:
 
 	def get_all_votes_count(survey_id):
 		survey_id = ObjectId(survey_id)
-		found = db.surveys_collection.find_one({'_id': survey_id})
+		found = Survey.db.surveys_collection.find_one({'_id': survey_id})
 		if found:
 			return len(found['votes'])
 
 	def vote(user_id, survey_id, option_number):
 		survey_id = ObjectId(survey_id)
 		user_id = ObjectId(user_id)
-		db.surveys_collection.update_one(
+		Survey.db.surveys_collection.update_one(
 			{'_id': survey_id},
 			{"$addToSet": {'votes': {'user_id': user_id, 'vote': option_number}}}
 		)
@@ -79,14 +82,14 @@ class Survey:
 	def has_voted(user_id, survey_id):
 		survey_id = ObjectId(survey_id)
 		user_id = ObjectId(user_id)
-		found = db.surveys_collection.find_one({'_id': survey_id, 'votes': {"$elemMatch": {'user_id': user_id}}})
+		found = Survey.db.surveys_collection.find_one({'_id': survey_id, 'votes': {"$elemMatch": {'user_id': user_id}}})
 		if found:
 			return True
 		return False
 
 	def close(survey_id):
 		survey_id = ObjectId(survey_id)
-		db.surveys_collection.update_one(
+		Survey.db.surveys_collection.update_one(
 			{'_id': survey_id},
 			{"$set":{'is_open': False}}
 		)
@@ -103,7 +106,7 @@ class Survey:
 				if Survey.get_votes_count_by_option(survey_id, i) > maximum:
 					win = found.get('options')[i]
 					maximum = Survey.get_votes_count_by_option(survey_id, i)
-		db.surveys_collection.update_one(
+		Survey.db.surveys_collection.update_one(
 			{'_id': survey_id},
 			{"$set":{'winner': win}}
 		)

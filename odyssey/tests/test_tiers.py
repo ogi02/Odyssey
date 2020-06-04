@@ -4,6 +4,7 @@ import unittest
 from pymongo import MongoClient
 
 from main import app
+import database_config
 
 from flask_classes.user import User
 from flask_classes.info import Info
@@ -97,16 +98,16 @@ class FollowTest(unittest.TestCase):
 		self.app = app.test_client()
 		
 		# config databases
-		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		User.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		User.db = User.client.user
 
-		Info.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Info.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		Info.db = Info.client.info
 
-		Tier.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Tier.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		Tier.db = Tier.client.tier
 
-		CreatorSpecific.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		CreatorSpecific.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		CreatorSpecific.db = CreatorSpecific.client.creator_specific
 
 		# Creator

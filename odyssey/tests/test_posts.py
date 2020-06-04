@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from werkzeug.datastructures import FileStorage
 
 from main import app
+import database_config
 
 from flask_classes.user import User
 from flask_classes.info import Info
@@ -165,19 +166,19 @@ class PostTest(unittest.TestCase):
 		self.app = app.test_client()
 		
 		# config databases
-		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		User.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		User.db = User.client.user
 
-		Info.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Info.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		Info.db = Info.client.info
 
-		Tier.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Tier.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		Tier.db = Tier.client.tier
 
-		Post.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
-		Post.db = Post.client.tier
+		Post.client = MongoClient(database_config.TESTING_DATABASE_URL)
+		Post.db = Post.client.post
 
-		CreatorSpecific.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		CreatorSpecific.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		CreatorSpecific.db = CreatorSpecific.client.creator_specific
 
 		# create user

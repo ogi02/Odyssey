@@ -4,6 +4,7 @@ import unittest
 from pymongo import MongoClient
 
 from main import app
+import database_config
 
 from flask_classes.user import User
 from flask_classes.info import Info
@@ -18,10 +19,10 @@ class AuthenticationTest(unittest.TestCase):
 		self.app = app.test_client()
 		
 		# config databases
-		User.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		User.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		User.db = User.client.user
 
-		Info.client = MongoClient("mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority")
+		Info.client = MongoClient(database_config.TESTING_DATABASE_URL)
 		Info.db = Info.client.info
 
 		# create user
