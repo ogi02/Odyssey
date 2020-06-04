@@ -1,16 +1,19 @@
+import random
 import pymongo
-from pymongo import ReturnDocument
-from pymongo import MongoClient
+import datetime
 from bson import ObjectId
+from pymongo import MongoClient, ReturnDocument
+
 from flask_classes.info import Info
 from flask_classes.tier import Tier
-import datetime
-import random
 
-client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
-db = client.giveaway
+import database_config
 
 class Giveaway:
+
+	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
+	db = client.giveaway
+
 	def __init__(self, _id, creator_id, contestants, date, image_path, text, restriction_type_id, is_open, deadline, winner):
 		self._id = _id;
 		self.creator_id = creator_id
@@ -36,31 +39,31 @@ class Giveaway:
 			'winner': None
 
 		}
-		result = db.giveaways_collection.insert_one(giveaway)
+		result = Giveaway.db.giveaways_collection.insert_one(giveaway)
 		return self
 		
 	def find_giveaways_by_creator_id(user_id):
 		user_id = ObjectId(user_id)
-		found = db.giveaways_collection.find({'creator_id': user_id})
+		found = Giveaway.db.giveaways_collection.find({'creator_id': user_id})
 		if found:
 			return found
 
 	def find_by_id(giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
-		found = db.giveaways_collection.find_one({'_id': giveaway_id})
+		found = Giveaway.db.giveaways_collection.find_one({'_id': giveaway_id})
 		if found:
 			return found
 
 	def get_all_contestants_count(giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
-		found = db.giveaways_collection.find_one({'_id': giveaway_id})
+		found = Giveaway.db.giveaways_collection.find_one({'_id': giveaway_id})
 		if found:
 			return len(found['contestants'])
 
 	def join_giveaway(user_id, giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
 		user_id = ObjectId(user_id)
-		db.giveaways_collection.update_one(
+		Giveaway.db.giveaways_collection.update_one(
 			{'_id': giveaway_id},
 			{"$push": {'contestants': user_id}}
 		)
@@ -68,14 +71,14 @@ class Giveaway:
 	def has_joined(user_id, giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
 		user_id = ObjectId(user_id)
-		found = db.giveaways_collection.find_one({'_id': giveaway_id, 'contestants': {"$in": [user_id]}})
+		found = Giveaway.db.giveaways_collection.find_one({'_id': giveaway_id, 'contestants': {"$in": [user_id]}})
 		if found:
 			return True
 		return False
 
 	def close(giveaway_id):
 		giveaway_id = ObjectId(giveaway_id)
-		db.giveaways_collection.update_one(
+		Giveaway.db.giveaways_collection.update_one(
 			{'_id': giveaway_id},
 			{"$set":{'is_open': False}}
 		)
@@ -89,7 +92,7 @@ class Giveaway:
 
 	def choose_winner(giveaway_id, username):
 		giveaway_id = ObjectId(giveaway_id)
-		db.giveaways_collection.update_one(
+		Giveaway.db.giveaways_collection.update_one(
 			{'_id': giveaway_id},
 			{"$set":{'winner': username}}
 		)

@@ -1,6 +1,7 @@
-from pymongo import MongoClient
 from bson import ObjectId
-from pymongo import ReturnDocument
+from pymongo import MongoClient, ReturnDocument
+
+import database_config
 
 class CreatorSpecific:
 

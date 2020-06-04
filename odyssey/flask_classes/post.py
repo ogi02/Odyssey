@@ -1,13 +1,15 @@
-from pymongo import ReturnDocument
-from pymongo import MongoClient
+import datetime
 from bson import ObjectId
+from pymongo import MongoClient, ReturnDocument
+
 from flask_classes.info import Info
 from flask_classes.tier import Tier
-import datetime
+
+import database_config
 
 class Post:
 
-	client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
+	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
 	db = client.post
 
 	def __init__(self, _id, user_id, likes, date, image_path, text, restriction_type_id):

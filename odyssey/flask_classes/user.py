@@ -1,12 +1,12 @@
-from flask import jsonify
-from pymongo import MongoClient
-from passlib.hash import sha256_crypt
 from bson import ObjectId
-from pymongo import ReturnDocument
+from passlib.hash import sha256_crypt
+from pymongo import MongoClient, ReturnDocument
+
+import database_config
 
 class User:
 
-	client = MongoClient("mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority")
+	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
 	db = client.user
 
 	def __init__(self, _id, username, password, name, email, role):
