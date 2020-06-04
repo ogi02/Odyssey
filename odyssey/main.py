@@ -1,6 +1,7 @@
 # Third party library imports
 from flask_cors import CORS
-from flask import Flask, send_from_directory, jsonify, session
+from flask_mail import Mail, Message
+from flask import Flask, send_from_directory, jsonify, session, render_template
 
 # Imports from .py files
 from flask_classes.active_user import ActiveUser
@@ -21,7 +22,20 @@ from flask_validators.tier_price_validator import tier_price_validator_bp
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"
+app.config['DEBUG'] = True
+app.config['TESTING'] = False
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'mail.odyssey.2020@gmail.com'
+app.config['MAIL_PASSWORD'] = 'odyssey2020'
+app.config['MAIL_DEFAULT_SENDER'] = 'mail.odyssey.2020@gmail.com'
+app.config['MAX_EMAILS'] = None
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
 CORS(app)
+
+mail = Mail(app)
 
 ActiveUser.logged_in = False
 ActiveUser.username = None

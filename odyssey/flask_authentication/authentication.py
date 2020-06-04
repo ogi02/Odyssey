@@ -3,9 +3,11 @@ import json
 import pymongo
 
 # Third party library imports
-from flask import Blueprint, request, jsonify
+from flask_mail import Message
+from flask import Blueprint, request, jsonify, render_template
 
 # Imports from .py files
+import main
 from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.active_user import ActiveUser
@@ -43,6 +45,8 @@ def register():
 		ActiveUser.username = username
 		info_log.info("User %s registered successfully." % username)
 
+		msg = Message('Testint', recipients = ['gabrielay2002@gmail.com'], html = render_template('beefree-uo9t4ro6un.html'))
+		main.mail.send(msg)
 		return jsonify(success=True, message="Registration successful")
 
 	except pymongo.errors.DuplicateKeyError as e:
