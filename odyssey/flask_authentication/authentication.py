@@ -45,8 +45,11 @@ def register():
 		ActiveUser.username = username
 		info_log.info("User %s registered successfully." % username)
 
-		msg = Message('Testint', recipients = ['gabrielay2002@gmail.com'], html = render_template('beefree-uo9t4ro6un.html'))
-		main.mail.send(msg)
+		if main.app.config['TESTING'] == False:
+			msg = Message('Testing Email Verification', recipients = ['gabrielay2002@gmail.com'], html = render_template('beefree-uo9t4ro6un.html'))
+			main.mail.send(msg)
+		
+		
 		return jsonify(success=True, message="Registration successful")
 
 	except pymongo.errors.DuplicateKeyError as e:
