@@ -8,18 +8,30 @@
 	
 	// Javascript imports
 	import routes from '../js/routes'
-	import { loggedIn } from '../js/stores.js';
-	import { checkLogin } from '../js/helpers.js';
+	import { loggedIn, isCreator } from '../js/stores.js';
+	import { checkLogin, checkCreator } from '../js/helpers.js';
 	import { logoutUser, loginUser } from '../Authentication/authentication_management.js';	
 
 	// Local variables
 	let page;
 	let params;
 	let userLoggedIn;
+	let userIsCreator;
 	let home_picture_src = '/images/src/Home.png';
 
 	onMount(async () => {
 		await loggedIn.set(await checkLogin());
+
+		loggedIn.subscribe(value => {
+			userLoggedIn = value;
+		});
+
+		if(userLoggedIn) {
+			await isCreator.set(await checkCreator());
+			isCreator.subscribe(value => {
+				userIsCreator = value;
+			});
+		}
 
 		// Loop around all of the routes and create a new instance of
 		// router for reach one with some rudimentary checks.
@@ -49,18 +61,16 @@
 		router.start();
 	});
 
-	const unsubscribe = loggedIn.subscribe(value => {
-		userLoggedIn = value;
-	});
-
 </script>
 
 {#if userLoggedIn}
 	<nav>
 		<a href='/' class='home-icon'><img src={home_picture_src}></a>
 		<a href='/profile' class='navlink'>My Profile</a>
-		<a href='/become_a_creator' class='navlink'>Become a creator!</a>
-		<a href='/login' class='navlink' on:click={async () => await logoutUser()}>Logout</a>
+		{#if !userIsCreator}
+			<a href='/become_a_creator' class='navlink'>Become a creator!</a>
+		{/if}
+		<a href='/' class='navlink' on:click={async () => await logoutUser()}>Logout</a>
 		<Search />
 	</nav>
 {:else}

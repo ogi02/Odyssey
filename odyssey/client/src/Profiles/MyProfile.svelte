@@ -17,6 +17,7 @@
 	import MyGiveaways from '../Giveaways/MyGiveaways.svelte';
 
 	// Javascript imports
+	import { isCreator } from '../js/stores.js';
 	import { fetchGet, fetchPost } from '../js/fetch.js';
 	
 	// Local variables
@@ -48,8 +49,10 @@
 		const response = await fetchGet("http://localhost:3000/profile");
 		
 		user = response.user;
+		isCreator.set(false);
 
 		if(user.role == "creator") {
+			isCreator.set(true);
 			info = response.info;
 			tiers = response.tiers;
 			posts = response.posts;

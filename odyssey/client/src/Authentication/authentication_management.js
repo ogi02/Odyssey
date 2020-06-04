@@ -2,8 +2,8 @@
 import router from 'page';
 
 // Javascript imports
-import { loggedIn } from '../js/stores.js';
 import { fetchPost } from '../js/fetch.js';
+import { loggedIn, isCreator } from '../js/stores.js';
 import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
 import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../js/helpers.js';
 
@@ -68,6 +68,8 @@ export async function becomeCreator(result) {
 	const response = await fetchPost('http://localhost:3000/becomeCreator', {
 		result: result
 	});
+
+	isCreator.set(true);
 
 	router.redirect("/profile");
 }
