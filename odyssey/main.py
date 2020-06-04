@@ -4,6 +4,7 @@ from flask_mail import Mail, Message
 from flask import Flask, send_from_directory, jsonify, session, render_template
 
 # Imports from .py files
+from flask_classes.user import User
 from flask_classes.active_user import ActiveUser
 
 # Blueprint imports
@@ -70,8 +71,17 @@ def check_login():
 	# Check if there is a user logged in
 	if ActiveUser.logged_in:
 		return jsonify(logged_in=True)
-		
+
 	return jsonify(logged_in=False)
+
+@app.route("/checkCreator")
+def check_creator():
+	# Check if the current user is creator
+	if ActiveUser.logged_in:
+		if User.get_from_db(ActiveUser.username).get("role") == "creator":
+			return jsonify(is_creator=True)
+
+	return jsonify(is_creator=False)
 
 if __name__ == "__main__":
 	app.run(debug=True)
