@@ -39,3 +39,14 @@ export async function checkLogin() {
 		return false;
 	}
 }
+
+// Check if the logged in user is a creator
+export async function checkCreator() {
+	const res = await fetch('http://localhost:3000/checkCreator');
+	const response = await res.json();
+	if (response.is_creator) {
+		return true;
+	} else {
+		return false;
+	}
+}

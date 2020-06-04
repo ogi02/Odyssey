@@ -1,12 +1,14 @@
 <script>
 	// Library imports
 	import router from 'page';
+	import { onMount } from 'svelte';
 
 	// Component imports
 	import Countries from '../Helpers/Countries.svelte';
 
-	// Javascript imports
+	// Javascript imports 
 	import { fetchPost } from '../js/fetch.js';
+	import { isCreator } from '../js/stores.js';
 	import { becomeCreator } from './authentication_management.js';
 
 	// Local Variables
@@ -32,6 +34,17 @@
 	}
 
 	let part = 0;
+	let userIsCreator;
+
+	onMount(() => {
+		isCreator.subscribe(value => {
+			userIsCreator = value;
+		});
+
+		if(userIsCreator) {
+			cancelBecomingCreator();
+		}
+	});
 
 	// Show next part of the form
 	function nextPart() {
