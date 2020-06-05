@@ -23,7 +23,7 @@
 		}
 
 		// Fetch post request for changing email, password or both
-		const response = await fetchPost('http://localhost:3000/editProfile', {
+		const response = await fetchPost('/editProfile', {
 			email: email, password: password
 		});
 

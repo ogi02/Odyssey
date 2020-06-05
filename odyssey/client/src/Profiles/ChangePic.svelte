@@ -31,7 +31,7 @@
 
 		// Fetch post request for uploading the picture
 		const response = await fetchFilePost(
-			('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/upload_picture?type=' + type), files[0]
+			('/FpCerpd9Z7SIbjmN81Jy/upload_picture?type=' + type), files[0]
 		);
 
 		// Check for possible errors

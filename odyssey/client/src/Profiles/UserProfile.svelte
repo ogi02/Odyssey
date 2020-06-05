@@ -38,7 +38,7 @@
 			return false;
 		}
 
-		const response = await fetchPost("http://localhost:3000/profile/" + newValue, {
+		const response = await fetchPost("/profile/" + newValue, {
 			username: newValue
 		});
 
@@ -63,7 +63,7 @@
 </script>
 
 <div class='cover-picture'>
-	<img 
+	<img
 		alt=''
 		id='cover-picture'
 		src={cover_picture_src}
@@ -72,7 +72,7 @@
 </div>
 
 <div class='profile-picture'>
-	<img 
+	<img
 		alt=''
 		id='profile-picture'
 		src={profile_picture_src}
@@ -106,7 +106,7 @@
 
 			{#if info.social_media_links.webtoon}
 				<a class='social-link' href={info.social_media_links.webtoon}>
-					<img id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
+					<img alt="" id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
 				</a>
 			{/if}
 

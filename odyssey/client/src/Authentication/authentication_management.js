@@ -2,7 +2,7 @@
 import router from 'page';
 
 // Javascript imports
-import { fetchPost } from '../js/fetch.js';
+import { fetchGet, fetchPost } from '../js/fetch.js';
 import { loggedIn, isCreator } from '../js/stores.js';
 import { clearErrorsAndLoaders, checkEmpty } from './authentication_helpers.js';
 import { displayError, clearError, showLoader, hideLoader, disableButton, enableButton } from '../js/helpers.js';
@@ -21,7 +21,7 @@ export async function loginUser(login) {
 	let password = document.getElementById('input_l_password').value;
 	
 	// Fetch post request for login
-	const response = await fetchPost('http://localhost:3000/login', {
+	const response = await fetchPost('/login', {
 		username: username, password: password
 	});
 
@@ -53,7 +53,7 @@ export async function registerUser(login) {
 	let password = document.getElementById('input_r_password').value;
 
 	// Fetch post request for registration
-	const response = await fetchPost('http://localhost:3000/register', {
+	const response = await fetchPost('/register', {
 		username: username, email: email, name: name, password: password
 	});
 
@@ -65,7 +65,7 @@ export async function becomeCreator(result) {
 	// result -> json object, containing all information for becoming a creator
 
 	// Fetch post request for becoming a creator
-	const response = await fetchPost('http://localhost:3000/becomeCreator', {
+	const response = await fetchPost('/becomeCreator', {
 		result: result
 	});
 
@@ -76,8 +76,8 @@ export async function becomeCreator(result) {
 
 // Logout function 
 export async function logoutUser() {
-	// Fetch post request for logout
-	await fetch('http://localhost:3000/logout');
+	// Fetch get request for logout
+	await fetchGet('/logout');
 	loggedIn.set(false);
 }
 
@@ -127,7 +127,7 @@ async function checkUsername(id) {
 	showLoader('loader_' + id);
 
 	// Fetch post request for checking if such username exists in the database
-	const usrnm_response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/username', {
+	const usrnm_response = await fetchPost('/FpCerpd9Z7SIbjmN81Jy/username', {
 		username: username
 	});
 
@@ -154,7 +154,7 @@ async function checkEmail(id) {
 	showLoader('loader_' + id);
 
 	// Fetch post request for checking if such email exists in the database
-	const email_response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/email', {
+	const email_response = await fetchPost('/FpCerpd9Z7SIbjmN81Jy/email', {
 		email: email
 	});
 

@@ -12,7 +12,7 @@
 
 	async function getUsernames() {
 		if(value != '') {
-			const response = await fetchPost("http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/getUsernames", {
+			const response = await fetchPost("/FpCerpd9Z7SIbjmN81Jy/getUsernames", {
 				value: value
 			});
 			document.getElementsByClassName('usernames')[0].style.display = 'block';
