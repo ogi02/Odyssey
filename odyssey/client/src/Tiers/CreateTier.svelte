@@ -45,7 +45,7 @@
 		}
 
 		// Fetch POST request for creating a tier
-		const response = await fetchPost('http://localhost:3000/createTier', {
+		const response = await fetchPost('/createTier', {
 			result: result
 		});
 
@@ -92,7 +92,7 @@
 		enableButton('create');
 
 		// Fetch post request for checking if such tier name exists in the database for the current user
-		const response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/tier_name', {
+		const response = await fetchPost('/FpCerpd9Z7SIbjmN81Jy/tier_name', {
 			tier_name: name
 		});
 
@@ -123,7 +123,7 @@
 		enableButton('create');
 
 		// Fetch post request for checking if such tier name exists in the database for the current user
-		const response = await fetchPost('http://localhost:3000/FpCerpd9Z7SIbjmN81Jy/tier_price', {
+		const response = await fetchPost('/FpCerpd9Z7SIbjmN81Jy/tier_price', {
 			tier_price: price
 		});
 

@@ -12,7 +12,7 @@ export async function followUser(username) {
 	}
 
 	// Fetch post request for following
-	const response = await fetchPost('http://localhost:3000/follow', {
+	const response = await fetchPost('/follow', {
 		result: result
 	});
 
@@ -27,7 +27,7 @@ export async function unfollowUser(username) {
 	}
 
 	// Fetch post request for unfollowing
-	const response = await fetchPost('http://localhost:3000/unfollow', {
+	const response = await fetchPost('/unfollow', {
 		result: result
 	});
 
@@ -43,7 +43,7 @@ export async function isFollowing(username) {
 	}
 
 	// Fetch post request for check
-	const res = await fetchPost('http://localhost:3000/isFollowing', {
+	const res = await fetchPost('/isFollowing', {
 		result: result
 	});
 	if (res.following) {

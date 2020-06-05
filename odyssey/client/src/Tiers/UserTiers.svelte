@@ -16,7 +16,7 @@
 
 		subscribedTierId = self_id;
 
-		const response = await fetchPost("http://localhost:3000/chooseTier", {
+		const response = await fetchPost("/chooseTier", {
 			result: result
 		});
 	}
@@ -30,7 +30,7 @@
 
 		subscribedTierId = null;
 
-		const response = await fetchPost("http://localhost:3000/removeTier", {
+		const response = await fetchPost("/removeTier", {
 			result: result
 		});
 	}

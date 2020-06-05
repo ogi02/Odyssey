@@ -46,7 +46,7 @@
 	
 	onMount(async() => {
 		// Get users profile and set variables
-		const response = await fetchGet("http://localhost:3000/profile");
+		const response = await fetchGet("/profile");
 		
 		user = response.user;
 		isCreator.set(false);
@@ -147,14 +147,14 @@
 {:else}
 
 	<div class='cover-picture'>
-		<img 
+		<img
 			alt=''
 			id='cover-picture'
 			src={cover_picture_src}
 			on:click={toggleChangeCoverPic}
 			on:error={() => cover_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/cover_picture?t=' + new Date().getTime()}
 		>
-		<img 
+		<img
 			alt=''
 			id='change-cover-picture'
 			src={'/images/_FpCerpd9Z7SIbjmN81Jy/camera_icon.png'}
@@ -162,14 +162,14 @@
 	</div>
 
 	<div class='profile-picture'>
-		<img 
+		<img
 			alt=''
 			id='profile-picture'
 			src={profile_picture_src}
 			on:click={toggleChangeProfilePic}
 			on:error={() => profile_picture_src = '/images/_FpCerpd9Z7SIbjmN81Jy/profile_picture?t=' + new Date().getTime()}
 		>
-		<img 
+		<img
 			alt=''
 			id='change-profile-picture'
 			src={'/images/_FpCerpd9Z7SIbjmN81Jy/camera_icon.png'}
@@ -207,7 +207,7 @@
 
 				{#if info.social_media_links.webtoon}
 					<a class='social-link' href={info.social_media_links.webtoon}>
-						<img id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
+						<img alt="" id='webtoon' src='https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/linewebtoon-512.png'>
 					</a>
 				{/if}
 

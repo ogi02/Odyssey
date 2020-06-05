@@ -25,7 +25,7 @@
 
 	// Get voted per option
 	async function getVotesPerOption(survey_id, option_id) {
-		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
+		const response = await fetchPost('/voteCountByOption', {
 			survey_id: survey_id,
 			option_id: option_id
 		});
@@ -37,7 +37,7 @@
 
 	// Close survey
 	async function closeSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/closeSurvey', {
+		const response = await fetchPost('/closeSurvey', {
 			survey_id: survey_id
 		});
 
@@ -47,7 +47,7 @@
 
 	// Set winner
 	async function electWinner(survey_id) {
-		const response = await fetchPost('http://localhost:3000/chooseWinningOption', {
+		const response = await fetchPost('/chooseWinningOption', {
 			survey_id: survey_id
 		});
 
@@ -57,7 +57,7 @@
 
 	// Get all votes
 	async function getVotesOnSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/getTotalVoteCount', {
+		const response = await fetchPost('/getTotalVoteCount', {
 			survey_id: survey_id
 		});
 
@@ -95,7 +95,7 @@
 
 			<div class='survey-box'>
 
-				<img class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
+				<img alt="" class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
 
 				<div class="text-container">
 					<h3>{survey.text}</h3>

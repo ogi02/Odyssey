@@ -28,7 +28,7 @@
 
 	// Has current user voted on certain survey
 	async function hasVoted(survey_id) {
-		const response = await fetchPost('http://localhost:3000/hasVotedOnSurvey', {
+		const response = await fetchPost('/hasVotedOnSurvey', {
 			survey_id: survey_id
 		});
 
@@ -38,7 +38,7 @@
 
 	// Can current user view a certain survey
 	async function canViewSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/canViewSurvey', {
+		const response = await fetchPost('/canViewSurvey', {
 			survey_id: survey_id
 		});
 
@@ -48,7 +48,7 @@
 
 	// Vote on a selected survey
 	async function voteOnSurvey(survey_id, option_id) {
-		const response = await fetchPost('http://localhost:3000/voteOnSurvey', {
+		const response = await fetchPost('/voteOnSurvey', {
 			survey_id: survey_id,
 			option_id: option_id
 		});
@@ -59,7 +59,7 @@
 
 	// Get votes on a certain option for a certain survey
 	async function getVotesPerOption(survey_id, option_id) {
-		const response = await fetchPost('http://localhost:3000/voteCountByOption', {
+		const response = await fetchPost('/voteCountByOption', {
 			survey_id: survey_id,
 			option_id: option_id
 		});
@@ -70,7 +70,7 @@
 
 	// Get all votes on a certain survey
 	async function getVotesOnSurvey(survey_id) {
-		const response = await fetchPost('http://localhost:3000/getTotalVoteCount', {
+		const response = await fetchPost('/getTotalVoteCount', {
 			survey_id: survey_id
 		});
 
@@ -118,7 +118,7 @@
 
 						{#await getVotesOnSurvey(survey._id.$oid) then votes}
 
-							<img class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
+							<img alt="" class="survey-image" src={"/images/" + user.username + "/" + survey.image_path}>
 							
 							<div class="text-container">
 								<h3>{survey.text}</h3>
@@ -168,7 +168,7 @@
 					{:else if survey.is_open}
 
 						<div class="cant-view-survey-container">
-							<img class="survey-image-cant-view" src={"/images/" + user.username + "/" + survey.image_path}>
+							<img alt="" class="survey-image-cant-view" src={"/images/" + user.username + "/" + survey.image_path}>
 							<p class="centered-text-over-image">You can't view this survey!</p>
 						</div>
 

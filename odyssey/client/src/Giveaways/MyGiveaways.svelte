@@ -25,7 +25,7 @@
 
 	// Generate random giveaway winner
 	async function pickRandomGiveawayWinner(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/generateRandomWinner', {
+		const response = await fetchPost('/generateRandomWinner', {
 			giveaway_id: giveaway_id
 		});
 
@@ -36,7 +36,7 @@
 
 	// Select giveaway winner
 	async function chooseGiveawayWinner(giveaway_id, winner_id) {
-		const response = await fetchPost('http://localhost:3000/chooseGiveawayWinner', {
+		const response = await fetchPost('/chooseGiveawayWinner', {
 			winner_id: winner_id,
 			giveaway_id: giveaway_id
 		});
@@ -47,7 +47,7 @@
 
 	// Get participants in giveaway
 	async function getParticipantCount(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/getTotalContestantsCount', {
+		const response = await fetchPost('/getTotalContestantsCount', {
 			giveaway_id: giveaway_id,
 		});
 
@@ -57,7 +57,7 @@
 
 	// Close giveaway
 	async function closeGiveaway(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/closeGiveaway', {
+		const response = await fetchPost('/closeGiveaway', {
 			giveaway_id: giveaway_id
 		});
 
@@ -95,7 +95,7 @@
 
 			<div class='giveaway-box'>
 
-				<img class="giveaway-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
+				<img alt="" class="giveaway-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
 				
 				<div class="text-container">
 					<h3>{giveaway.text}</h3>

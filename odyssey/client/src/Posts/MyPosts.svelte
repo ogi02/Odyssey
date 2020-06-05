@@ -25,7 +25,7 @@
 
 	// Get likes on post
 	async function getLikesOnPost(post_id) {
-		const response = await fetchPost('http://localhost:3000/getLikeCount', {
+		const response = await fetchPost('/getLikeCount', {
 			post_id: post_id
 		});
 
@@ -63,7 +63,7 @@
 		{#if i < loadedPosts}
 
 			<div class='post-box'>
-				<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+				<img alt="" class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
 				
 				<div class="text-container">
 

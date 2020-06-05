@@ -58,7 +58,7 @@
 		
 		// Fetch post request for uploading the picture
 		const response = await fetchFileJsonPost(
-			('http://localhost:3000/createSurvey'), result, files[0]
+			('/createSurvey'), result, files[0]
 		);
 
 		// Check for possible errors

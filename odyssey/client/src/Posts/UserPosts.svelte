@@ -25,7 +25,7 @@
 
 	// Is post liked
 	async function isLiked(post_id) {
-		const response = await fetchPost("http://localhost:3000/hasLikedPost", {
+		const response = await fetchPost("/hasLikedPost", {
 			post_id: post_id
 		});
 
@@ -35,7 +35,7 @@
 
 	// Can a user view post (by tier_id)
 	async function canViewPost(post_id) {
-		const response = await fetchPost("http://localhost:3000/canViewPost", {
+		const response = await fetchPost("/canViewPost", {
 			post_id: post_id
 		});
 
@@ -45,7 +45,7 @@
 
 	// Like post
 	async function likePost(post_id) {
-		const response = await fetchPost("http://localhost:3000/likePost", {
+		const response = await fetchPost("/likePost", {
 			post_id: post_id
 		});
 
@@ -55,7 +55,7 @@
 
 	// Unlike post
 	async function unlikePost(post_id) {
-		const response = await fetchPost("http://localhost:3000/unlikePost", {
+		const response = await fetchPost("/unlikePost", {
 			post_id: post_id
 		});
 
@@ -98,7 +98,7 @@
 			<div class="post-box">
 				{#if post.canView}
 
-					<img class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
+					<img alt="" class="post-image" src={"/images/" + user.username + "/" + post.image_path}>
 
 					<div class="text-container">
 						
@@ -125,7 +125,7 @@
 				{:else}
 
 					<div class="cant-view-post-container">
-						<img class="post-image-cant-view" src={"/images/" + user.username + "/" + post.image_path}>
+						<img alt="" class="post-image-cant-view" src={"/images/" + user.username + "/" + post.image_path}>
 						<p class="centered-text-over-image">You can't view this post!</p>
 					</div>
 

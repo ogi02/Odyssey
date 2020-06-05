@@ -28,7 +28,7 @@
 
 	// Can current user view certain giveaway
 	async function canViewGiveaway(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/canViewGiveaway', {
+		const response = await fetchPost('/canViewGiveaway', {
 			giveaway_id: giveaway_id
 		});
 
@@ -38,7 +38,7 @@
 
 	// Has current user joined certain giveaway
 	async function hasJoined(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/hasJoinedGiveaway', {
+		const response = await fetchPost('/hasJoinedGiveaway', {
 			giveaway_id: giveaway_id
 		});
 
@@ -48,7 +48,7 @@
 
 	// Join certain giveaway
 	async function joinGiveaway(giveaway_id) {
-		const response = await fetchPost('http://localhost:3000/joinGiveaway', {
+		const response = await fetchPost('/joinGiveaway', {
 			giveaway_id: giveaway_id,
 		});
 
@@ -93,7 +93,7 @@
 				<div class='giveaway-box'>
 					{#if giveaway.canView}
 			
-						<img class="giveaway-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
+						<img alt="" class="giveaway-image" src={"/images/" + user.username + "/" + giveaway.image_path}>
 						
 						<div class="text-container">
 							<h3>{giveaway.text}</h3>
@@ -108,7 +108,7 @@
 					{:else}
 						
 						<div class="cant-view-giveaway-container">
-							<img class="giveaway-image-cant-view" src={"/images/" + user.username + "/" + giveaway.image_path}>
+							<img alt="" class="giveaway-image-cant-view" src={"/images/" + user.username + "/" + giveaway.image_path}>
 							<p class="centered-text-over-image">You can't view this giveaway!</p>
 						</div>
 

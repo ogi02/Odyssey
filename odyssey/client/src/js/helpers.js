@@ -1,3 +1,6 @@
+// Javascript imports
+import { fetchGet } from './fetch.js';
+
 // Display certain error
 export function displayError(element, message) {
 	document.getElementById(element).style.display = 'block';
@@ -31,8 +34,7 @@ export function enableButton(button) {
 
 // Check if there is a user logged in
 export async function checkLogin() {
-	const res = await fetch('http://localhost:3000/checkLogin');
-	const response = await res.json();
+	const response = await fetchGet('/checkLogin');
 	if (response.logged_in) {
 		return true;
 	} else {
@@ -42,8 +44,7 @@ export async function checkLogin() {
 
 // Check if the logged in user is a creator
 export async function checkCreator() {
-	const res = await fetch('http://localhost:3000/checkCreator');
-	const response = await res.json();
+	const response = await fetchGet('/checkCreator');
 	if (response.is_creator) {
 		return true;
 	} else {

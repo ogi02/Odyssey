@@ -65,7 +65,7 @@
 
 {#if userLoggedIn}
 	<nav>
-		<a href='/' class='home-icon'><img src={home_picture_src}></a>
+		<a href='/' class='home-icon'><img alt="" src={home_picture_src}></a>
 		<a href='/profile' class='navlink'>My Profile</a>
 		{#if !userIsCreator}
 			<a href='/become_a_creator' class='navlink'>Become a creator!</a>
@@ -75,7 +75,7 @@
 	</nav>
 {:else}
 	<nav>
-		<a href='/' class='home-icon'><img src={home_picture_src}></a>
+		<a href='/' class='home-icon'><img alt="" src={home_picture_src}></a>
 		<a href='/login' class='navlink'>Log in</a>
 	</nav>
 {/if}

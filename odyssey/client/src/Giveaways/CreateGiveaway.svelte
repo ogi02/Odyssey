@@ -38,7 +38,7 @@
 
 		// Fetch post request for uploading the picture
 		const response = await fetchFilePost(
-			('http://localhost:3000/createGiveaway?description=' + description + '&required_id=' + required_id), files[0]
+			('/createGiveaway?description=' + description + '&required_id=' + required_id), files[0]
 		);
 
 		// Check for possible errors

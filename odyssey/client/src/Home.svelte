@@ -39,15 +39,15 @@
 				<div>
 
 					<div>
-						<img class='image-in-container' src='https://i.pinimg.com/originals/f6/5a/53/f65a53be9515951bf9e28504efc5d6b0.jpg'>
-						<img class='image-in-container' src='https://cdn.shopify.com/s/files/1/1734/8431/products/Flying_1024x1024.jpg?v=1491498378'>
-						<img class='image-in-container' src='https://i.pinimg.com/originals/28/72/54/2872549acfb2e0ee8846edc3f973fd2a.jpg'>
+						<img alt="" class='image-in-container' src='https://i.pinimg.com/originals/f6/5a/53/f65a53be9515951bf9e28504efc5d6b0.jpg'>
+						<img alt="" class='image-in-container' src='https://cdn.shopify.com/s/files/1/1734/8431/products/Flying_1024x1024.jpg?v=1491498378'>
+						<img alt="" class='image-in-container' src='https://i.pinimg.com/originals/28/72/54/2872549acfb2e0ee8846edc3f973fd2a.jpg'>
 					</div>
 
 					<div>
-						<img class='image-in-container' src='https://images.discerningassets.com/image/upload/c_fit,h_1000,w_1000/c_fit,fl_relative,h_1.0,o_100,w_1.0/v1559837064/Giraffe_Gerald_qh7k1j.jpg'>
-						<img class='image-in-container' src='https://i.pinimg.com/originals/07/4c/e9/074ce9b21ed92eaaa6a759dd3863b069.jpg'>
-						<img class='image-in-container' src='https://cdn.shopify.com/s/files/1/1734/8431/products/White_Rooster_1024x1024.jpg?v=1581350689'>
+						<img alt="" class='image-in-container' src='https://images.discerningassets.com/image/upload/c_fit,h_1000,w_1000/c_fit,fl_relative,h_1.0,o_100,w_1.0/v1559837064/Giraffe_Gerald_qh7k1j.jpg'>
+						<img alt="" class='image-in-container' src='https://i.pinimg.com/originals/07/4c/e9/074ce9b21ed92eaaa6a759dd3863b069.jpg'>
+						<img alt="" class='image-in-container' src='https://cdn.shopify.com/s/files/1/1734/8431/products/White_Rooster_1024x1024.jpg?v=1581350689'>
 					</div>
 
 				</div>

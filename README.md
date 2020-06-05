@@ -112,10 +112,31 @@ $ npm -v
 ### To Run
 
 Go to Terminal (Mac OS or Ubuntu) or Command Prompt (Windows) and type the following commands:
+
 ```
 $ cd Odyssey/odyssey
+```
+
+Open `.flaskenv` file add set FLASK_RUN_HOST to your local ip address. The file is probably hidden, so you have to display it first before opening it.
+
+Then type the following command in terminal:
+
+```
+$ cd client/src/js
+```
+
+Open `fetch.js` and change line 1 to:
+
+```javascript
+const domain = 'http://<your-ip>:5000'
+```
+
+This is all you have to do, now you can start the server. Go to `/odyssey` directory and type:
+
+```
 $ make
 ```
+
 The Makefile runs the following script:
 ```makefile
 all:
