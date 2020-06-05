@@ -119,8 +119,10 @@ $ cd Odyssey/odyssey
 
 Open `.flaskenv` file add set FLASK_RUN_HOST to your local ip address. The file is probably hidden, so you have to display it first before opening it.
 
+Then type the following command in terminal:
+
 ```
-$ cd client/src/js/fetch.js
+$ cd client/src/js
 ```
 
 Open `fetch.js` and change line 1 to:
