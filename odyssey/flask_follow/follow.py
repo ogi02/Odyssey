@@ -3,12 +3,11 @@ import json
 from bson import json_util, ObjectId
 
 # Third party library imports
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 
 # Imports from .py files
 from flask_classes.user import User
 from flask_classes.info import Info
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
 follow_bp = Blueprint('follow_bp', __name__)
@@ -16,7 +15,7 @@ follow_bp = Blueprint('follow_bp', __name__)
 @follow_bp.route('/follow', methods=['POST'])
 def follow():
 	# Get user from session
-	user = User.get_from_db(ActiveUser.username)
+	user = User.get_from_db(session.get("USERNAME"))
 	user_id = user.get('_id')
 
 	# Get information about the profile to be followed
@@ -36,7 +35,7 @@ def follow():
 @follow_bp.route('/unfollow', methods=['POST'])
 def unfollow():
 	# Get user from session
-	user = User.get_from_db(ActiveUser.username)
+	user = User.get_from_db(session.get("USERNAME"))
 	user_id = user.get('_id')
 
 	# Get information about the profile to be followed
@@ -56,7 +55,7 @@ def unfollow():
 @follow_bp.route('/isFollowing', methods=['POST'])
 def is_following():
 	# Get user from session
-	user = User.get_from_db(ActiveUser.username)
+	user = User.get_from_db(session.get("USERNAME"))
 	user_id = user.get('_id')
 
 	# Get information about the profile to be followed

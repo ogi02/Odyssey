@@ -5,14 +5,13 @@ import datetime
 from bson import json_util, ObjectId
 
 # Third party library imports
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 
 # Imports from .py files
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.giveaway import Giveaway
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
 upload_folder = "./client/public/images"
@@ -22,7 +21,7 @@ giveaway_actions_bp = Blueprint('giveaway_actions_bp', __name__)
 @giveaway_actions_bp.route('/createGiveaway', methods=['POST'])
 def create_giveaway():
 	# Get user from session
-	username = ActiveUser.username
+	username = session.get("USERNAME")
 	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
@@ -85,7 +84,7 @@ def get_total_contestants_count():
 @giveaway_actions_bp.route('/joinGiveaway', methods=['POST'])
 def join_giveaway():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the giveaway
@@ -93,14 +92,14 @@ def join_giveaway():
 	
 	Giveaway.join_giveaway(activeUser_id, giveaway_id)
 
-	info_log.info("%s joined giveaway with id: %s." % (ActiveUser.username, giveaway_id))
+	info_log.info("%s joined giveaway with id: %s." % (session.get("USERNAME"), giveaway_id))
 	
 	return jsonify(success=True, message='Successfully joined giveaway!')
 
 @giveaway_actions_bp.route('/hasJoinedGiveaway', methods=['POST'])
 def has_joined_giveaway():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the giveaway
@@ -114,7 +113,7 @@ def has_joined_giveaway():
 @giveaway_actions_bp.route('/canViewGiveaway', methods=['POST'])
 def can_view_giveaway():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post

@@ -13,7 +13,6 @@ from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.tier import Tier
 from flask_classes.post import Post
-from flask_classes.active_user import ActiveUser
 from flask_classes.creator_specific import CreatorSpecific
 
 class PostTest(unittest.TestCase):

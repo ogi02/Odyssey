@@ -1,18 +1,18 @@
-DOMAIN = "http://localhost:5000"
 # Built-in imports
 import json
 import pymongo
 
 # Third party library imports
 from flask_mail import Message
-from flask import Blueprint, request, jsonify, render_template, redirect
+from flask import Blueprint, request, jsonify, render_template, redirect, session
 
 # Imports from .py files
 import main
 from flask_classes.user import User
 from flask_classes.info import Info
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
+
+from database_config import CLIENT_URL
 
 authentication_bp = Blueprint("authentication_bp", __name__)
 
@@ -51,7 +51,6 @@ def register():
 			main.mail.send(msg)
 			info_log.info("Sent activation email to %s" % username)
 		
-		
 		return jsonify(success=True, message="Registration successful")
 
 	except pymongo.errors.DuplicateKeyError as e:
@@ -59,19 +58,21 @@ def register():
 		key = list(e.details.get('keyValue').keys())[0]
 		value = e.details.get('keyValue').get(key)
 		error_log.error("Duplicate %s: %s" % (key, value))
-		return jsonify(success=False, message="Duplicate %s: %s" % (key, value)), 403
+
+		return jsonify(success=False, message="Duplicate %s: %s" % (key, value)), 403 # forbidden
 
 @authentication_bp.route("/verify/<username>", methods=["GET"])
 def verify_account(username):
 
 	User.verify_account(username)
-	return redirect(DOMAIN + "/login")
+	return redirect(CLIENT_URL + "/login")
 
 @authentication_bp.route("/login", methods=["POST"])
 def login():
+
 	# Get information about user and try to find him
-	username = request.get_json().get("username")
-	password = request.get_json().get("password")
+	username = request.json.get("username")
+	password = request.json.get("password")
 	user = User.find_by_username(username)
 	
 	# Validate user
@@ -87,18 +88,20 @@ def login():
 		return jsonify(success=False, message="Account is not verified!"), 403 # forbidden
 
 	# Update session
-	ActiveUser.logged_in = True
-	ActiveUser.username = username
+	session["LOGGED_IN"] = True
+	session["USERNAME"] = username
 	info_log.info("%s logged in successfully" % username)
+
+	print('success')
 
 	return jsonify(success=True, message="%s logged in successfully" % username)
 
 @authentication_bp.route("/logout")
 def user_logout():
 	# Update session
-	username = ActiveUser.username
-	ActiveUser.logged_in = False
-	ActiveUser.username = None
+	username = session.get("USERNAME")
+	session["LOGGED_IN"] = False
+	session["USERNAME"] = None
 	info_log.info("%s logged out" % username)
 
 	return jsonify(success=True, message="%s logged out" % username)
