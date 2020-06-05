@@ -46,7 +46,7 @@
 		
 		<form autocomplete="off">
 			{#if registered}
-				<p>Grumni se ognqne! :)</p>
+				<p>Thank you for registering, you'll receive a validation mail shortly.</p>
 			{:else if login}
 
 				<Field type='text' id='l_username' placeholder='Username' has_icon={false} />

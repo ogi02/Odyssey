@@ -51,6 +51,13 @@ class AuthenticationTest(unittest.TestCase):
 			follow_redirects = True
 			)
 
+	# Verify helper function
+	def verify(self, username):
+		return self.app.get(
+			"/verify/" + username,
+			follow_redirects = True
+			)
+
 	def test_01_main_page(self):
 		response = self.app.get('/', follow_redirects=True)
 		self.assertEqual(response.status_code, 200)
@@ -85,22 +92,28 @@ class AuthenticationTest(unittest.TestCase):
 		self.assertEqual(response.status_code, 403)
 		self.assertIn(b'Duplicate email: _FpCerpd9Z7SIbjmN81Jy_test_profile@baruh.net', response.data)
 
-	def test_05_valid_user_login(self):
+	def test_05_invalid_user_login_account_is_not_verified(self):
+		response = self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
+		self.assertEqual(response.status_code, 403)
+		self.assertIn(b'Account is not verified!', response.data)
+
+	def test_06_valid_user_login(self):
+		self.verify('_FpCerpd9Z7SIbjmN81Jy_test_profile')
 		response = self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'_FpCerpd9Z7SIbjmN81Jy_test_profile logged in successfully', response.data)
 
-	def test_06_invalid_user_login_username_does_not_exist(self):
+	def test_07_invalid_user_login_username_does_not_exist(self):
 		response = self.login('invalid', '12345678')
 		self.assertEqual(response.status_code, 403)
 		self.assertIn(b'Incorrect username or password', response.data)
 
-	def test_07_invalid_user_login_incorrect_password(self):
+	def test_08_invalid_user_login_incorrect_password(self):
 		response = self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile', 'incorrect')
 		self.assertEqual(response.status_code, 403)
 		self.assertIn(b'Incorrect username or password', response.data)
 
-	def test_08_valid_user_logout(self):
+	def test_09_valid_user_logout(self):
 		response = self.logout()
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'_FpCerpd9Z7SIbjmN81Jy_test_profile logged out', response.data)
