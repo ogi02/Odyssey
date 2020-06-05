@@ -1,10 +1,11 @@
+DOMAIN = "http://localhost:5000"
 # Built-in imports
 import json
 import pymongo
 
 # Third party library imports
 from flask_mail import Message
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, redirect
 
 # Imports from .py files
 import main
@@ -30,7 +31,8 @@ def register():
 		User.hash_password(password), 
 		name,
 		email,
-		None
+		None,
+		False
 	)
 
 	try:
@@ -41,12 +43,15 @@ def register():
 
 		Info.create(user_id)
 
-		ActiveUser.logged_in = True
-		ActiveUser.username = username
 		info_log.info("User %s registered successfully." % username)
 
-		msg = Message('Testint', recipients = ['gabrielay2002@gmail.com'], html = render_template('beefree-uo9t4ro6un.html'))
-		main.mail.send(msg)
+		if main.app.config['TESTING'] == False:
+			msg = Message('Testing Email Verification', recipients = [email],
+				html = render_template('activation_email.html', username = username))
+			main.mail.send(msg)
+			info_log.info("Sent activation email to %s" % username)
+		
+		
 		return jsonify(success=True, message="Registration successful")
 
 	except pymongo.errors.DuplicateKeyError as e:
@@ -56,6 +61,11 @@ def register():
 		error_log.error("Duplicate %s: %s" % (key, value))
 		return jsonify(success=False, message="Duplicate %s: %s" % (key, value)), 403
 
+@authentication_bp.route("/verify/<username>", methods=["GET"])
+def verify_account(username):
+
+	User.verify_account(username)
+	return redirect(DOMAIN + "/login")
 
 @authentication_bp.route("/login", methods=["POST"])
 def login():
@@ -69,7 +79,13 @@ def login():
 		error_log.error("Login failed!")
 		
 		return jsonify(success=False, message="Incorrect username or password"), 403 # forbidden
-	
+
+	# Check if user is verified
+	if user.verified == False:
+		error_log.error("Login failed!")
+		
+		return jsonify(success=False, message="Account is not verified!"), 403 # forbidden
+
 	# Update session
 	ActiveUser.logged_in = True
 	ActiveUser.username = username

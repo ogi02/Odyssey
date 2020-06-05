@@ -244,7 +244,7 @@
 	}
 
 	.wrap {
-		width: 70%;
+		width: 50%;
 		padding: 1em;
 		display: flex;
 		margin: 0 auto;

@@ -25,6 +25,22 @@ class EditProfileTest(unittest.TestCase):
 			follow_redirects = True
 			)
 
+	# Login helper function
+	def login(self, username, password):
+		return self.app.post(
+			"/login",
+			data = json.dumps(dict(username = username, password = password)),
+			content_type='application/json',
+			follow_redirects = True
+			)
+		
+	# Verify helper function
+	def verify(self, username):
+		return self.app.get(
+			"/verify/" + username,
+			follow_redirects = True
+			)
+
 	# Change email/password helper function
 	def edit_profile(self, email, password):
 		return self.app.post(
@@ -65,6 +81,9 @@ class EditProfileTest(unittest.TestCase):
 			'Ognian Baruh',
 			'_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com'
 		)
+
+		self.verify(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile')
+		self.login(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
 
 	def test_01_change_password_only_success(self):
 		response = self.edit_profile(None, 'changedpassword')

@@ -106,7 +106,7 @@
 
 	.home-icon img {
 		top: 0.5em;
-		left: 1.5em;
+		left: 1em;
 		width: 3.3em;
 		position: fixed;
 	}

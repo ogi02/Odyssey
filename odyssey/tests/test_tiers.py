@@ -22,6 +22,22 @@ class FollowTest(unittest.TestCase):
 			follow_redirects = True
 			)
 
+	# Login helper function
+	def login(self, username, password):
+		return self.app.post(
+			"/login",
+			data = json.dumps(dict(username = username, password = password)),
+			content_type='application/json',
+			follow_redirects = True
+			)
+		
+	# Verify helper function
+	def verify(self, username):
+		return self.app.get(
+			"/verify/" + username,
+			follow_redirects = True
+			)
+
 	# Become creator helper function
 	def become_creator(self):
 		result = {
@@ -117,6 +133,8 @@ class FollowTest(unittest.TestCase):
 			'Ognian Baruh', 
 			'_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com'
 		)
+		self.verify(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile')
+		self.login(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
 
 	def test_01_become_creator_success(self):
 		response = self.become_creator()
@@ -136,6 +154,10 @@ class FollowTest(unittest.TestCase):
 			'Ognian Baruh', 
 			'_FpCerpd9Z7SIbjmN81Jy_test_profile1@gmail.com'
 		)
+
+		self.verify('_FpCerpd9Z7SIbjmN81Jy_test_profile2')
+		self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile2', '12345678')
+
 		creator_id = User.get_from_db('_FpCerpd9Z7SIbjmN81Jy_test_profile').get('_id')
 		tier_id = Tier.find_by_name(creator_id, 'Test Tier 1').get('_id')
 		response = self.subscribe(tier_id, creator_id)

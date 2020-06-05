@@ -9,13 +9,14 @@ class User:
 	client = MongoClient(database_config.DEVELOPMENT_DATABASE_URL)
 	db = client.user
 
-	def __init__(self, _id, username, password, name, email, role):
+	def __init__(self, _id, username, password, name, email, role, verified):
 		self._id = _id
 		self.username = username
 		self.password = password
 		self.name = name
 		self.email = email
 		self.role = role
+		self.verified = verified
 
 	def create(self):
 		user = {
@@ -23,18 +24,8 @@ class User:
 			'password': self.password,
 			'name': self.name,
 			'email': self.email,
-			'role': "user"
-		}
-		result = User.db.users.insert_one(user)
-		return self
-
-	def create_creator(self):
-		user = {
-			'username': self.username,
-			'password': self.password,
-			'name': self.name,
-			'email': self.email,
-			'role': "creator"
+			'role': "user",
+			'verified': False
 		}
 		result = User.db.users.insert_one(user)
 		return self
@@ -43,6 +34,13 @@ class User:
 		found = User.db.users.find_one_and_update(
 			{'username': username},
 			{"$set": {'role': "creator"}},
+			return_document=ReturnDocument.AFTER
+		)
+
+	def verify_account(username):
+		found = User.db.users.find_one_and_update(
+			{'username': username},
+			{"$set": {'verified': True}},
 			return_document=ReturnDocument.AFTER
 		)
 

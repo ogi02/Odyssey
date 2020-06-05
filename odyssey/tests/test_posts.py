@@ -47,6 +47,22 @@ class PostTest(unittest.TestCase):
 			follow_redirects = True
 			)
 
+	# Login helper function
+	def login(self, username, password):
+		return self.app.post(
+			"/login",
+			data = json.dumps(dict(username = username, password = password)),
+			content_type='application/json',
+			follow_redirects = True
+			)
+		
+	# Verify helper function
+	def verify(self, username):
+		return self.app.get(
+			"/verify/" + username,
+			follow_redirects = True
+			)
+
 	# Become creator helper function
 	def become_creator(self):
 		result = {
@@ -189,6 +205,9 @@ class PostTest(unittest.TestCase):
 			'_FpCerpd9Z7SIbjmN81Jy_test_profile@gmail.com'
 		)
 
+		self.verify(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile')
+		self.login(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile', '12345678')
+
 		# become creator
 		response = self.become_creator(self)
 
@@ -219,11 +238,15 @@ class PostTest(unittest.TestCase):
 
 	def test_04_can_view_post_fail_does_not_pass_requirement(self):
 		unsubsribed_user = self.register(
-			'_FpCerpd9Z7SIbjmN81Jy_test_profile_2',
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile2',
 			'12345678',
 			'Ognian Baruh',
-			'_FpCerpd9Z7SIbjmN81Jy_test_profile_2@gmail.com'
+			'_FpCerpd9Z7SIbjmN81Jy_test_profile2@gmail.com'
 		)
+
+		self.verify('_FpCerpd9Z7SIbjmN81Jy_test_profile2')
+		self.login('_FpCerpd9Z7SIbjmN81Jy_test_profile2', '12345678')
+		
 		post_id = self.get_post_id("_FpCerpd9Z7SIbjmN81Jy_test_profile")
 
 		response = self.can_view_post(post_id)
@@ -247,7 +270,7 @@ class PostTest(unittest.TestCase):
 
 		response = self.like_post(post_id)
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b"_FpCerpd9Z7SIbjmN81Jy_test_profile_2 liked post with id: %s." % str(post_id).encode('utf-8'), response.data)
+		self.assertIn(b"_FpCerpd9Z7SIbjmN81Jy_test_profile2 liked post with id: %s." % str(post_id).encode('utf-8'), response.data)
 
 	def test_07_get_likes_after_user_likes_post(self):
 		post_id = self.get_post_id("_FpCerpd9Z7SIbjmN81Jy_test_profile")
@@ -270,7 +293,7 @@ class PostTest(unittest.TestCase):
 
 		response = self.unlike_post(post_id)
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b"_FpCerpd9Z7SIbjmN81Jy_test_profile_2 unliked post with id: %s." % str(post_id).encode('utf-8'), response.data)
+		self.assertIn(b"_FpCerpd9Z7SIbjmN81Jy_test_profile2 unliked post with id: %s." % str(post_id).encode('utf-8'), response.data)
 
 	def test_10_has_liked_post_false(self):
 		post_id = self.get_post_id("_FpCerpd9Z7SIbjmN81Jy_test_profile")

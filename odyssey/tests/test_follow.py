@@ -20,6 +20,22 @@ class FollowTest(unittest.TestCase):
 			follow_redirects = True
 			)
 
+	# Login helper function
+	def login(self, username, password):
+		return self.app.post(
+			"/login",
+			data = json.dumps(dict(username = username, password = password)),
+			content_type='application/json',
+			follow_redirects = True
+			)
+		
+	# Verify helper function
+	def verify(self, username):
+		return self.app.get(
+			"/verify/" + username,
+			follow_redirects = True
+			)
+
 	# Follow helper function
 	def follow(self, profile_name):
 		result = {
@@ -83,6 +99,9 @@ class FollowTest(unittest.TestCase):
 			'12345678', 
 			'Ognian Baruh', 
 			'_FpCerpd9Z7SIbjmN81Jy_test_profile1@gmail.com')
+
+		self.verify(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile2')
+		self.login(self, '_FpCerpd9Z7SIbjmN81Jy_test_profile2', '12345678')
 
 	def test_01_is_following_return_false(self):
 		response = self.is_following('_FpCerpd9Z7SIbjmN81Jy_test_profile')

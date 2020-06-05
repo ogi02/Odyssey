@@ -56,8 +56,8 @@ export async function registerUser(login) {
 	const response = await fetchPost('http://localhost:3000/register', {
 		username: username, email: email, name: name, password: password
 	});
-	loggedIn.set(true);
-	router.redirect('/profile');
+
+	return true;
 }
 
 // Become creator function 
