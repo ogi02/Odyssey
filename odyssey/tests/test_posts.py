@@ -13,7 +13,6 @@ from flask_classes.user import User
 from flask_classes.info import Info
 from flask_classes.tier import Tier
 from flask_classes.post import Post
-from flask_classes.active_user import ActiveUser
 from flask_classes.creator_specific import CreatorSpecific
 
 class PostTest(unittest.TestCase):
@@ -44,7 +43,6 @@ class PostTest(unittest.TestCase):
 			"/register",
 			data = json.dumps(dict(username = username, password = password, name = name, email = email)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Login helper function
@@ -53,14 +51,12 @@ class PostTest(unittest.TestCase):
 			"/login",
 			data = json.dumps(dict(username = username, password = password)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 		
 	# Verify helper function
 	def verify(self, username):
 		return self.app.get(
 			"/verify/" + username,
-			follow_redirects = True
 			)
 
 	# Become creator helper function
@@ -88,7 +84,6 @@ class PostTest(unittest.TestCase):
 			"/becomeCreator",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Create tier helper function
@@ -102,7 +97,6 @@ class PostTest(unittest.TestCase):
 			"/createTier",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Subscribe to tier helper function
@@ -115,7 +109,6 @@ class PostTest(unittest.TestCase):
 			"/chooseTier",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 		)
 
 
@@ -126,7 +119,6 @@ class PostTest(unittest.TestCase):
 				"/createPost?description=%s&required_id=%s" % (text, restriction_type_id),
 				data = dict(image = image),
 				content_type = 'multipart/form-data',
-				follow_redirects = True
 				)
 
 	# Like post helper function
@@ -135,7 +127,6 @@ class PostTest(unittest.TestCase):
 			"/likePost",
 			data = json.dumps(dict(post_id = str(post_id))),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Unlike post helper function
@@ -144,7 +135,6 @@ class PostTest(unittest.TestCase):
 			"/unlikePost",
 			data = json.dumps(dict(post_id = str(post_id))),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Get likes on post helper function
@@ -153,7 +143,6 @@ class PostTest(unittest.TestCase):
 			"/getLikeCount",
 			data = json.dumps(dict(post_id = str(post_id))),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Has liked post helper function
@@ -162,7 +151,6 @@ class PostTest(unittest.TestCase):
 			"/hasLikedPost",
 			data = json.dumps(dict(post_id = str(post_id))),
 			content_type = 'application/json',
-			follow_redirects = True
 		)
 
 	# Can view post helper function
@@ -171,7 +159,6 @@ class PostTest(unittest.TestCase):
 			"/canViewPost",
 			data = json.dumps(dict(post_id = str(post_id))),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Set Up Class - executed before the first test

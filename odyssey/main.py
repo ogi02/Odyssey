@@ -3,8 +3,7 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask import Flask, send_from_directory, jsonify, session, render_template
 
-# Imports from .py files
-from flask_classes.active_user import ActiveUser
+from database_config import CLIENT_URL
 
 # Blueprint imports
 from flask_follow.follow import follow_bp
@@ -34,12 +33,10 @@ app.config['MAIL_PASSWORD'] = 'odyssey2020'
 app.config['MAIL_DEFAULT_SENDER'] = 'mail.odyssey.2020@gmail.com'
 app.config['MAX_EMAILS'] = None
 app.config['MAIL_ASCII_ATTACHMENTS'] = False
-CORS(app)
+
+CORS(app, supports_credentials = True, resources={r"/*": {"origins": CLIENT_URL}})
 
 mail = Mail(app)
-
-ActiveUser.username = None
-ActiveUser.logged_in = False
 
 # Register blueprints
 app.register_blueprint(follow_bp)

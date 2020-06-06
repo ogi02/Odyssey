@@ -5,12 +5,11 @@ import datetime
 from bson import json_util, ObjectId
 
 # Third party library imports
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 
 # Imports from .py files
 from helpers import allowed_image
 from flask_classes.user import User
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 from flask_classes.survey import Survey
 
@@ -21,7 +20,7 @@ survey_actions_bp = Blueprint('survey_actions_bp', __name__)
 @survey_actions_bp.route('/createSurvey', methods=['POST'])
 def create_survey():
 	# Get user from session
-	username = ActiveUser.username
+	session.get("USERNAME")
 	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
@@ -86,7 +85,7 @@ def get_total_vote_count():
 @survey_actions_bp.route('/voteOnSurvey', methods=['POST'])
 def vote_on_survey():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the survey
@@ -95,7 +94,7 @@ def vote_on_survey():
 	
 	Survey.vote(activeUser_id, survey_id, option_id)
 
-	info_log.info("%s voted on survey with id: %s." % (ActiveUser.username, survey_id))
+	info_log.info("%s voted on survey with id: %s." % (session.get("USERNAME"), survey_id))
 	
 	return jsonify(success=True, message='Successfully voted on survey!')
 
@@ -112,7 +111,7 @@ def get_votes_by_option():
 @survey_actions_bp.route('/hasVotedOnSurvey', methods=['POST'])
 def has_voted_on_survey():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the survey
@@ -136,7 +135,7 @@ def close_survey():
 @survey_actions_bp.route('/chooseWinningOption', methods=['POST'])
 def get_winning_option():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the survey
@@ -152,7 +151,7 @@ def get_winning_option():
 @survey_actions_bp.route('/canViewSurvey', methods=['POST'])
 def can_view_survey():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post

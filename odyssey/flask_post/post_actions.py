@@ -5,13 +5,12 @@ import datetime
 from bson import json_util, ObjectId
 
 # Third party library imports
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 
 # Imports from .py files
 from helpers import allowed_image
 from flask_classes.user import User
 from flask_classes.post import Post
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
 upload_folder = "./client/public/images"
@@ -21,7 +20,7 @@ post_actions_bp = Blueprint('post_actions_bp', __name__)
 @post_actions_bp.route('/createPost', methods=['POST'])
 def create_post():
 	# Get user from session
-	username = ActiveUser.username
+	username = session.get("USERNAME")
 	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
@@ -84,7 +83,7 @@ def get_like_count():
 @post_actions_bp.route('/likePost', methods=['POST'])
 def like_post():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
@@ -92,14 +91,14 @@ def like_post():
 	
 	Post.add_like(activeUser_id, post_id)
 
-	info_log.info("%s liked post with id: %s." % (ActiveUser.username, post_id))
+	info_log.info("%s liked post with id: %s." % (session.get("USERNAME"), post_id))
 	
-	return jsonify(success=True, message='%s liked post with id: %s.' % (ActiveUser.username, post_id))
+	return jsonify(success=True, message='%s liked post with id: %s.' % (session.get("USERNAME"), post_id))
 
 @post_actions_bp.route('/unlikePost', methods=['POST'])
 def unlike_post():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
@@ -107,14 +106,14 @@ def unlike_post():
 	
 	Post.remove_like(activeUser_id, post_id)
 
-	info_log.info("%s unliked post with id: %s." % (ActiveUser.username, post_id))
+	info_log.info("%s unliked post with id: %s." % (session.get("USERNAME"), post_id))
 	
-	return jsonify(success=True, message="%s unliked post with id: %s." % (ActiveUser.username, post_id))
+	return jsonify(success=True, message="%s unliked post with id: %s." % (session.get("USERNAME"), post_id))
 
 @post_actions_bp.route('/hasLikedPost', methods=['POST'])
 def has_liked_post():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post
@@ -128,7 +127,7 @@ def has_liked_post():
 @post_actions_bp.route('/canViewPost', methods=['POST'])
 def can_view_post():
 	# Get user from session
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser_id = activeUser.get('_id')
 
 	# Get information about the post

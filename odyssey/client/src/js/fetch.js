@@ -1,11 +1,13 @@
-const domain = 'http://192.168.1.132:3000';
+const domain = 'http://0.0.0.0:3000';
 
 // Fetch get request
 export async function fetchGet(relative_url) {
 
 	let url = domain.concat(relative_url);
 
-	const res = await fetch(url);
+	const res = await fetch(url, {
+		credentials: 'include'
+	});
 	const response = await res.json();
 	return response;
 }
@@ -17,6 +19,8 @@ export async function fetchPost(relative_url, data) {
 
 	const res = await fetch(url, {
 		method: 'POST',
+		mode: 'cors',
+		credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json',
 			'Accept': 'application/json'
@@ -37,6 +41,8 @@ export async function fetchFilePost(relative_url, file) {
 
 	const res = await fetch(url, {
 		method: 'POST',
+		mode: 'cors',
+		credentials: 'include',
 		body: formData
 	});
 
@@ -54,6 +60,8 @@ export async function fetchFileJsonPost(relative_url, data, file) {
 
 	const res = await fetch(url, {
 		method: 'POST',
+		mode: 'cors',
+		credentials: 'include',
 		body: formData
 	});
 

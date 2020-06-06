@@ -14,7 +14,6 @@ from flask_classes.tier import Tier
 from flask_classes.post import Post
 from flask_classes.survey import Survey
 from flask_classes.giveaway import Giveaway
-from flask_classes.active_user import ActiveUser
 from flask_logging.log_config import info_log, error_log
 
 profile_bp = Blueprint("profile_bp", __name__)
@@ -23,9 +22,10 @@ upload_folder = "./client/public/images"
 
 @profile_bp.route("/profile")
 def my_profile():
-	if ActiveUser.logged_in:
-		# Get user from session and information about the user from the database 
-		user = User.get_from_db(ActiveUser.username)
+	print(session.get("USERNAME"))
+	if session.get("LOGGED_IN"):
+		# Get user from session and information about the user from the database
+		user = User.get_from_db(session.get("USERNAME"))
 		user = json.loads(json_util.dumps(user))
 		
 		if user.get('role') == "creator":
@@ -58,9 +58,9 @@ def my_profile():
 				giveaways = giveaways
 			)
 			
-		return jsonify(success=True, user = user)
+		return jsonify(success = True, user = user)
 		
-	return jsonify(success=False)
+	return jsonify(success = False)
 
 @profile_bp.route("/profile/<username>", methods=["POST"])
 def user_profile(username):
@@ -68,7 +68,7 @@ def user_profile(username):
 	searchedUser = json.loads(json_util.dumps(searchedUser))
 	searchedUser_id = searchedUser.get('_id').get('$oid')
 
-	activeUser = User.get_from_db(ActiveUser.username)
+	activeUser = User.get_from_db(session.get("USERNAME"))
 	activeUser = json.loads(json_util.dumps(activeUser))
 	activeUser_id = activeUser.get('_id').get('$oid')
 
@@ -121,7 +121,7 @@ def upload_picture():
 	picture_type = request.args.get("type")
 
 	# Get user
-	username = ActiveUser.username
+	username = session.get("USERNAME")
 	
 	# Validate image
 	if allowed_image(image.filename):
@@ -152,7 +152,7 @@ def edit_profile():
 	message = ""
 
 	# Get user from session
-	username = ActiveUser.username
+	username = session.get("USERNAME")
 
 	# Get user"s new email and password
 	email = request.get_json().get("email")
@@ -177,6 +177,6 @@ def get_usernames():
 	# Get current input state
 	value = request.get_json().get("value")
 
-	usernames = User.get_searched_usernames(value, ActiveUser.username)
+	usernames = User.get_searched_usernames(value, session.get("USERNAME"))
 
 	return jsonify(success = True, usernames = usernames)

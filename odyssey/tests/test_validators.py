@@ -53,7 +53,6 @@ class AuthenticationTest(unittest.TestCase):
 			"/register",
 			data = json.dumps(dict(username = username, password = password, name = name, email = email)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	def check_username(self, username):
@@ -61,7 +60,6 @@ class AuthenticationTest(unittest.TestCase):
 			"/FpCerpd9Z7SIbjmN81Jy/username",
 			data = json.dumps(dict(username = username)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	def check_email(self, email):
@@ -69,7 +67,6 @@ class AuthenticationTest(unittest.TestCase):
 			"/FpCerpd9Z7SIbjmN81Jy/email",
 			data = json.dumps(dict(email = email)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	def test_01_validate_username_success_free(self):

@@ -19,7 +19,6 @@ class FollowTest(unittest.TestCase):
 			"/register",
 			data = json.dumps(dict(username = username, password = password, name = name, email = email)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Login helper function
@@ -28,14 +27,12 @@ class FollowTest(unittest.TestCase):
 			"/login",
 			data = json.dumps(dict(username = username, password = password)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 		
 	# Verify helper function
 	def verify(self, username):
 		return self.app.get(
 			"/verify/" + username,
-			follow_redirects = True
 			)
 
 	# Become creator helper function
@@ -63,7 +60,6 @@ class FollowTest(unittest.TestCase):
 			"/becomeCreator",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Create tier helper function
@@ -77,7 +73,6 @@ class FollowTest(unittest.TestCase):
 			"/createTier",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Subscribe to tier helper function
@@ -90,7 +85,6 @@ class FollowTest(unittest.TestCase):
 			"/chooseTier",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 		)
 
 	# Unsubscribe to tier helper function
@@ -103,7 +97,6 @@ class FollowTest(unittest.TestCase):
 			"/removeTier",
 			data = json.dumps(dict(result = result)),
 			content_type = 'application/json',
-			follow_redirects = True
 		)
 
 	# Set Up - Executed before first test
