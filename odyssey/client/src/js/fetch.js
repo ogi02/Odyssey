@@ -1,4 +1,4 @@
-const domain = 'http://0.0.0.0:3000';
+const domain = 'http://d270.y1home.net:3000';
 
 // Fetch get request
 export async function fetchGet(relative_url) {

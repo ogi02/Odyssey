@@ -1,5 +1,5 @@
 FLASK_RUN_PORT = "3000"
-FLASK_RUN_HOST = "0.0.0.0"
-CLIENT_URL = "http://0.0.0.0:5000"
+FLASK_RUN_HOST = "d270.y1home.net"
+CLIENT_URL = "http://d270.y1home.net:5000"
 TESTING_DATABASE_URL = "mongodb+srv://Tester:Odyssey2020@cluster0-jyfux.mongodb.net/user?retryWrites=true&w=majority"
 DEVELOPMENT_DATABASE_URL = "mongodb+srv://KelpieG:admin11@clusterodyssey-olnzj.mongodb.net/test?retryWrites=true&w=majority"
