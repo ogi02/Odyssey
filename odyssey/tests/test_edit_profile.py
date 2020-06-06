@@ -22,7 +22,6 @@ class EditProfileTest(unittest.TestCase):
 			"/register",
 			data = json.dumps(dict(username = username, password = password, name = name, email = email)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 
 	# Login helper function
@@ -31,14 +30,12 @@ class EditProfileTest(unittest.TestCase):
 			"/login",
 			data = json.dumps(dict(username = username, password = password)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 		
 	# Verify helper function
 	def verify(self, username):
 		return self.app.get(
 			"/verify/" + username,
-			follow_redirects = True
 			)
 
 	# Change email/password helper function
@@ -47,7 +44,6 @@ class EditProfileTest(unittest.TestCase):
 			"/editProfile",
 			data = json.dumps(dict(email = email, password = password)),
 			content_type = 'application/json',
-			follow_redirects = True
 			)
 
 	# Upload new picture
@@ -57,7 +53,6 @@ class EditProfileTest(unittest.TestCase):
 				"/FpCerpd9Z7SIbjmN81Jy/upload_picture?type=%s" % image_type,
 				data = dict(image = image),
 				content_type = 'multipart/form-data',
-				follow_redirects = True
 				)
 
 	# Set Up - Executed before first test

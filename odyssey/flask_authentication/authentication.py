@@ -6,13 +6,13 @@ import pymongo
 from flask_mail import Message
 from flask import Blueprint, request, jsonify, render_template, redirect, session
 
+from database_config import CLIENT_URL, FLASK_RUN_PORT, FLASK_RUN_HOST
+
 # Imports from .py files
 import main
 from flask_classes.user import User
 from flask_classes.info import Info
 from flask_logging.log_config import info_log, error_log
-
-from database_config import CLIENT_URL
 
 authentication_bp = Blueprint("authentication_bp", __name__)
 
@@ -47,7 +47,7 @@ def register():
 
 		if main.app.config['TESTING'] == False:
 			msg = Message('Testing Email Verification', recipients = [email],
-				html = render_template('activation_email.html', username = username))
+				html = render_template('activation_email.html', username = username, host = FLASK_RUN_HOST, port = FLASK_RUN_PORT))
 			main.mail.send(msg)
 			info_log.info("Sent activation email to %s" % username)
 		
@@ -99,9 +99,8 @@ def login():
 @authentication_bp.route("/logout")
 def user_logout():
 	# Update session
-	username = session.get("USERNAME")
 	session["LOGGED_IN"] = False
 	session["USERNAME"] = None
-	info_log.info("%s logged out" % username)
+	info_log.info("User logged out")
 
-	return jsonify(success=True, message="%s logged out" % username)
+	return jsonify(success=True, message="User logged out")

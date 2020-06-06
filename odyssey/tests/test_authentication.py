@@ -32,7 +32,6 @@ class AuthenticationTest(unittest.TestCase):
 			"/register",
 			data = json.dumps(dict(username = username, password = password, name = name, email = email)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 
 	# Login helper function
@@ -41,21 +40,18 @@ class AuthenticationTest(unittest.TestCase):
 			"/login",
 			data = json.dumps(dict(username = username, password = password)),
 			content_type='application/json',
-			follow_redirects = True
 			)
 
 	# Logout helper function
 	def logout(self):
 		return self.app.get(
 			"/logout",
-			follow_redirects = True
 			)
 
 	# Verify helper function
 	def verify(self, username):
 		return self.app.get(
 			"/verify/" + username,
-			follow_redirects = True
 			)
 
 	def test_01_main_page(self):
@@ -116,7 +112,7 @@ class AuthenticationTest(unittest.TestCase):
 	def test_09_valid_user_logout(self):
 		response = self.logout()
 		self.assertEqual(response.status_code, 200)
-		self.assertIn(b'_FpCerpd9Z7SIbjmN81Jy_test_profile logged out', response.data)
+		self.assertIn(b'User logged out', response.data)
 
 	@classmethod
 	def tearDownClass(cls):
