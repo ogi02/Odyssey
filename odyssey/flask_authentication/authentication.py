@@ -92,8 +92,6 @@ def login():
 	session["USERNAME"] = username
 	info_log.info("%s logged in successfully" % username)
 
-	print('success')
-
 	return jsonify(success=True, message="%s logged in successfully" % username)
 
 @authentication_bp.route("/logout")
