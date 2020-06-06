@@ -86,15 +86,15 @@
 				<Countries />
 			</datalist>
 
-			<textarea class='input' id='bio' placeholder='About' maxlength='1500'
+			<textarea class='textarea' id='bio' placeholder='About' maxlength='1500' cols='40' rows='5'
 				bind:value={result.bio}></textarea>
 
-			<div class='part_buttons red' on:click={cancelBecomingCreator}>
-				<h4>Cancel</h4>
-			</div>
+			<div class='buttons'>
 
-			<div class='part_buttons green' on:click={nextPart}>
-				<h4>Next</h4>
+				<button class='pink' type='submit' on:click|preventDefault={() => cancelBecomingCreator()}>Cancel</button>
+
+				<button class='blue' type='submit' on:click|preventDefault={async () => nextPart()}>Next</button>
+
 			</div>
 			
 		{:else if part == 1}
@@ -102,24 +102,24 @@
 			<h3>What do you do?</h3>
 			<p>This will make it easier for people to find you. You can select multiple content types if you feel like it.</p>
 
-			<input type="checkbox" bind:group={result.content_type} value={"Podcaster"}>Podcaster<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Video Creator"}>Video Creator<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Musician"}>Musician<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Visual Artist"}>Visual Artist<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Writer/Journalis"}>Writer/Journalist<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Gaming Creator"}>Gaming Creator<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Nonprofit"}>Nonprofit Organization<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Local Bussiness"}>Local Bussiness<br>
-			<input type="checkbox" bind:group={result.content_type} value={"Other"}>Other<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Podcaster"}>  Podcaster<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Video Creator"}>  Video Creator<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Musician"}>  Musician<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Visual Artist"}>  Visual Artist<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Writer/Journalis"}>  Writer/Journalist<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Gaming Creator"}>  Gaming Creator<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Nonprofit"}>  Nonprofit Organization<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Local Bussiness"}>  Local Bussiness<br>
+			<input type="checkbox" class='chk' bind:group={result.content_type} value={"Other"}>  Other<br>
 
-			<div class='part_buttons red' on:click={previousPart}>
-				<h4>Previous</h4>
+			<div class='buttons'>
+
+				<button class='pink' type='submit' on:click|preventDefault={() => previousPart()}>Previous</button>
+
+				<button class='blue' type='submit' on:click|preventDefault={async () => nextPart()}>Next</button>
+
 			</div>
 
-			<div class='part_buttons green' on:click={nextPart}>
-				<h4>Next</h4>
-			</div>
-		
 		{:else if part == 2}
 
 			<h3>How can you receive gifts?</h3>
@@ -152,12 +152,12 @@
 			<input type='text' class='input' id='postal_code' placeholder='Postal Code'
 				bind:value={result.postal_code}>
 
-			<div class='part_buttons red' on:click={previousPart}>
-				<h4>Previous</h4>
-			</div>
+			<div class='buttons'>
 
-			<div class='part_buttons green' on:click={nextPart}>
-				<h4>Next</h4>
+				<button class='pink' type='submit' on:click|preventDefault={() => previousPart()}>Previous</button>
+
+				<button class='blue' type='submit' on:click|preventDefault={async () => nextPart()}>Next</button>
+
 			</div>
 		
 		{:else}
@@ -165,80 +165,93 @@
 			<h3>How can people find you on other social media?</h3>
 			<p>You can link your accounts on other platforms, so that your followers can see more about you and your creations. You can provide as many accounts to other platforms as you like.</p>
 
-			<input type='text' class='input social' id='facebook' placeholder='Facebook'
+			<input type='text' class='input' id='facebook' placeholder='Facebook'
 				bind:value={result.facebook}>
 
-			<input type='text' class='input social' id='twitter' placeholder='Twitter'
+			<input type='text' class='input' id='twitter' placeholder='Twitter'
 				bind:value={result.twitter}>
 
-			<input type='text' class='input social' id='instagram' placeholder='Instagram'
+			<input type='text' class='input' id='instagram' placeholder='Instagram'
 				bind:value={result.instagram}>
 
-			<input type='text' class='input social' id='webtoon' placeholder='Webtoon'
+			<input type='text' class='input' id='webtoon' placeholder='Webtoon'
 				bind:value={result.webtoon}>
 
-			<input type='text' class='input social' id='twitch' placeholder='Twitch'
+			<input type='text' class='input' id='twitch' placeholder='Twitch'
 				bind:value={result.twitch}>
 
-			<input type='text' class='input social' id='youtube' placeholder='Youtube'
+			<input type='text' class='input' id='youtube' placeholder='Youtube'
 				bind:value={result.youtube}>
 
-			<div class='part_buttons red' on:click={previousPart}>
-				<h4>Previous</h4>
+			<div class='buttons'>
+
+				<button class='pink' type='submit' on:click|preventDefault={() => previousPart()}>Previous</button>
+
+				<button class='blue' type='submit' on:click|preventDefault={async () => becomeCreator(result)}>Finish</button>
+
 			</div>
 
-			<div class='part_buttons green' on:click={() => becomeCreator(result)}>
-				<h4>Finish</h4>
-			</div>
-		
 		{/if}
 
 	</form>
-	
+
 </div>
+
+<link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 
 <style>
 
-	.part_buttons {
+	.form {
+		display: block;
+		font-size: 1.1em;
+		max-width: 400px;
+		margin: 100px auto;
 		text-align: center;
-		min-width: 100px;
-		padding: 10px;
-		border: 1px solid #111;
-		margin: 5px;
-		display: inline-block;
-	}
-
-	.part_buttons:hover {
-		cursor: pointer;
-	}
-
-	.part_buttons h4 {
-		margin: 0;
-	}
-
-	.red {
-		background-color: #ff6347;
-	}
-
-	.red:hover {
-		background-color: #ff4327;
-	}
-
-	.green {
-		background-color: #63ff47;
-	}
-
-	.green:hover {
-		background-color: #43ff27;
+		font-family: "Jost";
 	}
 
 	.input {
 		display: block;
+		margin: 10px auto;
 	}
-	
-	#about {
-		width: 450px;
-		height: 300px;
+
+	.chk:hover {
+		cursor: pointer;
+	}
+
+	button {
+		width: 300px;
+		border-radius: 5px;
+	}
+
+	.buttons {
+		width: 300px;
+		display: flex;
+		margin: 15px auto 0;
+	}
+
+	.pink {
+		color: #0f1931;
+		font-weight: bold;
+		margin-right: 5px;
+		background-color: #e6afcc;
+	}
+
+	.pink:hover {
+		cursor: pointer;
+		background-color: #eca1c9;
+	}
+
+	.blue {
+		color: #0f1931;
+		font-weight: bold;
+		margin-left: 5px;
+		background-color: #9fcdf5;
+	}
+
+	.blue:hover {
+		cursor: pointer;
+		background-color: #8cc2f2;
 	}
 
 </style>
