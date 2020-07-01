@@ -20,7 +20,7 @@ survey_actions_bp = Blueprint('survey_actions_bp', __name__)
 @survey_actions_bp.route('/createSurvey', methods=['POST'])
 def create_survey():
 	# Get user from session
-	session.get("USERNAME")
+	username = session.get("USERNAME")
 	user = User.get_from_db(username)
 	user_id = user.get('_id')
 
